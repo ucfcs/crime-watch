@@ -10,19 +10,7 @@ const styles = StyleSheet.create({
         //padding: 30,
         paddingVertical: '30%'
     },
-  /*
-    bottomContainer:{
-        backgroundColor:"white",
-        paddingVertical: padding * 3,
-        shadowColor: "#000000",
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        shadowOffset: {
-            height: 1,
-            width: 0
-        }
-    },
-*/
+
     containerView:{
         backgroundColor: 'transparent'
     },
