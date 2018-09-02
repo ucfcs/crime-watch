@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
         paddingBottom: padding * 2,
         justifyContent:"center",
         alignItems:"center",
-        backgroundColor: "#FF553F",
+        backgroundColor: color.black,
     },
 
     image:{
-        height: 200,
-        width: 200,
-        backgroundColor: color.grey,
+        height: 250,
+        width: 250,
+        backgroundColor: 'transparent',
         marginBottom: padding,
         resizeMode
     },

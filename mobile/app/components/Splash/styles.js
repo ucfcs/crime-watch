@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
     },
 
     image:{
-        height: 100,
-        width: 100,
+        //flex: 1,
+        //width: 500,
         backgroundColor: color.grey,
         marginBottom: padding,
         resizeMode
@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         position: "absolute",
-        bottom: 16,
-        height: 50
+        bottom: 90,
+        height: 500
     },
 
     activityIndicator: {

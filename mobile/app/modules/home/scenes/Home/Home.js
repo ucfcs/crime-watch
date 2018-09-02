@@ -33,36 +33,17 @@ class Home extends React.Component {
         Alert.alert('Oops!', error.message);
     }
 
-    // custom stuff
-    showReports() {
-    var reports = action.displayReports();
-      class Report extends React.Component 
-      {
-        
-
-          render ()
-          {
-            return (
-                <View>
-
-                </View>
-
-            );   
-          }
-      }
-    }
-
     render() {
         return (
             <View style={styles.container}>
 
                     <Button
                     raised
-                    title={'LOG OUT'}
+                    title={'REPORTS'}
                     containerViewStyle={[styles.containerView]}
                     buttonStyle={[styles.button]}
                     textStyle={styles.buttonText}
-                    onPress={this.showReports}/>
+                    onPress={Actions.Report}/>
 
                     <Button
                     raised

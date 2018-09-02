@@ -20,7 +20,7 @@ class Welcome extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.topContainer}>
-                    <Image style={styles.image} source={{uri: "asset:/paper.jpg"}}/>
+                    <Image style={styles.image} source={require('../../../../assets/images/color.png')}/>
                     <Text style={styles.title}>Crime Watch</Text>
                 </View>
 
