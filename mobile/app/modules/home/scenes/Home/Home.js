@@ -1,10 +1,10 @@
 import React from 'react';
-var { View, StyleSheet, Alert } = require('react-native');
+var { View, StyleSheet, Alert, Text } = require('react-native');
 
 import {Button} from 'react-native-elements'
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
-
+import { AsyncStorage } from 'react-native';
 import styles from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
@@ -15,12 +15,39 @@ const { color } = theme;
 
 class Home extends React.Component {
     constructor(){
+        console.log("HOME");
         super();
-        this.state = { user: ''}
-        
+        this.state = { 'user': ''};
         this.onSignOut = this.onSignOut.bind(this);
     }
 
+    // attempting to grab user data and display it
+    getUser = async () => 
+    {
+        var username;
+
+        try 
+        {
+            username = await AsyncStorage.getItem('user') || 'none';
+        } 
+        catch (error) 
+        {
+          // Error retrieving data
+          console.log(error.message);
+        }
+        this.setState({ user: username });
+    }
+
+    // alternative method
+    componentDidMount = async () => {
+        console.log("Currently here");
+        AsyncStorage.getItem('user').then(response => {
+            var user = JSON.parse(response).username;
+            this.setState({ 'user': user });
+        }).done();
+    }
+   
+      
     onSignOut() {
         this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this))
     }
@@ -33,24 +60,10 @@ class Home extends React.Component {
         Alert.alert('Oops!', error.message);
     }
 
-    // attempting to grab user data and display it
-    async getUser() 
-    {
-        try
-        {
-            const data = await AsyncStorage.getItem('user');
-            console.log("Accessing user" + data);
-            this.setState({ user: JSON.parse(data) });
-        }
-        catch (err)
-        {
-            console.log(err);
-        }
-    }
-
     render() {
         return (
             <View style={styles.container}>
+                    <Text>{this.state.user}</Text>
                     <Button
                     raised
                     title={'REPORTS'}

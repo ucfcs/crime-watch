@@ -112,7 +112,7 @@ const colors = {
     white: 'white',
     monza: 'red',
     switchEnabled: (Platform.OS === 'android') ? 'red' : null,
-    switchDisabled: (Platform.OS === 'android') ? 'red' : null,
+    switchDisabled: (Platform.OS === 'android') ? 'gray' : null,
     switchOnTintColor: (Platform.OS === 'android') ? 'black' : null,
     blueGem: 'blue',
   };
