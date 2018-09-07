@@ -16,7 +16,7 @@ const { color } = theme;
 class Home extends React.Component {
     constructor(){
         super();
-        this.state = { }
+        this.state = { user: ''}
         
         this.onSignOut = this.onSignOut.bind(this);
     }
@@ -33,10 +33,24 @@ class Home extends React.Component {
         Alert.alert('Oops!', error.message);
     }
 
+    // attempting to grab user data and display it
+    async getUser() 
+    {
+        try
+        {
+            const data = await AsyncStorage.getItem('user');
+            console.log("Accessing user" + data);
+            this.setState({ user: JSON.parse(data) });
+        }
+        catch (err)
+        {
+            console.log(err);
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
-
                     <Button
                     raised
                     title={'REPORTS'}
@@ -47,15 +61,15 @@ class Home extends React.Component {
 
                     <Button
                     raised
-                    title={'LOG OUT'}
+                    title={'SETTINGS'}
                     containerViewStyle={[styles.containerView]}
                     buttonStyle={[styles.button]}
                     textStyle={styles.buttonText}
-                    onPress={this.onSignOut}/>
+                    onPress={Actions.Settings}/>
 
                     <Button
                     raised
-                    title={'LOG OUT'}
+                    title={'STUFF'}
                     containerViewStyle={[styles.containerView]}
                     buttonStyle={[styles.button]}
                     textStyle={styles.buttonText}
