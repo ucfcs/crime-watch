@@ -4,6 +4,22 @@ import { auth } from "../../config/firebase";
 
 import { AsyncStorage } from 'react-native';
 
+export function changeGender (user, gender, successCB, errorCB)
+{
+    console.log("Attempting gender change");
+    return (dispatch) => 
+    {
+        api.setGender(user, gender, function (success, error) 
+        {
+            if (success) 
+            {
+                successCB();
+            }
+            else if (error) 
+                errorCB(error)
+        });
+    };
+}
 
 export function displayReports (user, successCB, errorCB)
 {

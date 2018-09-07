@@ -21,23 +21,6 @@ class Home extends React.Component {
         this.onSignOut = this.onSignOut.bind(this);
     }
 
-    // attempting to grab user data and display it
-    getUser = async () => 
-    {
-        var username;
-
-        try 
-        {
-            username = await AsyncStorage.getItem('user') || 'none';
-        } 
-        catch (error) 
-        {
-          // Error retrieving data
-          console.log(error.message);
-        }
-        this.setState({ user: username });
-    }
-
     // alternative method
     componentDidMount = async () => {
         console.log("Currently here");
@@ -63,7 +46,7 @@ class Home extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                    <Text>{this.state.user}</Text>
+                    <Text>Welcome, {this.state.user}!</Text>
                     <Button
                     raised
                     title={'REPORTS'}
