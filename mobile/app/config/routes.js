@@ -12,6 +12,7 @@ import Login from '../modules/auth/scenes/Login';
 import ForgotPassword from '../modules/auth/scenes/ForgotPassword';
 import Home from '../modules/home/scenes/Home';
 import Report from '../modules/home/scenes/Report';
+import Settings from '../modules/home/scenes/Settings';
 
 //Import Store, actions
 import store from '../redux/store'
@@ -57,6 +58,7 @@ export default class extends React.Component {
                     <Stack key="Main" initial={this.state.isLoggedIn}>
                         <Scene key="Home" component={Home} title="Home" initial={true} type={ActionConst.REPLACE}/>
                         <Scene key="Report" component={Report} title="Report"/>
+                        <Scene key="Settings" component={Settings} title="Settings"/>
                     </Stack>
                 </Scene>
             </Router>
