@@ -9,11 +9,11 @@ import {connect} from 'react-redux';
 import styles from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
-import action from '../../actions'
+import actions from '../../actions'
 const { signOut } = auth;
 
 const { color } = theme;
-import AsyncStorage from "react-native";
+import { AsyncStorage } from "react-native";
 
 
 class Settings extends React.Component {
@@ -25,15 +25,25 @@ class Settings extends React.Component {
             gender: '',
         };
     }
-
+    // alternative method
+    componentDidMount = async () => {
+        console.log("Currently here");
+        AsyncStorage.getItem('user').then(response => {
+            var user = JSON.parse(response).username;
+            this.setState({ 'username': user });
+        }).done();
+    }
+    
+    /*
     async componentWillMount()
     {
-        const user = JSON.parse(await AsyncStorage.getItem("user"));
-        this.setState({
-            user,
-            ready: true
-        })
+        console.log("Currently here");
+        AsyncStorage.getItem('user').then(response => {
+            var user = JSON.parse(response).username;
+            this.setState({ 'user': user });
+        }).done();
     }
+    */
 
     render() {
         return (
@@ -83,11 +93,14 @@ class Settings extends React.Component {
                     this.setState({
                         gender: value
                     });
+                    // Call an Action to save the new information into firebase
+                    actions.changeGender(this.state.username, value, null, null);
+
                 }}
                 value={this.state.gender}
                 styleModalButtonsText={{color: colors.black}}
             />
-     
+            
     
             <SettingsSwitch
                 title={'Allow Push Notifications'}

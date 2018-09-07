@@ -6,7 +6,7 @@ import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
 import {actions as auth} from "../../index";
-const {} = auth;
+//const {} = auth;
 
 import styles from "./styles"
 
