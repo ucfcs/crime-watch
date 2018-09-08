@@ -28,14 +28,6 @@ class Home extends React.Component {
             
             this.setState({ 'user': user, 'gender': gender });
         }).done();
-
-        /*
-        AsyncStorage.getItem('user').then(response => {
-            console.log("user data" + user);
-            var gender = JSON.parse(response).gender;
-            this.setState({ 'gender': gender });
-        }).done();
-        */
     }
    
       
@@ -71,22 +63,6 @@ class Home extends React.Component {
                     buttonStyle={[styles.button]}
                     textStyle={styles.buttonText}
                     onPress={Actions.Settings}/>
-
-                    <Button
-                    raised
-                    title={'STUFF'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={this.onSignOut}/>
-
-                    <Button
-                    raised
-                    title={'LOG OUT'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={this.onSignOut}/>
 
                     <Button
                     raised
