@@ -29,6 +29,15 @@ const fields = [
         type: "text"
     },
     {
+        key: 'phone',
+        label: "Phone Number",
+        placeholder: "Phone Number",
+        autoFocus: false,
+        secureTextEntry: false,
+        value: "",
+        type: "phone"
+    },
+    {
         key: 'password',
         label: "Password",
         placeholder: "Password",
