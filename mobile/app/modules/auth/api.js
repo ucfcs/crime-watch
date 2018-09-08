@@ -14,8 +14,11 @@ export function register(data, callback)
 export function createUser (user, callback) 
 {
     const userRef = database.ref().child('users');
-
-    userRef.child(user.uid).update({ ...user })
+    var email = '';
+    var phone = '';
+    var gender = '';
+    var reports = [];
+    userRef.child(user.uid).update({ ...user, email, phone, gender, reports })
         .then(() => callback(true, user, null))
         .catch((error) => callback(false, null, {message: error}));
 }

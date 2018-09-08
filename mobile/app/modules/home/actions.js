@@ -2,39 +2,17 @@ import * as t from './actionTypes';
 import * as api from './api';
 import { auth } from "../../config/firebase";
 
-import { AsyncStorage } from 'react-native';
 
-export function changeGender (user, gender, successCB, errorCB)
+export function changeGender(user, gender) 
 {
-    console.log("Attempting gender change");
-    return (dispatch) => 
-    {
-        api.setGender(user, gender, function (success, error) 
+    console.log("Attempting to gender change");
+  
+        api.changeGender(user, gender, function () 
         {
-            if (success) 
-            {
-                successCB();
-            }
-            else if (error) 
-                errorCB(error)
+            console.log("Success");
         });
-    };
+   
 }
 
-export function displayReports (user, successCB, errorCB)
-{
-    return (dispatch) => 
-      {
-          api.userReports(user, function (success, error, data) 
-          {
-              if (success) 
-              {
-                  dispatch({type: t.LOGGED_IN}, data);
-                  successCB(user);
-              }
-              else if (error) 
-                  errorCB(error)
-          });
-      };
-}
+
 

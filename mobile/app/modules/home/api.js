@@ -1,17 +1,14 @@
 import { auth, database, provider } from "../../config/firebase";
 
-export function setGender (user, gender, callback)
-{
-  database.ref('users').child(user.uid).once('value')
-    .then(function() 
-    {
-        console.log("Here");
-    })
-    .catch(error => callback(false, null, error));
-}
 
-export function userReports (user, callback)
+//Send Password Reset Email
+export function changeGender(user, gender, callback) 
 {
-  // testing a simple return call
-    return 'Here is a list of reports';
+  console.log("IN API");
+  console.log(user);
+   console.log(gender);
+
+
+   database.ref('users').child(user).update({'gender': gender});
+   callback();
 }
