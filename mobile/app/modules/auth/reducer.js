@@ -9,7 +9,7 @@ const authReducer = (state = initialState, action) =>
     {
         case t.LOGGED_IN:
             const user = action.data;
-
+            
             // Save the token data to Asynstorage
             AsyncStorage.multiSet([['user',JSON.stringify(user)]]);
 

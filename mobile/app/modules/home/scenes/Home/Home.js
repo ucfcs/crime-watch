@@ -15,19 +15,27 @@ const { color } = theme;
 
 class Home extends React.Component {
     constructor(){
-        console.log("HOME");
         super();
-        this.state = { 'user': ''};
+        this.state = { 'user': '', 'gender': ''};
         this.onSignOut = this.onSignOut.bind(this);
     }
 
     // alternative method
     componentDidMount = async () => {
-        console.log("Currently here");
         AsyncStorage.getItem('user').then(response => {
             var user = JSON.parse(response).username;
-            this.setState({ 'user': user });
+            var gender = JSON.parse(response).gender;
+            
+            this.setState({ 'user': user, 'gender': gender });
         }).done();
+
+        /*
+        AsyncStorage.getItem('user').then(response => {
+            console.log("user data" + user);
+            var gender = JSON.parse(response).gender;
+            this.setState({ 'gender': gender });
+        }).done();
+        */
     }
    
       
@@ -47,6 +55,7 @@ class Home extends React.Component {
         return (
             <View style={styles.container}>
                     <Text>Welcome, {this.state.user}!</Text>
+                    <Text>Gender, {this.state.gender}!</Text>
                     <Button
                     raised
                     title={'REPORTS'}

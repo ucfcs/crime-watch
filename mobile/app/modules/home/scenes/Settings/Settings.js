@@ -8,8 +8,8 @@ import {connect} from 'react-redux';
 
 import styles from "./styles"
 
-import { actions as auth, theme } from "../../../auth/index"
-import actions from '../../actions'
+import { actions as auth, theme } from "../../../home/index"
+//import action from '../../actions'
 const { signOut } = auth;
 
 const { color } = theme;
@@ -20,6 +20,7 @@ class Settings extends React.Component {
     constructor(){
         super();
         this.state = { 
+            uid: '',
             username: '',
             allowedPushNotifications: false,
             gender: '',
@@ -29,8 +30,11 @@ class Settings extends React.Component {
     componentDidMount = async () => {
         console.log("Currently here");
         AsyncStorage.getItem('user').then(response => {
+            var uid = JSON.parse(response).uid;
             var user = JSON.parse(response).username;
-            this.setState({ 'username': user });
+            var gender = JSON.parse(response).gender;
+
+            this.setState({ 'username': user, 'gender': gender, 'uid': uid });
         }).done();
     }
     
@@ -89,12 +93,14 @@ class Settings extends React.Component {
                 negativeButtonTitle={'Cancel'}
                 buttonRightTitle={'Save'}
                 onSaveValue={value => {
-                    console.log('gender:', value);
+                    
                     this.setState({
                         gender: value
                     });
+
                     // Call an Action to save the new information into firebase
-                    actions.changeGender(this.state.username, value, null, null);
+                    auth.changeGender(this.state.uid, value);
+                   // actions.changeGender(value);
 
                 }}
                 value={this.state.gender}
