@@ -4,6 +4,7 @@ Below you'll find information about performing common tasks. The most recent ver
 
 ## Table of Contents
 
+* [Installing Dependencies]
 * [Updating to New Releases](#updating-to-new-releases)
 * [Available Scripts](#available-scripts)
   * [npm start](#npm-start)
@@ -25,6 +26,12 @@ Below you'll find information about performing common tasks. The most recent ver
   * [Networking](#networking)
   * [iOS Simulator won't open](#ios-simulator-wont-open)
   * [QR Code does not scan](#qr-code-does-not-scan)
+## Installing Dependencies
+
+Use either npm or yarn for the install.
+
+yarn add redux react-redux redux-thunk react-native-elements react-native-router-flux axios react-native-redux-listener react-native-loading-spinner-overlay react-native-keyboard-spacer moment firebase react-native-size-matters react-native-settings-components
+
 
 ## Updating to New Releases
 
