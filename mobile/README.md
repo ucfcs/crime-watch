@@ -29,9 +29,9 @@ Below you'll find information about performing common tasks. The most recent ver
 ## Installing Dependencies
 
 Use either npm or yarn for the install.
-
+```
 yarn add redux react-redux redux-thunk react-native-elements react-native-router-flux axios react-native-redux-listener react-native-loading-spinner-overlay react-native-keyboard-spacer moment firebase react-native-size-matters react-native-settings-components
-
+```
 
 ## Updating to New Releases
 
