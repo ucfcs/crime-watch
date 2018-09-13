@@ -14,3 +14,9 @@ export function changePhone(user, phone, callback)
                 .then((resp) => callback(true, resp))
                 .catch((error) => callback(false, error));
 }
+
+export function getData(phone, callback)
+{
+        var report = database.ref('reports').child(phone).onChildAdded(snapshot, previousChildName);
+        callback(true, report);
+}

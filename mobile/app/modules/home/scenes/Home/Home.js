@@ -1,6 +1,6 @@
 import React from 'react';
 var { View, StyleSheet, Alert, Text } = require('react-native');
-
+import bindActionCreators from 'redux';
 import {Button} from 'react-native-elements'
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
@@ -9,19 +9,21 @@ import styles from "./styles"
 import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
+import { actions as home } from "../../../home/index"
 
 const { color } = theme;
 
 class Home extends React.Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
+        //console.log("HOME" + props);
         this.state = { 'username': '', 'gender': ''};
 
     }
 
     // alternative method
     componentDidMount = async (prevProps, prevState, snapshot) => {
-        console.log(prevProps);
+        //console.log(prevProps);
         const state = store.getState().authReducer.user;
    
 
@@ -73,9 +75,17 @@ class Home extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return{
+        username: state.username,
+        gender: state.gender
+    }
+}
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = (dispatch) => {
+    return{
+        ...bindActionCreators({}, dispatch)
+    }
+}
 
-})
-
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, {})(Home);

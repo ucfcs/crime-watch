@@ -35,5 +35,19 @@ export function changePhone (user, phone)
     };
 }
 
+export function getData (phone)
+{
+    return (dispatch) =>
+    {
+        api.getData(phone, function (success, report)
+        {
+            if (success)
+                dispatch({type: t.DATA_RECEIVED, data: report})
+            else
+                console.log("error");
+        });
+    };
+}
+
 
 

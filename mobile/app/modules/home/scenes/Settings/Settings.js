@@ -18,8 +18,10 @@ const { changePhone, changeGender } = home;
 const { color } = theme;
 
 class Settings extends React.Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
+  
+        console.log(props);
         this.state = { 
             uid: '',
             username: '',
@@ -58,31 +60,19 @@ class Settings extends React.Component {
     }
 
     // alternative method
-    componentDidMount = async (prevProps, prevState, snapshot) => {
-
-        console.log("Attempting to mount");
+    componentDidMount = async () => {
 
         const state = store.getState().authReducer.user;
-    
-        var uid = state.uid;console.log(uid);
+        
+        var uid = state.uid;
         var gender = state.gender;
         var username = state.username;
         var phone = state.phone;
         var email = state.email;
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email}).done();
-       
-        /*
-        store.subscribe(() => {
-        // When state will be updated(in our case, when items will be fetched), 
-        // we will update local component state and force component to rerender 
-        // with new data.
-  
-        this.setState({ 'username': user, 'gender': gender, 'uid': uid, 'phone': phone}).done();
-      });
-      */
     }
-  
+
     render() {
         return (
         <ScrollView style={{flex: 1, backgroundColor: (Platform.OS === 'ios') ? colors.iosSettingsBackground : colors.white}}>
@@ -100,7 +90,7 @@ class Settings extends React.Component {
                 positiveButtonTitle={'Continue'}
                 negativeButtonTitle={'Cancel'}
                 buttonRightTitle={'Save'}
-                value={this.state.username}
+                value={this.props.username}
                 dialogAndroidProps={{
                     widgetColor: colors.black,
                     positiveColor: colors.black,
@@ -184,7 +174,7 @@ class Settings extends React.Component {
                     buttonStyle={[styles.button]}
                     textStyle={styles.buttonText}
                     onPress={this.onSignOut}/>
-
+                <Text>RANDOM {this.props.gender}</Text>
           </ScrollView>
         );
         }
@@ -200,12 +190,19 @@ const colors = {
     blueGem: 'blue',
   };
 
-  /*
-  const mapStateToProps = state => {
-    return {
-      gender: state.gender
-    }
-  }
-  */
 
-  export default connect(null, { changePhone, changeGender, signOut })(Settings);
+  const mapStateToProps = (state) => {
+        return {
+            'username': state.authReducer.username,
+            'gender': state.homeReducer.gender,
+            'phone': state.authReducer.phone
+        }
+  }
+
+  const mapDispatchToProps = {
+    changeGender,
+    changePhone,
+    signOut
+  }
+    
+  export default connect(mapStateToProps, mapDispatchToProps)(Settings);
