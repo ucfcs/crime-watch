@@ -1,5 +1,5 @@
 import React from 'react';
-var { View, StyleSheet, Alert, Text, Platform } = require('react-native');
+var { View, ScrollView, StyleSheet, Alert, Text, Platform, TouchableOpacity } = require('react-native');
 import bindActionCreators from 'redux';
 import {Button} from 'react-native-elements'
 import {Actions} from 'react-native-router-flux';
@@ -34,12 +34,7 @@ class Home extends React.Component {
         var phone = state.phone;
         var email = state.email;
 
-            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone}).done();
-        
-            store.subscribe(() => {
-    
-            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone}).done();
-            });
+        this.setState({ 'username': username, 'gender': gender}).done();
     }
    
     onSuccess() {
@@ -52,46 +47,41 @@ class Home extends React.Component {
 
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
+     
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
+
+                <View style={styles.navView}>
+                    {/*
+                    <Button
+                    raised
+                    title={'REPORTS'}
+                    containerViewStyle={styles.containerView}
+                    buttonStyle={[styles.button]}
+                    onPress={Actions.Report}/>
+                    */}
+
+                    <Button
+                    raised
+                    containerViewStyle={[styles.containerView]}
+                    buttonStyle={[styles.button]}
+                    onPress={Actions.Settings}/>
+                    
+                </View>
 
                 <View style={styles.userView}>
 
                     <Text>Welcome, {this.state.username}!</Text>
 
                     <Text>Gender, {this.state.gender}!</Text>
-                </View>
+
+                    <TouchableOpacity onPress={Actions.Map}>
+                        <Text>PRESS HERE TO SEE REPORTS MAP</Text>
+                    </TouchableOpacity>
                     
-                <Button
-                raised
-                title={'REPORTS'}
-                containerViewStyle={styles.containerView}
-                buttonStyle={[styles.button]}
-                onPress={Actions.Report}/>
-                
-                <Button
-                raised
-                title={'SETTINGS'}
-                containerViewStyle={styles.containerView}
-                buttonStyle={[styles.button]}
-                onPress={Actions.Settings}/>
-                
-                <Button
-                raised
-                title={'REPORTS MAP'}
-                containerViewStyle={styles.containerView}
-                buttonStyle={[styles.button]}
-                onPress={Actions.Map}/>
+                </View>
 
-                <Button
-                raised
-                title={'SETTINGS'}
-                containerViewStyle={[styles.containerView]}
-                buttonStyle={[styles.button]}
-                onPress={Actions.Settings}/>
-
-
-            </View>
+            </ScrollView>
         );
     }
 }
