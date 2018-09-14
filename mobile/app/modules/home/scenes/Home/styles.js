@@ -4,7 +4,33 @@ const { padding, color, fontSize, fontFamily, windowWidth, normalize } = theme;
 
 const resizeMode = 'contain';
 
-const styles = StyleSheet.create({
+export const androidStyles = StyleSheet.create({
+    container:{
+        flex:1,
+        paddingVertical: '30%'
+    },
+
+    userView:{
+        flex:0,
+    },
+
+    containerView:{
+        backgroundColor: 'transparent'
+    },
+
+    buttonContainer:{
+        justifyContent:"center",
+        alignItems:"center",
+    },
+
+    button:{
+        flex: 1,
+        padding: 22,
+        margin: 25,
+    }
+});
+
+export const iosStyles = StyleSheet.create({
     container:{
         flex:1,
         paddingVertical: '30%'
@@ -29,5 +55,3 @@ const styles = StyleSheet.create({
         margin: 2,
     }
 });
-
-export default styles;

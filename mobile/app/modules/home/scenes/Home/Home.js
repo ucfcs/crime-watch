@@ -1,11 +1,12 @@
 import React from 'react';
-var { View, StyleSheet, Alert, Text } = require('react-native');
+var { View, StyleSheet, Alert, Text, Platform } = require('react-native');
 import bindActionCreators from 'redux';
 import {Button} from 'react-native-elements'
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
-import styles from "./styles"
+import { iosStyles, androidStyles } from "./styles";
+
 import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
@@ -50,6 +51,7 @@ class Home extends React.Component {
     }
 
     render() {
+        const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         return (
             <View style={styles.container}>
 
@@ -63,26 +65,22 @@ class Home extends React.Component {
                 <Button
                 raised
                 title={'REPORTS'}
-                containerViewStyle={styles.button}
-                // buttonStyle={[styles.button]}
-                //textStyle={styles.buttonText}
+                containerViewStyle={styles.containerView}
+                buttonStyle={[styles.button]}
                 onPress={Actions.Report}/>
                 
                 <Button
                 raised
                 title={'SETTINGS'}
-                containerViewStyle={[styles.button]}
-                // buttonStyle={[styles.button]}
-                //textStyle={styles.buttonText}
+                containerViewStyle={styles.containerView}
+                buttonStyle={[styles.button]}
                 onPress={Actions.Settings}/>
                 
                 <Button
                 raised
-                //borderRadius={20}
                 title={'REPORTS MAP'}
-                containerViewStyle={[styles.button]}
-                //buttonStyle={[styles.button]}
-                //textStyle={'bold'}
+                containerViewStyle={styles.containerView}
+                buttonStyle={[styles.button]}
                 onPress={Actions.Map}/>
 
                 <Button
@@ -90,7 +88,6 @@ class Home extends React.Component {
                 title={'SETTINGS'}
                 containerViewStyle={[styles.containerView]}
                 buttonStyle={[styles.button]}
-                textStyle={styles.buttonText}
                 onPress={Actions.Settings}/>
 
 
