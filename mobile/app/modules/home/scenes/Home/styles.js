@@ -7,15 +7,21 @@ const resizeMode = 'contain';
 export const androidStyles = StyleSheet.create({
     container:{
         flex:1,
-        paddingVertical: '30%'
-    },
-
-    userView:{
-        flex:0,
     },
 
     containerView:{
         backgroundColor: 'transparent'
+    },
+
+    navView:{
+        flexDirection: 'row',
+    },
+
+    userView:{
+        flex:1,
+        paddingVertical: "20%",
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     buttonContainer:{
@@ -25,9 +31,13 @@ export const androidStyles = StyleSheet.create({
 
     button:{
         flex: 1,
-        padding: 22,
-        margin: 25,
-    }
+        height: 35,
+        width: 35,
+        marginTop: 12,
+        borderRadius: 8,
+        borderWidth: 1,
+        backgroundColor: 'white'
+    },
 });
 
 export const iosStyles = StyleSheet.create({
