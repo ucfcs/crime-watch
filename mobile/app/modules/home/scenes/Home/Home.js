@@ -52,23 +52,47 @@ class Home extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                    <Text>Welcome, {this.state.username}!</Text>
-                    <Text>Gender, {this.state.gender}!</Text>
-                    <Button
-                    raised
-                    title={'REPORTS'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={Actions.Report}/>
 
-                    <Button
-                    raised
-                    title={'SETTINGS'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={Actions.Settings}/>
+                <View style={styles.userView}>
+
+                    <Text>Welcome, {this.state.username}!</Text>
+
+                    <Text>Gender, {this.state.gender}!</Text>
+                </View>
+                    
+                <Button
+                raised
+                title={'REPORTS'}
+                containerViewStyle={styles.button}
+                // buttonStyle={[styles.button]}
+                //textStyle={styles.buttonText}
+                onPress={Actions.Report}/>
+                
+                <Button
+                raised
+                title={'SETTINGS'}
+                containerViewStyle={[styles.button]}
+                // buttonStyle={[styles.button]}
+                //textStyle={styles.buttonText}
+                onPress={Actions.Settings}/>
+                
+                <Button
+                raised
+                //borderRadius={20}
+                title={'REPORTS MAP'}
+                containerViewStyle={[styles.button]}
+                //buttonStyle={[styles.button]}
+                //textStyle={'bold'}
+                onPress={Actions.Map}/>
+
+                <Button
+                raised
+                title={'SETTINGS'}
+                containerViewStyle={[styles.containerView]}
+                buttonStyle={[styles.button]}
+                textStyle={styles.buttonText}
+                onPress={Actions.Settings}/>
+
 
             </View>
         );
