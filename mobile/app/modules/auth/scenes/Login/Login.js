@@ -18,7 +18,9 @@ const fields = [
         autoFocus: false,
         secureTextEntry: false,
         value: "",
-        type: "email"
+        type: "email",
+        keyboardType: "email-address",
+        autoFocus: true
     },
     {
         key: 'password',

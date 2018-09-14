@@ -11,6 +11,7 @@ import styles from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
+import { changeGender1} from "../../actions"
 //import action from '../../actions'
 const { signOut } = auth;
 
@@ -122,14 +123,15 @@ class Settings extends React.Component {
                 positiveButtonTitle={'Continue'}
                 negativeButtonTitle={'Cancel'}
                 buttonRightTitle={'Save'}
-                onSaveValue={value => {
+                onSaveValue={(value) => {
                     
                     this.setState({
                         gender: value
                     });
 
                     // Call an Action to save the new information into firebase
-                    home.changeGender(this.state.uid, value);
+                    console.log("Whatever");
+                    this.props.changeGender1(this.state.uid, value);
                    // actions.changeGender(value);
 
                 }}
@@ -175,4 +177,4 @@ const colors = {
     blueGem: 'blue',
   };
 
-  export default connect(null, { signOut })(Settings);
+  export default connect(null, { signOut, changeGender1 })(Settings);

@@ -5,6 +5,8 @@ import { Font, AppLoading } from 'expo';
 import Router from './app/config/routes'
 import store from './app/redux/store';
 
+Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT_UP);
+
 function cacheFonts(fonts) 
 {
     return fonts.map(font => Font.loadAsync(font));

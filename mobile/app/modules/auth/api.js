@@ -19,7 +19,7 @@ export function createUser (user, phone, email, callback)
     var email = email;
     var phone = phone;
     var gender = '';
-    var reports = [];
+    var reports = ["Hello"];
     userRef.child(user.uid).update({ ...user, email, phone, gender, reports })
         .then(() => callback(true, user, null))
         .catch((error) => callback(false, null, {message: error}));
