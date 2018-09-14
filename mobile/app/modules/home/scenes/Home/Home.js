@@ -72,6 +72,15 @@ class Home extends React.Component {
                     buttonStyle={[styles.button]}
                     textStyle={styles.buttonText}
                     onPress={this.onSignOut}/>
+
+                    <Button
+                    raised
+                    //borderRadius={20}
+                    title={'REPORTS MAP'}
+                    containerViewStyle={[styles.containerView]}
+                    buttonStyle={[styles.button]}
+                    textStyle={styles.buttonText}
+                    onPress={Actions.Map}/>
             </View>
         );
     }
