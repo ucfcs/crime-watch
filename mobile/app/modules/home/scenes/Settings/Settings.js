@@ -20,7 +20,7 @@ const { color } = theme;
 class Settings extends React.Component {
     constructor(props){
         super(props);
-
+        
         this.state = { 
             uid: '',
             username: '',
@@ -28,7 +28,7 @@ class Settings extends React.Component {
             gender: '',
             email: ''
         };
-
+        console.log(props);
         this.onPhoneChange = this.onPhoneChange.bind(this);
         this.onGenderChange = this.onGenderChange.bind(this);
         this.onSignOut = this.onSignOut.bind(this);
@@ -50,7 +50,7 @@ class Settings extends React.Component {
         this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this))
     }
 
-    onSuccess() {
+    onSuccess() {s
         Actions.reset("Auth")
     }
 
@@ -62,18 +62,24 @@ class Settings extends React.Component {
     componentDidMount = async () => {
 
         const state = store.getState().authReducer.user;
-        
+        console.log(state);
         var uid = state.uid;
-        var gender = state.gender;
         var username = state.username;
+    
+        // check for prop status before implementing state
+        var gender = (this.props.gender == undefined)? state.gender: this.props.gender;
         var phone = state.phone;
         var email = state.email;
-
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email}).done();
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ gender: nextProps.gender });  
+        
+        if (nextProps.gender != this.props.gender)
+        {
+            //console.log("Detected prop change, so rerendering the state");
+            this.setState({ gender: nextProps.gender });  
+        }
     }
 
     render() {
@@ -177,6 +183,7 @@ class Settings extends React.Component {
                     buttonStyle={[styles.button]}
                     textStyle={styles.buttonText}
                     onPress={this.onSignOut}/>
+
                 <Text>RANDOM {this.state.gender}</Text>
           </ScrollView>
         );
@@ -196,9 +203,9 @@ const colors = {
 
   const mapStateToProps = (state) => {
         return {
-            'username': state.authReducer.username,
+            //'username': state.authReducer.username,
             'gender': state.authReducer.gender,
-            'phone': state.authReducer.phone
+            //'phone': state.authReducer.phone
         }
   }
 

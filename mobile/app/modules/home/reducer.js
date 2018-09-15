@@ -1,10 +1,8 @@
+/*
 import { AsyncStorage } from 'react-native';
 import * as t from './actionTypes';
 
-
-let initialState = {};
-
-const reducer = (state = initialState, action) =>
+const reducer = (state = {}, action) =>
 {
     switch (action.type) 
     {
@@ -19,10 +17,5 @@ const reducer = (state = initialState, action) =>
     }
 };
 
-/**
- * Subscribing to the store makes it possible to
- * execute some code every time the state is updated.
- */
-
-
 export default reducer;
+*/
