@@ -14,6 +14,7 @@ export function register(data, callback)
 export function createUser (user, callback) 
 {
     const userRef = database.ref().child('users');
+    const reportRef = database.ref().child('reports');
 
     userRef.child(user.uid).update({ ...user })
         .then(() => callback(true, user, null))
