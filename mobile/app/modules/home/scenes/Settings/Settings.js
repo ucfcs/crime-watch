@@ -20,8 +20,7 @@ const { color } = theme;
 class Settings extends React.Component {
     constructor(props){
         super(props);
-  
-        console.log(props);
+
         this.state = { 
             uid: '',
             username: '',
@@ -73,6 +72,10 @@ class Settings extends React.Component {
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email}).done();
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({ gender: nextProps.gender });  
+    }
+
     render() {
         return (
         <ScrollView style={{flex: 1, backgroundColor: (Platform.OS === 'ios') ? colors.iosSettingsBackground : colors.white}}>
@@ -90,7 +93,7 @@ class Settings extends React.Component {
                 positiveButtonTitle={'Continue'}
                 negativeButtonTitle={'Cancel'}
                 buttonRightTitle={'Save'}
-                value={this.props.username}
+                value={this.state.username}
                 dialogAndroidProps={{
                     widgetColor: colors.black,
                     positiveColor: colors.black,
@@ -174,7 +177,7 @@ class Settings extends React.Component {
                     buttonStyle={[styles.button]}
                     textStyle={styles.buttonText}
                     onPress={this.onSignOut}/>
-                <Text>RANDOM {this.props.gender}</Text>
+                <Text>RANDOM {this.state.gender}</Text>
           </ScrollView>
         );
         }
@@ -194,7 +197,7 @@ const colors = {
   const mapStateToProps = (state) => {
         return {
             'username': state.authReducer.username,
-            'gender': state.homeReducer.gender,
+            'gender': state.authReducer.gender,
             'phone': state.authReducer.phone
         }
   }

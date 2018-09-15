@@ -24,6 +24,12 @@ export const androidStyles = StyleSheet.create({
         alignItems: "center"
     },
 
+    tableContainer:{
+        flex: 1,
+        height:400,
+        width:400
+    },
+
     buttonContainer:{
         justifyContent:"center",
         alignItems:"center",
