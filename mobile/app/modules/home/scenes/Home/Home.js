@@ -10,6 +10,7 @@ import { iosStyles, androidStyles } from "./styles";
 import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
+import { Table, Row, Rows } from 'react-native-table-component';
 import { actions as home } from "../../../home/index"
 
 const { color } = theme;
@@ -71,9 +72,18 @@ class Home extends React.Component {
 
                 <View style={styles.userView}>
 
+
+
                     <Text>Welcome, {this.state.username}!</Text>
 
                     <Text>Gender, {this.state.gender}!</Text>
+
+                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}} style={styles.tableContainer}>
+                        <Row data={["Example", "Header"]} style={styles.head}/>
+                        <Rows data={[['1', '2'],['3', '4']]} style={styles.text}/>
+                      
+                    </Table>
+
 
                     <TouchableOpacity onPress={Actions.Map}>
                         <Text>PRESS HERE TO SEE REPORTS MAP</Text>
