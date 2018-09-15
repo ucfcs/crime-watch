@@ -3,20 +3,25 @@ import { auth, database, provider } from "../../config/firebase";
 //Register the user using email and password
 export function register(data, callback) 
 {
-    const { email, password, username } = data;
+    console.log(data);
+    const { email, password, phone, username } = data;
     
     auth.createUserWithEmailAndPassword(email, password)
-        .then((resp) => createUser({ username, uid:resp.user.uid }, callback))
+        .then((resp) => createUser({ username, uid:resp.user.uid }, phone, email, callback))
         .catch((error) => callback(false, null, error));
 }
 
 //Create the user object in realtime database
-export function createUser (user, callback) 
+export function createUser (user, phone, email, callback) 
 {
+   
     const userRef = database.ref().child('users');
-    const reportRef = database.ref().child('reports');
-
-    userRef.child(user.uid).update({ ...user })
+    var email = email;
+    var phone = phone;
+    var gender = '';
+    var deviceID = '';
+    var reports = [''];
+    userRef.child(user.uid).update({ ...user, email, phone, gender, deviceID, reports })
         .then(() => callback(true, user, null))
         .catch((error) => callback(false, null, {message: error}));
 }

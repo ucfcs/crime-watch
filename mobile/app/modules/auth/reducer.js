@@ -3,7 +3,7 @@ import * as t from './actionTypes';
 
 let initialState = { isLoggedIn: false, user: null };
 
-const authReducer = (state = initialState, action) =>
+const reducer = (state = initialState, action) =>
 {
     switch (action.type) 
     {
@@ -20,10 +20,10 @@ const authReducer = (state = initialState, action) =>
             AsyncStorage.multiRemove(keys);
             
             return {...state, isLoggedIn: false, user: null};
-
+        
         default:
             return state;
     }
 };
 
-export default authReducer;
+export default reducer;

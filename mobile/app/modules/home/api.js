@@ -1,6 +1,23 @@
 
-export function userReports (user, callback)
+import { auth, database, provider } from "../../config/firebase";
+
+
+export function changeGender(user, gender, callback) 
 {
-  // testing a simple return call
-    return 'Here is a list of reports';
+        database.ref('users').child(user).update({'gender': gender})
+                .then((resp) => callback(true, resp))
+                .catch((error) => callback(false, error));
+}
+
+export function changePhone(user, phone, callback)
+{
+        database.ref('users').child(user).update({'phone': phone})
+                .then((resp) => callback(true, resp))
+                .catch((error) => callback(false, error));
+}
+
+export function getData(phone, callback)
+{
+        var report = database.ref('reports').child(phone).onChildAdded(snapshot, previousChildName);
+        callback(true, report);
 }

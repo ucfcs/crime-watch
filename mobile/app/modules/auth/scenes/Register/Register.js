@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import styles from './styles';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -27,6 +27,15 @@ const fields = [
         secureTextEntry: false,
         value: "",
         type: "text"
+    },
+    {
+        key: 'phone',
+        label: "Phone Number",
+        placeholder: "Phone Number",
+        autoFocus: false,
+        secureTextEntry: false,
+        value: "",
+        type: "phone"
     },
     {
         key: 'password',
@@ -93,14 +102,14 @@ class Register extends React.Component {
 
     render() {
         return (
-          <View style = {styles.container}>
+          <ScrollView style = {styles.container}>
             <Form fields={fields}
                
                   showLabel={false}
                   onSubmit={this.onSubmit}
                   buttonTitle={"SIGN UP"}
                   error={this.state.error}/>
-                  </View>
+                  </ScrollView>
         );
     }
 }

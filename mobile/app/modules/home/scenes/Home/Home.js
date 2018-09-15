@@ -1,30 +1,43 @@
 import React from 'react';
-var { View, StyleSheet, Alert } = require('react-native');
-
+var { View, ScrollView, StyleSheet, Alert, Text, Platform, TouchableOpacity } = require('react-native');
+import bindActionCreators from 'redux';
 import {Button} from 'react-native-elements'
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
-import styles from "./styles"
+import { iosStyles, androidStyles } from "./styles";
+
+import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
-import action from '../../actions'
-const { signOut } = auth;
+import { Table, Row, Rows } from 'react-native-table-component';
+import { actions as home } from "../../../home/index"
 
 const { color } = theme;
 
 class Home extends React.Component {
-    constructor(){
-        super();
-        this.state = { user: ''}
-        
-        this.onSignOut = this.onSignOut.bind(this);
+    constructor(props){
+        super(props);
+        //console.log("HOME" + props);
+        this.state = { 'username': '', 'gender': ''};
+
     }
 
-    onSignOut() {
-        this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this))
-    }
+    // alternative method
+    componentDidMount = async (prevProps, prevState, snapshot) => {
+        //console.log(prevProps);
+        const state = store.getState().authReducer.user;
+   
 
+        var uid = state.uid;console.log(uid);
+        var gender = state.gender;
+        var username = state.username;
+        var phone = state.phone;
+        var email = state.email;
+
+        this.setState({ 'username': username, 'gender': gender}).done();
+    }
+   
     onSuccess() {
         Actions.reset("Auth")
     }
@@ -33,67 +46,67 @@ class Home extends React.Component {
         Alert.alert('Oops!', error.message);
     }
 
-    // attempting to grab user data and display it
-    async getUser() 
-    {
-        try
-        {
-            const data = await AsyncStorage.getItem('user');
-            console.log("Accessing user" + data);
-            this.setState({ user: JSON.parse(data) });
-        }
-        catch (err)
-        {
-            console.log(err);
-        }
-    }
-
     render() {
+        const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
+     
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
+
+                <View style={styles.navView}>
+                    {/*
                     <Button
                     raised
                     title={'REPORTS'}
-                    containerViewStyle={[styles.containerView]}
+                    containerViewStyle={styles.containerView}
                     buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
                     onPress={Actions.Report}/>
+                    */}
 
                     <Button
                     raised
-                    title={'SETTINGS'}
                     containerViewStyle={[styles.containerView]}
                     buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
                     onPress={Actions.Settings}/>
+                    
+                </View>
 
-                    <Button
-                    raised
-                    title={'STUFF'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={this.onSignOut}/>
+                <View style={styles.userView}>
 
-                    <Button
-                    raised
-                    title={'LOG OUT'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={this.onSignOut}/>
 
-                    <Button
-                    raised
-                    //borderRadius={20}
-                    title={'LOG OUT'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={this.onSignOut}/>
-            </View>
+
+                    <Text>Welcome, {this.state.username}!</Text>
+
+                    <Text>Gender, {this.state.gender}!</Text>
+
+                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}} style={styles.tableContainer}>
+                        <Row data={["Example", "Header"]} style={styles.head}/>
+                        <Rows data={[['1', '2'],['3', '4']]} style={styles.text}/>
+                      
+                    </Table>
+
+
+                    <TouchableOpacity onPress={Actions.Map}>
+                        <Text>PRESS HERE TO SEE REPORTS MAP</Text>
+                    </TouchableOpacity>
+                    
+                </View>
+
+            </ScrollView>
         );
     }
 }
 
-export default connect(null, { signOut })(Home);
+const mapStateToProps = (state) => {
+    return{
+        username: state.username,
+        gender: state.gender
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        ...bindActionCreators({}, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, {})(Home);

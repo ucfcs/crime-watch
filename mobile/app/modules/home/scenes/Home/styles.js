@@ -4,27 +4,30 @@ const { padding, color, fontSize, fontFamily, windowWidth, normalize } = theme;
 
 const resizeMode = 'contain';
 
-const styles = StyleSheet.create({
+export const androidStyles = StyleSheet.create({
     container:{
         flex:1,
-        //padding: 30,
-        paddingVertical: '30%'
     },
-  /*
-    bottomContainer:{
-        backgroundColor:"white",
-        paddingVertical: padding * 3,
-        shadowColor: "#000000",
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        shadowOffset: {
-            height: 1,
-            width: 0
-        }
-    },
-*/
+
     containerView:{
         backgroundColor: 'transparent'
+    },
+
+    navView:{
+        flexDirection: 'row',
+    },
+
+    userView:{
+        flex:1,
+        paddingVertical: "20%",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+
+    tableContainer:{
+        flex: 1,
+        height:400,
+        width:400
     },
 
     buttonContainer:{
@@ -34,9 +37,37 @@ const styles = StyleSheet.create({
 
     button:{
         flex: 1,
-        padding: 22,
-        margin: 25,
-    }
+        height: 35,
+        width: 35,
+        marginTop: 12,
+        borderRadius: 8,
+        borderWidth: 1,
+        backgroundColor: 'white'
+    },
 });
 
-export default styles;
+export const iosStyles = StyleSheet.create({
+    container:{
+        flex:1,
+        paddingVertical: '30%'
+    },
+
+    userView:{
+        flex:0,
+    },
+
+    containerView:{
+        backgroundColor: 'transparent'
+    },
+
+    buttonContainer:{
+        flex:1,
+        alignItems: "center"
+    },
+
+    button:{
+        flex: 1,
+        padding: 2,
+        margin: 2,
+    }
+});

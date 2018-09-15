@@ -4,21 +4,15 @@ import { auth } from "../../config/firebase";
 
 import { AsyncStorage } from 'react-native';
 
-
-export function displayReports (user, successCB, errorCB)
+export function getUserInfo (callback)
 {
-    return (dispatch) => 
-      {
-          api.userReports(user, function (success, error, data) 
-          {
-              if (success) 
-              {
-                  dispatch({type: t.LOGGED_IN}, data);
-                  successCB(user);
-              }
-              else if (error) 
-                  errorCB(error)
-          });
-      };
+    return (dispatch) =>
+    {
+        api.getUser(user, function (success, data, error)
+        {
+
+        });
+    };
 }
+
 
