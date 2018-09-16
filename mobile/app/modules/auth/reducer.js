@@ -12,8 +12,8 @@ const reducer = (state = initialState, action) =>
 
             // Save the token data to Asynstorage
             AsyncStorage.multiSet([['user',JSON.stringify(user)]]);
-            return {...state, isLoggedIn: true, user: user };
-        
+            //return {...state, isLoggedIn: true, user: user };
+            return {...state, isLoggedIn: true, ...user };
         case t.LOGGED_OUT:
             let keys = ['user'];
             AsyncStorage.multiRemove(keys);

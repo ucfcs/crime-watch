@@ -7,8 +7,10 @@ export function changeGender (user, gender)
     {
         api.changeGender(user, gender, function (success, data, error) 
         {
+            console.log("Here");
             if (success)
             {
+                console.log("API call");
                 dispatch({type: t.CHANGE_GENDER, data: gender});
                 console.log("State change done");
             }
