@@ -18,24 +18,40 @@ const { color } = theme;
 class Home extends React.Component {
     constructor(props){
         super(props);
-        //console.log("HOME" + props);
+        console.log('here');
         this.state = { 'username': '', 'gender': ''};
-
     }
 
     // alternative method
     componentDidMount = async (prevProps, prevState, snapshot) => {
         //console.log(prevProps);
         const state = store.getState().authReducer.user;
-   
-
+        
         var uid = state.uid;console.log(uid);
-        var gender = state.gender;
         var username = state.username;
+      
+        // check for prop status before implementing state
+        var gender = (this.props.gender == undefined)? state.gender: this.props.gender;
         var phone = state.phone;
         var email = state.email;
 
-        this.setState({ 'username': username, 'gender': gender}).done();
+        this.props.navigation.addListener('willFocus', () =>{
+            
+            // STORE ISN"T UPDATING AT ROOT LEVEL FOR SOME REASON
+            const state = store.getState().authReducer;
+            console.log(state);
+            //this.setState({ 'username': username, 'gender': gender}).done();
+        });
+    }
+    //
+    componentWillReceiveProps(nextProps) {
+        console.log("Home page received new info")
+        console.log("Updated props is" + nextProps.gender);
+        if (nextProps.gender != this.props.gender)
+        {
+            console.log("Detected prop change, so rerendering the state");
+            this.setState({ gender: nextProps.gender });  
+        }
     }
    
     onSuccess() {
@@ -109,4 +125,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, {})(Home);
+export default connect(null, {})(Home);

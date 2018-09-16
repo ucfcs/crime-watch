@@ -21,13 +21,14 @@ import { checkLoginStatus } from "../modules/auth/actions";
 
 import { color, navTitleStyle } from "../styles/theme";
 
+
 export default class extends React.Component {
     constructor() {
         super();
         this.state = {
             isReady: false,
             isLoggedIn: false,
-            exist: false //indicates if user exist in realtime database
+            exist: false, //indicates if user exist in realtime database,
         }
     }
 
@@ -44,7 +45,7 @@ export default class extends React.Component {
 
         return (
             <Router>
-                <Scene key="root" hideNavBar
+                <Scene key="root" hideNavBar 
                        navigationBarStyle={{backgroundColor: "#fff"}}
                        titleStyle={navTitleStyle}
                        backButtonTintColor={color.black}>
