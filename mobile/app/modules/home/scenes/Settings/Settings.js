@@ -11,7 +11,7 @@ import styles from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
-//import action from '../../actions'
+
 const { signOut } = auth;
 const { changePhone, changeGender } = home;
 
@@ -20,15 +20,21 @@ const { color } = theme;
 class Settings extends React.Component {
     constructor(props){
         super(props);
-
+        
+        // Set some initial state (variables that you need to display somewhere on this screen)
+        //
         this.state = { 
             uid: '',
             username: '',
+            phone: '',
             allowedPushNotifications: false,
             gender: '',
             email: ''
         };
 
+        console.log(props);
+
+        // Any function that requires a state change will need to be bound onto the component. Do that for every new function here
         this.onPhoneChange = this.onPhoneChange.bind(this);
         this.onGenderChange = this.onGenderChange.bind(this);
         this.onSignOut = this.onSignOut.bind(this);
@@ -36,6 +42,8 @@ class Settings extends React.Component {
         this.onError = this.onError.bind(this);
     }
 
+    // These are the functions that will be executed when a user does something on the app (button press for example). Bind these above
+    //
     onPhoneChange(value) {
         this.setState({phone: value});
         this.props.changePhone(this.state.uid, value);
@@ -47,148 +55,148 @@ class Settings extends React.Component {
     }
 
     onSignOut() {
-        this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this))
+        this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this));
     }
 
     onSuccess() {
-        Actions.reset("Auth")
+        Actions.reset("Auth");
     }
 
     onError(error) {
         Alert.alert('Oops!', error.message);
     }
 
-    // alternative method
+    // The important part. ComponentDidMount happens ONCE when the PAGE is initially loaded. There is where you tap into the store to retrieve the current state. 
+    // Update this.state by using the setState method on each unique field that you'll need for the page
+    //
     componentDidMount = async () => {
-        this.props.navigation.addListener('willFocus',() => {
-            const authState = store.getState().authReducer.user;
-            const homeState = store.getState().homeReducer;
-       
-            var username = authState.username;
-            var email = authState.email;
 
-            try{
-                var gender = homeState.gender;
-                var phone = homeState.phone;
-            }
-            catch (err){
-                var gender = authState.gender;
-                var phone = authState.phone;
-            }
+        const state = store.getState().authReducer;
 
-            this.setState({ 'username': username, 'gender': gender, 'phone': phone, 'email': email});
-        });
+        console.log(state);
+
+        var uid = state.uid;
+        var username = state.username;
+        var gender = state.gender;
+        var phone = state.phone;
+        var email = state.email;
+
+        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email});
     }
 
+    // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
+    // a rerender will happen via this.setState(). Place all of the variables that will be updated in here.
+    //
     componentWillReceiveProps(nextProps) {
-        console.log("loggging componentwillreceiveprops");
-        this.setState({ gender: nextProps.gender });  
+        if (nextProps.gender != this.props.gender)
+        {
+            this.setState({ gender: nextProps.gender });  
+        }
     }
 
     render() {
         return (
-        <ScrollView style={{flex: 1, backgroundColor: (Platform.OS === 'ios') ? colors.iosSettingsBackground : colors.white}}>
-     
-            <SettingsCategoryHeader title={'My Account ' + this.state.gender } textStyle={(Platform.OS === 'android') ? {color: colors.black} : null}/>
-     
-            <SettingsDividerLong android={false}/>
-            <SettingsDividerShort ios={true}/>
+            <ScrollView style={{flex: 1, backgroundColor: (Platform.OS === 'ios') ? colors.iosSettingsBackground : colors.white}}>
+        
+                <SettingsCategoryHeader title={'My Account ' + this.state.gender } textStyle={(Platform.OS === 'android') ? {color: colors.black} : null}/>
+        
+                <SettingsDividerLong android={false}/>
+                <SettingsDividerShort ios={true}/>
 
-            <SettingsEditText
-                disabled='true'
-                title="Username"
-                dialogDescription={'Enter your username.'}
-                valuePlaceholder="..."
-                positiveButtonTitle={'Continue'}
-                negativeButtonTitle={'Cancel'}
-                buttonRightTitle={'Save'}
-                value={this.state.username}
-                dialogAndroidProps={{
-                    widgetColor: colors.black,
-                    positiveColor: colors.black,
-                    negativeColor: colors.black,
-                }}
-            />
-     
-            <SettingsEditText
-                disabled='true'
-                title="Email"
-                dialogDescription={'Change your Email.'}
-                valuePlaceholder="..."
-                positiveButtonTitle={'Continue'}
-                negativeButtonTitle={'Cancel'}
-                buttonRightTitle={'Save'}
-                value={this.state.email}
-                dialogAndroidProps={{
-                    widgetColor: colors.black,
-                    positiveColor: colors.black,
-                    negativeColor: colors.black,
-                }}
-            />
+                <SettingsEditText
+                    disabled='true'
+                    title="Username"
+                    dialogDescription={'Enter your username.'}
+                    valuePlaceholder="..."
+                    positiveButtonTitle={'Continue'}
+                    negativeButtonTitle={'Cancel'}
+                    buttonRightTitle={'Save'}
+                    value={this.state.username}
+                    dialogAndroidProps={{
+                        widgetColor: colors.black,
+                        positiveColor: colors.black,
+                        negativeColor: colors.black,
+                    }}
+                />
+        
+                <SettingsEditText
+                    disabled='true'
+                    title="Email"
+                    dialogDescription={'Change your Email.'}
+                    valuePlaceholder="..."
+                    positiveButtonTitle={'Continue'}
+                    negativeButtonTitle={'Cancel'}
+                    buttonRightTitle={'Save'}
+                    value={this.state.email}
+                    dialogAndroidProps={{
+                        widgetColor: colors.black,
+                        positiveColor: colors.black,
+                        negativeColor: colors.black,
+                    }}
+                />
 
-            <SettingsEditText
-                disabled="true"
-                title="Phone"
-                dialogDescription={'Change your phone number.'}
-                valuePlaceholder="..."
-                positiveButtonTitle={'Continue'}
-                negativeButtonTitle={'Cancel'}
-                buttonRightTitle={'Save'}
-                onSaveValue={value => {
-                    this.onPhoneChange(value);
-                }}
-                value={this.state.phone}
-                dialogAndroidProps={{
-                    widgetColor: colors.black,
-                    positiveColor: colors.black,
-                    negativeColor: colors.black,
-                }}
-            />
-     
-            <SettingsPicker
-                title="Gender"
-                dialogDescription={'Choose your gender.'}
-                possibleValues={[
-                    {label: '...', value: ''},
-                    {label: 'male', value: 'male'},
-                    {label: 'female', value: 'female'},
-                    {label: 'other', value: 'other'}
-                ]}
-                positiveButtonTitle={'Continue'}
-                negativeButtonTitle={'Cancel'}
-                buttonRightTitle={'Save'}
-                onSaveValue={value => {
-                    this.onGenderChange(value);
-                }}
-                value={this.state.gender}
-                styleModalButtonsText={{color: colors.black}}
-            />
-            
-            <SettingsDividerShort/>
-    
-            <SettingsSwitch
-                title={'Allow Push Notifications'}
-                onSaveValue={(value) => {
-                    console.log('allow push notifications:', value);
-                    this.setState({
-                        allowPushNotifications: value
-                    });
-                }}
-                value={this.state.allowPushNotifications}
-                thumbTintColor={(this.state.allowPushNotifications) ? colors.switchEnabled : colors.switchDisabled}
-            />
-     
-            <Button
-                    raised
-                    //borderRadius={20}
-                    title={'LOG OUT'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={this.onSignOut}/>
-                <Text>RANDOM {this.state.gender}</Text>
-          </ScrollView>
-        );
+                <SettingsEditText
+                    disabled="true"
+                    title="Phone"
+                    dialogDescription={'Change your phone number.'}
+                    valuePlaceholder="..."
+                    positiveButtonTitle={'Continue'}
+                    negativeButtonTitle={'Cancel'}
+                    buttonRightTitle={'Save'}
+                    onSaveValue={value => {
+                        this.onPhoneChange(value);
+                    }}
+                    value={this.state.phone}
+                    dialogAndroidProps={{
+                        widgetColor: colors.black,
+                        positiveColor: colors.black,
+                        negativeColor: colors.black,
+                    }}
+                />
+        
+                <SettingsPicker
+                    title="Gender"
+                    dialogDescription={'Choose your gender.'}
+                    possibleValues={[
+                        {label: '...', value: ''},
+                        {label: 'male', value: 'male'},
+                        {label: 'female', value: 'female'},
+                        {label: 'other', value: 'other'}
+                    ]}
+                    positiveButtonTitle={'Continue'}
+                    negativeButtonTitle={'Cancel'}
+                    buttonRightTitle={'Save'}
+                    onSaveValue={value => {
+                        this.onGenderChange(value);
+                    }}
+                    value={this.state.gender}
+                    styleModalButtonsText={{color: colors.black}}
+                />
+                
+                <SettingsDividerShort/>
+        
+                <SettingsSwitch
+                    title={'Allow Push Notifications'}
+                    onSaveValue={(value) => {
+                        console.log('allow push notifications:', value);
+                        this.setState({
+                            allowPushNotifications: value
+                        });
+                    }}
+                    value={this.state.allowPushNotifications}
+                    thumbTintColor={(this.state.allowPushNotifications) ? colors.switchEnabled : colors.switchDisabled}
+                />
+        
+                <Button
+                        raised
+                        title={'LOG OUT'}
+                        containerViewStyle={[styles.containerView]}
+                        buttonStyle={[styles.button]}
+                        textStyle={styles.buttonText}
+                        onPress={this.onSignOut}/>
+
+            </ScrollView>
+            );
         }
 }
 
@@ -202,16 +210,19 @@ const colors = {
     blueGem: 'blue',
   };
 
-
+  // When our state changes, we want the new properties to be passed downwards and eventually get to this page. This function will link 
+  // our props to the state essentially. Place those changing variables here
+  //
   const mapStateToProps = (state) => {
         return {
-            
-            //'username': state.user.username,
-            'gender': state.homeReducer.gender,
-            'phone': state.homeReducer.phone
+            'gender': state.authReducer.gender,
+            'phone': state.authReducer.phone
         }
   }
 
+  // Extremely important, this maps the properties to the actions that we want to fire off. Basically, changeGender is an action created from action.js
+  // It's responsible for taking in an action and state, and tapping into the reducer to modify the state. All actions will need to be connected via
+  // this component by using the connect() method
   const mapDispatchToProps = {
     changeGender,
     changePhone,

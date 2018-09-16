@@ -25,10 +25,10 @@ export const androidStyles = StyleSheet.create({
     },
 
     tableContainer:{
-        flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff'
+        flex: 1,
+        height:400,
+        width:400
     },
-    head: { height: 40, backgroundColor: '#f1f8ff' },
-    text: { margin: 6 },
 
     buttonContainer:{
         justifyContent:"center",

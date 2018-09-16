@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
 import { Font, AppLoading } from 'expo';
 
-import Router from './app/config/routes'
+import Router from './app/config/routes';
 import store from './app/redux/store';
 
-const ReducedRouter = connect ()(Router);
+const ConnectedRouter = connect()(Router);
 
 function cacheFonts(fonts) 
 {
@@ -51,7 +51,7 @@ export default class App extends Component
         
         return (
             <Provider store={store}>
-                    <ReducedRouter/>
+                    <ConnectedRouter></ConnectedRouter>
             </Provider>
         );
     }

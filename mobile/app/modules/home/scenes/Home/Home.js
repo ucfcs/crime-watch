@@ -1,5 +1,5 @@
 import React from 'react';
-var { View, ScrollView, StyleSheet, Alert, Text, Platform, TouchableOpacity } = require('react-native');
+var { View, ScrollView, Alert, Text, Platform, TouchableOpacity } = require('react-native');
 import bindActionCreators from 'redux';
 import {Button} from 'react-native-elements'
 import {Actions} from 'react-native-router-flux';
@@ -11,34 +11,61 @@ import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
 import { Table, Row, Rows } from 'react-native-table-component';
-import { actions as home } from "../../../home/index"
+
+import { actions as home } from '../../index';
 
 const { color } = theme;
 
 class Home extends React.Component {
     constructor(props){
         super(props);
-        this.state = { 'username': '', 'gender': ''};
+
+        // Set some initial state (variables that you need to display somewhere on this screen)
+        // I don't need it all for this home page but why not 
+        this.state = { 
+            uid: '',
+            username: '',
+            gender: '',
+            phone: '',
+            email: ''
+        };
     }
 
+    // The important part. ComponentDidMount happens ONCE when the PAGE is initially loaded. There is where you tap into the store to retrieve the current state. 
+    // Update this.state by using the setState method on each unique field that you'll need for the page
+    //
+    // NOTE ** We wrap the state stuff inside this.props.navigation.addListener(). It's an asynchronous function that actively listens for a page navigation event.
+    // It's the only method I could think of that will allow the state to be updated after going back a page.
     componentDidMount = async () => {
-        this.props.navigation.addListener('willFocus',() => {
-            const authState = store.getState().authReducer;
-            const homeState = store.getState().homeReducer;
-            console.log(authState);
-            var username = authState.username;
- 
-            try{
-                var gender = homeState.gender;
+        this.props.navigation.addListener('willFocus', () =>{
 
-            }
-            catch (err){
-                var gender = authState.gender;
-     
-            }
+            // Here is a list of all USER REPORTS. Please use this information 
+            // and display it on the page.
+            var reports = home.getReport();
 
-            this.setState({ 'username': username, 'gender': gender});
+            const state = store.getState().authReducer;
+
+            console.log(state);
+
+            var uid = state.uid;
+            var username = state.username;
+            var gender = state.gender;
+            var phone = state.phone;
+            var email = state.email;
+   
+            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email});
         });
+    }
+
+    // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
+    // a rerender will happen via this.setState(). Place all of the variables that will be updated in here.
+    //
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.gender != this.props.gender)
+        {
+            console.log("Detected prop change, so rerendering the state");
+            this.setState({ gender: nextProps.gender });  
+        }
     }
    
     onSuccess() {
@@ -56,29 +83,24 @@ class Home extends React.Component {
             <ScrollView style={styles.container}>
 
                 <View style={styles.navView}>
-                 
                     <Button
-                    raised
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    onPress={Actions.Settings}/>
-                    
+                        raised
+                        containerViewStyle={[styles.containerView]}
+                        buttonStyle={[styles.button]}
+                        onPress={Actions.Settings}/>
+                        
                 </View>
 
                 <View style={styles.userView}>
 
-
-
                     <Text>Welcome, {this.state.username}!</Text>
-
-                    <Text>Gender, {this.props.gender}!</Text>
+                    <Text>Gender, {this.state.gender}!</Text>
 
                     <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}} style={styles.tableContainer}>
                         <Row data={["Example", "Header"]} style={styles.head}/>
                         <Rows data={[['1', '2'],['3', '4']]} style={styles.text}/>
                       
                     </Table>
-
 
                     <TouchableOpacity onPress={Actions.Map}>
                         <Text>PRESS HERE TO SEE REPORTS MAP</Text>
@@ -91,17 +113,13 @@ class Home extends React.Component {
     }
 }
 
+// Not used until later
 const mapStateToProps = (state) => {
     return{
-       // username: state.homeReducer.username,
-        //gender: state.homeReducer.gender
+        username: state.username,
+        gender: state.gender
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return{
-        ...bindActionCreators({}, dispatch)
-    }
-}
 
-export default connect(mapStateToProps, {})(Home);
+export default connect(null, {})(Home);

@@ -42,6 +42,7 @@ export function getUser(user, callback)
     database.ref('users').child(user.uid).once('value')
         .then(function(snapshot) 
         {
+
             const exists = (snapshot.val() !== null);
 
             //if the user exist in the DB, replace the user variable with the returned snapshot

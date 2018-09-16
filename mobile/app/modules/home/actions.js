@@ -1,15 +1,16 @@
 import * as t from './actionTypes';
 import * as api from './api';
 
-
 export function changeGender (user, gender)
 {
     return (dispatch) =>
     {
         api.changeGender(user, gender, function (success, data, error) 
         {
+            console.log("Here");
             if (success)
             {
+                console.log("API call");
                 dispatch({type: t.CHANGE_GENDER, data: gender});
                 console.log("State change done");
             }
@@ -36,3 +37,19 @@ export function changePhone (user, phone)
     };
 }
 
+// auto assigning the phone number, will need to pass in the current users phone
+export function getReport (phone = '4072277420')
+{
+    console.log("Waiting for reports");
+    api.getReport(phone, function (success, report)
+    {
+        if (success)
+        {
+            //dispatch({type: t.DATA_RECEIVED, data: report})
+            console.log(report);
+            return report;
+        }
+        else
+            console.log("error");
+    });
+}
