@@ -7,7 +7,6 @@ module.exports =
     userIntent: function (object)
     {
         var speechOutput = '';
-        var repromptText = '';
         const session = object.event.session;
         const intent = object.event.request.intent;
 
@@ -37,25 +36,31 @@ module.exports =
         return null;
     },
     
-    reportIntent: function (object)
+    reportIntent: function (object, database)
     {
         var speechOutput = '';
         var repromptText = '';
         const session = object.event.session;
         const intent = object.event.request.intent;
-        
-        API.getUser(object.event.session.attributes.deviceID, function log (phone)
+       
+        API.getUser(object.event.session.attributes.deviceID, function callback (user)
         {
             // check to see if the user has an account with crime watch already 
-            if (phone)
+            if (user)
             {
-                object.emit(":ask", 'Okay, your account has been found. You are able to make reports now.', '');
+                //object.emit(":ask", 'Okay, your account has been found. You are able to make reports now.', '');
+                API.makeReport(user, 'vehicle', '101 alafaya trail', '11:00pm');
             }
             else
             {
                 object.emit(":ask", "It seems like you haven't linked your Crime Watch account. Just say , add user, to get your account set up.", '');
             }
         });
+    
+
+        // check to see if phone number exists in firebase
+        
+
     }
 
 }

@@ -18,24 +18,27 @@ const { color } = theme;
 class Home extends React.Component {
     constructor(props){
         super(props);
-        //console.log("HOME" + props);
         this.state = { 'username': '', 'gender': ''};
-
     }
 
-    // alternative method
-    componentDidMount = async (prevProps, prevState, snapshot) => {
-        //console.log(prevProps);
-        const state = store.getState().authReducer.user;
-   
+    componentDidMount = async () => {
+        this.props.navigation.addListener('willFocus',() => {
+            const authState = store.getState().authReducer;
+            const homeState = store.getState().homeReducer;
+            console.log(authState);
+            var username = authState.username;
+ 
+            try{
+                var gender = homeState.gender;
 
-        var uid = state.uid;console.log(uid);
-        var gender = state.gender;
-        var username = state.username;
-        var phone = state.phone;
-        var email = state.email;
+            }
+            catch (err){
+                var gender = authState.gender;
+     
+            }
 
-        this.setState({ 'username': username, 'gender': gender}).done();
+            this.setState({ 'username': username, 'gender': gender});
+        });
     }
    
     onSuccess() {
@@ -53,15 +56,7 @@ class Home extends React.Component {
             <ScrollView style={styles.container}>
 
                 <View style={styles.navView}>
-                    {/*
-                    <Button
-                    raised
-                    title={'REPORTS'}
-                    containerViewStyle={styles.containerView}
-                    buttonStyle={[styles.button]}
-                    onPress={Actions.Report}/>
-                    */}
-
+                 
                     <Button
                     raised
                     containerViewStyle={[styles.containerView]}
@@ -76,7 +71,7 @@ class Home extends React.Component {
 
                     <Text>Welcome, {this.state.username}!</Text>
 
-                    <Text>Gender, {this.state.gender}!</Text>
+                    <Text>Gender, {this.props.gender}!</Text>
 
                     <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}} style={styles.tableContainer}>
                         <Row data={["Example", "Header"]} style={styles.head}/>
@@ -98,8 +93,8 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => {
     return{
-        username: state.username,
-        gender: state.gender
+       // username: state.homeReducer.username,
+        //gender: state.homeReducer.gender
     }
 }
 

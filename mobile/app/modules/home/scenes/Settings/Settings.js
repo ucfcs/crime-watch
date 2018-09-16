@@ -60,19 +60,28 @@ class Settings extends React.Component {
 
     // alternative method
     componentDidMount = async () => {
+        this.props.navigation.addListener('willFocus',() => {
+            const authState = store.getState().authReducer.user;
+            const homeState = store.getState().homeReducer;
+       
+            var username = authState.username;
+            var email = authState.email;
 
-        const state = store.getState().authReducer.user;
-        
-        var uid = state.uid;
-        var gender = state.gender;
-        var username = state.username;
-        var phone = state.phone;
-        var email = state.email;
+            try{
+                var gender = homeState.gender;
+                var phone = homeState.phone;
+            }
+            catch (err){
+                var gender = authState.gender;
+                var phone = authState.phone;
+            }
 
-        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email}).done();
+            this.setState({ 'username': username, 'gender': gender, 'phone': phone, 'email': email});
+        });
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("loggging componentwillreceiveprops");
         this.setState({ gender: nextProps.gender });  
     }
 
@@ -196,9 +205,10 @@ const colors = {
 
   const mapStateToProps = (state) => {
         return {
-            'username': state.authReducer.username,
-            'gender': state.authReducer.gender,
-            'phone': state.authReducer.phone
+            
+            //'username': state.user.username,
+            'gender': state.homeReducer.gender,
+            'phone': state.homeReducer.phone
         }
   }
 
