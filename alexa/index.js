@@ -1,11 +1,11 @@
 'use-strict';
 const Alexa = require('alexa-sdk');
 const Intents = require('./intents');
-const API = require('./api');
 
 const appID = '';
 const helpMessage = '';
 const helpReprompt = 'What can I help you with?';
+
 
 
 // Handlers
@@ -21,7 +21,7 @@ const handlers =
     },
     'ReportIntent': function ()
     {
-        Intents.reportIntent(this);
+        Intents.reportIntent(this, database);
     },
     'AMAZON.FallbackIntent': function () 
     {

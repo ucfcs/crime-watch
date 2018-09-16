@@ -12,6 +12,8 @@ import store from '../../../../redux/store';
 import { actions as auth, theme } from "../../../auth/index"
 import { Table, Row, Rows } from 'react-native-table-component';
 
+import { actions as home } from '../../index';
+
 const { color } = theme;
 
 class Home extends React.Component {
@@ -36,7 +38,11 @@ class Home extends React.Component {
     // It's the only method I could think of that will allow the state to be updated after going back a page.
     componentDidMount = async () => {
         this.props.navigation.addListener('willFocus', () =>{
-            
+
+            // Here is a list of all USER REPORTS. Please use this information 
+            // and display it on the page.
+            var reports = home.getReport();
+
             const state = store.getState().authReducer;
 
             console.log(state);
@@ -115,10 +121,5 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return{
-        ...bindActionCreators({}, dispatch)
-    }
-}
 
 export default connect(null, {})(Home);

@@ -15,8 +15,12 @@ export function changePhone(user, phone, callback)
                 .catch((error) => callback(false, error));
 }
 
-export function getData(phone, callback)
+// on child added is supposed to only fire off when a new data object is added
+export function getReport(phone, callback)
 {
-        var report = database.ref('reports').child(phone).onChildAdded(snapshot, previousChildName);
-        callback(true, report);
+        database.ref('reports').child(phone).on('value', (snapshot) =>{
+                console.log("A new report was detected!");
+                callback(true, snapshot);
+        });
 }
+

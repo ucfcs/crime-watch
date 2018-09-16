@@ -37,19 +37,19 @@ export function changePhone (user, phone)
     };
 }
 
-export function getData (phone)
+// auto assigning the phone number, will need to pass in the current users phone
+export function getReport (phone = '4072277420')
 {
-    return (dispatch) =>
+    console.log("Waiting for reports");
+    api.getReport(phone, function (success, report)
     {
-        api.getData(phone, function (success, report)
+        if (success)
         {
-            if (success)
-                dispatch({type: t.DATA_RECEIVED, data: report})
-            else
-                console.log("error");
-        });
-    };
+            //dispatch({type: t.DATA_RECEIVED, data: report})
+            console.log(report);
+            return report;
+        }
+        else
+            console.log("error");
+    });
 }
-
-
-
