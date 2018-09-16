@@ -43,7 +43,7 @@ class Home extends React.Component {
             //this.setState({ 'username': username, 'gender': gender}).done();
         });
     }
-
+    //
     componentWillReceiveProps(nextProps) {
         console.log("Home page received new info")
         console.log("Updated props is" + nextProps.gender);
