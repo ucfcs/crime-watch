@@ -57,20 +57,17 @@ export function getReportTypes(uid)
 
 export function getReports(uid)
 {
-    api.getReports(uid, function (success, reports)
-    {
-        if (success)
+    return (dispatch) => {
+        api.getReports(uid, function (success, reports)
         {
-            console.log("UIDs: " + uid);
-            console.log(reports);
-            reports.forEach(function (report) {
-                console.log(report.key + " " + report.val().type);
-            });
-            return reports;
-        }
-        else
-            console.log(reports);
-    })
+            if (success)
+            {
+                dispatch({type: t.UPDATE_REPORTS, reports: reports});
+            }
+            else
+                console.log(reports);
+        });
+    };
 }
 
 // auto assigning the phone number, will need to pass in the current users phone

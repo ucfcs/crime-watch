@@ -28,7 +28,7 @@ class Home extends React.Component {
             gender: '',
             phone: '',
             email: '',
-            reports: null
+            reports: []
         };
     }
 
@@ -44,6 +44,8 @@ class Home extends React.Component {
             // and display it on the page.
             
             const state = store.getState().authReducer;
+            console.log("STATE:");
+            console.log(state);
             // var reports = getReports(state.uid);
             //console.log(state);
             // console.log(" REPORT'S");
@@ -55,7 +57,10 @@ class Home extends React.Component {
             var phone = state.phone;
             var email = state.email;
             var types = [];
-            var reports = getReports(uid);
+            var reports = state.reports;
+            //getReports(uid);
+            console.log("email " + email);
+            console.log("reports " + reports[0].details); 
             // getReports(uid).then(reports => {
             //     console.log("I'm here");
             //     reports.array.forEach(element => {
@@ -93,8 +98,13 @@ class Home extends React.Component {
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const state = this.state;
-        const reports = state.reports;
-        console.log("Here are theose damn reports " + reports);
+        const types = [];
+        state.reports.forEach((report) => {
+            types.push(report.type);
+            console.log(report.type);
+        });
+        // const reports = state.reports;
+        // console.log("Here are theose damn reports " + reports);
         const element = (data, index) => (
             <TouchableOpacity onPress={() => this._alertIndex(index)}>
                 <View style={styles.btn}>
@@ -122,8 +132,9 @@ class Home extends React.Component {
                     <Text>Gender, {state.gender}!</Text>
 
                     <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}} style={styles.tableContainer}>
-                        <Row data={["Report Number", "Type", "Location", "Time", "Details"]} style={styles.head}/>
-                        <Rows data={[state.reports]} style={styles.text}/>
+                        <Row data={["Report Number", "Type"]} style={styles.head}/>
+                        <Row data={types} style={styles.head}/>
+                        {/* <Rows data={[state.reports]} style={styles.text}/> */}
                     </Table>
 
                     <View style={styles.navView}>

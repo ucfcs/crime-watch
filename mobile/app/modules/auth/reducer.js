@@ -28,6 +28,10 @@ const reducer = (state = initialState, action) =>
             console.log("Attempting to update phone number");
             return { ...state, phone: action.data};
 
+        case t.UPDATE_REPORTS:
+            console.log("Attempting to get reports");
+            return { ...state, reports: action.data};
+
         default:
             return state;
 
