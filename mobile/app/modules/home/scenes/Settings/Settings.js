@@ -98,7 +98,7 @@ class Settings extends React.Component {
         return (
             <ScrollView style={{flex: 1, backgroundColor: (Platform.OS === 'ios') ? colors.iosSettingsBackground : colors.white}}>
         
-                <SettingsCategoryHeader title={'My Account ' + this.state.gender } textStyle={(Platform.OS === 'android') ? {color: colors.black} : null}/>
+                <SettingsCategoryHeader title={'My Account '} textStyle={(Platform.OS === 'android') ? {color: colors.black} : null}/>
         
                 <SettingsDividerLong android={false}/>
                 <SettingsDividerShort ios={true}/>

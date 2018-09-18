@@ -27,7 +27,7 @@ class AuthTextInput extends Component {
                     secureTextEntry={secureTextEntry}
                     containerStyle={styles.containerStyle}
                     inputStyle={styles.inputContainer}
-                    placeholderTextColor={placeholderTextColor}
+                    placeholderTextColor={'#f2f2f2'}
                     keyboardType={keyboardType}
                     value={this.props.value}/>
                 {
