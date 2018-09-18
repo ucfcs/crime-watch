@@ -1,5 +1,6 @@
 import * as t from './actionTypes';
 import * as api from './api';
+import { functions } from 'firebase';
 
 export function changeGender (user, gender)
 {
@@ -35,6 +36,41 @@ export function changePhone (user, phone)
                 console.log("error");
         });
     };
+}
+
+export function getReportTypes(uid)
+{
+    var reportTypes = [];
+    api.getReports(uid, function (success, reports)
+    {
+        if (success)
+        {
+            reports.forEach(function (report) {
+                reportTypes.push(report.val().type);
+            });
+            return reports;
+        }
+        else
+            console.log(reports);
+    })
+}
+
+export function getReports(uid)
+{
+    api.getReports(uid, function (success, reports)
+    {
+        if (success)
+        {
+            console.log("UIDs: " + uid);
+            console.log(reports);
+            reports.forEach(function (report) {
+                console.log(report.key + " " + report.val().type);
+            });
+            return reports;
+        }
+        else
+            console.log(reports);
+    })
 }
 
 // auto assigning the phone number, will need to pass in the current users phone

@@ -56,6 +56,12 @@ export const iosStyles = StyleSheet.create({
         flex:0,
     },
 
+    tableContainer:{
+        flex: 1,
+        height:'80%',
+        width:'100%'
+    },
+
     containerView:{
         backgroundColor: 'transparent'
     },
@@ -67,7 +73,7 @@ export const iosStyles = StyleSheet.create({
 
     button:{
         flex: 1,
-        padding: 2,
-        margin: 2,
+        padding: 15,
+        margin: 20,
     }
 });

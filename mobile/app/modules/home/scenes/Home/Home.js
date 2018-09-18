@@ -12,7 +12,7 @@ import store from '../../../../redux/store';
 import { actions as auth, theme } from "../../../auth/index"
 import { Table, Row, Rows } from 'react-native-table-component';
 
-import { actions as home } from '../../index';
+import { getReports } from '../../actions';
 
 const { color } = theme;
 
@@ -27,7 +27,8 @@ class Home extends React.Component {
             username: '',
             gender: '',
             phone: '',
-            email: ''
+            email: '',
+            reports: null
         };
     }
 
@@ -41,19 +42,28 @@ class Home extends React.Component {
 
             // Here is a list of all USER REPORTS. Please use this information 
             // and display it on the page.
-            var reports = home.getReport();
-
+            
             const state = store.getState().authReducer;
-
-            console.log(state);
+            // var reports = getReports(state.uid);
+            //console.log(state);
+            // console.log(" REPORT'S");
+            // console.log(reports);
 
             var uid = state.uid;
             var username = state.username;
             var gender = state.gender;
             var phone = state.phone;
             var email = state.email;
+            var types = [];
+            var reports = getReports(uid);
+            // getReports(uid).then(reports => {
+            //     console.log("I'm here");
+            //     reports.array.forEach(element => {
+            //         types.push(element.val().type);
+            //     });
+            // })
    
-            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email});
+            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
         });
     }
 
@@ -76,15 +86,30 @@ class Home extends React.Component {
         Alert.alert('Oops!', error.message);
     }
 
+    _alertIndex(index) {
+        Alert.alert("This button was pressed");
+    }
+
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
-     
+        const state = this.state;
+        const reports = state.reports;
+        console.log("Here are theose damn reports " + reports);
+        const element = (data, index) => (
+            <TouchableOpacity onPress={() => this._alertIndex(index)}>
+                <View style={styles.btn}>
+                    <Text style={styles.btnText}>button</Text>
+                </View>
+            </TouchableOpacity>
+        );
+
         return (
             <ScrollView style={styles.container}>
 
                 <View style={styles.navView}>
                     <Button
                         raised
+                        title={'Settings'}
                         containerViewStyle={[styles.containerView]}
                         buttonStyle={[styles.button]}
                         onPress={Actions.Settings}/>
@@ -93,18 +118,27 @@ class Home extends React.Component {
 
                 <View style={styles.userView}>
 
-                    <Text>Welcome, {this.state.username}!</Text>
-                    <Text>Gender, {this.state.gender}!</Text>
+                    <Text>Welcome, {state.username}!</Text>
+                    <Text>Gender, {state.gender}!</Text>
 
                     <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}} style={styles.tableContainer}>
-                        <Row data={["Example", "Header"]} style={styles.head}/>
-                        <Rows data={[['1', '2'],['3', '4']]} style={styles.text}/>
-                      
+                        <Row data={["Report Number", "Type", "Location", "Time", "Details"]} style={styles.head}/>
+                        <Rows data={[state.reports]} style={styles.text}/>
                     </Table>
 
-                    <TouchableOpacity onPress={Actions.Map}>
+                    <View style={styles.navView}>
+                    <Button
+                        raised
+                        title={'Reports Map'}
+                        containerViewStyle={[styles.containerView]}
+                        buttonStyle={[styles.button]}
+                        onPress={Actions.Map}/>
+                        
+                    </View>
+
+                    {/* <TouchableOpacity onPress={Actions.Map}>
                         <Text>PRESS HERE TO SEE REPORTS MAP</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     
                 </View>
 
