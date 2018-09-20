@@ -46,9 +46,10 @@ export default class extends React.Component {
         return (
             <Router>
                 <Scene key="root" hideNavBar 
-                       navigationBarStyle={{backgroundColor: "#fff"}}
+                       navigationBarStyle={{backgroundColor: "#1e4351"}}
                        titleStyle={navTitleStyle}
-                       backButtonTintColor={color.black}>
+                       navBarButtonColor={color.white}
+                       backButtonTintColor={color.white}>
                     <Stack key="Auth" initial={!this.state.isLoggedIn}>
                         <Scene key="Welcome" component={Welcome} title="" initial={true} hideNavBar/>
                         <Scene key="Register" component={Register} title="Register" back/>

@@ -7,16 +7,16 @@ const resizeMode = 'contain';
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor: color.white
     },
 
     topContainer:{
         flex:1,
         paddingHorizontal:15,
+        paddingTop: padding * 2,
         paddingBottom: padding * 2,
         justifyContent:"center",
         alignItems:"center",
-        backgroundColor: color.black,
+        backgroundColor: color.light_blue_transparent,
     },
 
     image:{
@@ -24,12 +24,13 @@ const styles = StyleSheet.create({
         width: 250,
         backgroundColor: 'transparent',
         marginBottom: padding,
+        marginTop: 50,
         resizeMode
     },
 
     title:{
-        fontSize: fontSize.large + 2,
-        lineHeight: fontSize.large + 4,
+        fontSize: fontSize.large + 10,
+        lineHeight: fontSize.large + 10,
         fontFamily: fontFamily.bold,
         color:color.white,
         letterSpacing: 1
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     //===============================
 
     bottomContainer:{
-        backgroundColor:"white",
+        backgroundColor: color.light_blue_transparent,
         paddingVertical: padding * 3,
         shadowColor: "#000000",
         shadowOpacity: 0.8,
@@ -58,11 +59,12 @@ const styles = StyleSheet.create({
 
     buttonContainer:{
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
     },
 
     containerView:{
-        width: windowWidth - 40
+        width: windowWidth - 40,
+        height: 300,
     },
 
     socialButton:{
@@ -73,8 +75,8 @@ const styles = StyleSheet.create({
     },
 
     button:{
-        backgroundColor: "#FF553F",
-        height: normalize(55)
+        backgroundColor: color.orange,
+        height: normalize(55),
     },
 
     buttonText:{
@@ -86,27 +88,21 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent:"center",
         alignItems:"center",
-        marginTop: padding * 2
+        marginTop: padding * 2,
     },
 
     bottomText:{
-        fontSize: fontSize.regular,
+        fontSize: fontSize.small,
         fontFamily: fontFamily.medium,
         marginRight: 5,
-        color: "#414141"
+        color: color.light_grey
     },
 
     signUpText:{
         fontSize: fontSize.regular,
-        color: "#FF553F",
-        fontFamily: fontFamily.medium
-    },
-
-    orContainer:{
-        justifyContent:"center",
-        alignItems:"center",
-        height: 40,
-        width: windowWidth
+        fontWeight: 'bold',
+        color: color.orange,
+        fontFamily: fontFamily.extrabold
     },
 
     divider:{

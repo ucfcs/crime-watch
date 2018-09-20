@@ -6,12 +6,12 @@ const  { color, padding, windowWidth, normalize, fontSize, fontFamily } = theme;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: color.black,
+        backgroundColor: 'transparent',
     },
 
     wrapper:{
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
     },
 
     errorText:{
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 
     containerView:{
         marginVertical: padding * 3,
-        width: windowWidth - 40
+        width: windowWidth - 80
     },
 
     socialButton:{
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     },
 
     button:{
-        backgroundColor: "#FF553F",
+        backgroundColor: color.orange,
         height: normalize(55)
     },
 
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 
     forgotText:{
         textAlign:"center",
-        color:color.black,
+        color:color.light_grey,
         marginBottom: padding,
         fontSize: fontSize.regular,
         fontFamily: fontFamily.medium,
