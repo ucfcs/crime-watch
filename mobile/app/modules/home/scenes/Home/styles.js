@@ -7,18 +7,46 @@ const resizeMode = 'contain';
 export const androidStyles = StyleSheet.create({
     container:{
         flex:1,
-    },
-
-    containerView:{
-        backgroundColor: 'transparent'
+        backgroundColor: color.white
     },
 
     navView:{
         flexDirection: 'row',
+        flex: 1,
+    },
+
+    navButton1:{
+        height: 100,
+        width: windowWidth / 3,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: color.light_blue,
+    },
+
+    navButton2:{
+        height: 100,
+        width: windowWidth / 3,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: color.orange,
+    },
+
+    navButton3:{
+        height: 100,
+        justifyContent: "center",
+        alignItems: "center",
+        width: windowWidth / 3,
+        backgroundColor: color.green,
+    },
+
+    navButtonContent:{
+        height: 40,
+        width: 40,
+        color: color.white
     },
 
     userView:{
-        flex:1,
+        flex:100,
         paddingVertical: "20%",
         justifyContent: "center",
         alignItems: "center"
@@ -42,8 +70,8 @@ export const androidStyles = StyleSheet.create({
         marginTop: 12,
         borderRadius: 8,
         borderWidth: 1,
-        backgroundColor: 'white'
     },
+
 });
 
 export const iosStyles = StyleSheet.create({

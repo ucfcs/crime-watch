@@ -1,5 +1,5 @@
 import React from 'react';
-var { View, ScrollView, Alert, Text, Platform, TouchableOpacity } = require('react-native');
+var { View, ScrollView, Alert, Text, Platform, TouchableOpacity, Image } = require('react-native');
 import bindActionCreators from 'redux';
 import {Button} from 'react-native-elements'
 import {Actions} from 'react-native-router-flux';
@@ -83,18 +83,29 @@ class Home extends React.Component {
             <ScrollView style={styles.container}>
 
                 <View style={styles.navView}>
-                    <Button
-                        raised
-                        containerViewStyle={[styles.containerView]}
-                        buttonStyle={[styles.button]}
-                        onPress={Actions.Settings}/>
-                        
+                    <TouchableOpacity onPress={Actions.Settings} style={styles.navButton1}>
+                        <Image style={styles.navButtonContent}
+                            source={require('../../../../assets/images/settings.png')}>
+                        </Image>
+                        <Text>Settings</Text>
+                   </TouchableOpacity>
+
+                   <TouchableOpacity onPress={Actions.Settings} style={styles.navButton2}>
+                        <Image style={styles.navButtonContent}
+                            source={require('../../../../assets/images/user.png')}>
+                        </Image>
+                        <Text>Henry</Text>
+                   </TouchableOpacity>
+
+                   <TouchableOpacity onPress={Actions.Settings} style={styles.navButton3}>
+                        <Image style={styles.navButtonContent}
+                            source={require('../../../../assets/images/placeholder.png')}>
+                        </Image>
+                        <Text>53</Text>
+                   </TouchableOpacity>
                 </View>
 
                 <View style={styles.userView}>
-
-                    <Text>Welcome, {this.state.username}!</Text>
-                    <Text>Gender, {this.state.gender}!</Text>
 
                     <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}} style={styles.tableContainer}>
                         <Row data={["Example", "Header"]} style={styles.head}/>
