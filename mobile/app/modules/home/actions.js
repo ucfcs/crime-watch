@@ -46,10 +46,15 @@ export function getReport (phone = '4072277420')
         if (success)
         {
             //dispatch({type: t.DATA_RECEIVED, data: report})
-            console.log(report);
+
+
+            // go to the most recent report and look to see if the location field is filled in
+            //console.log(report);
+
             return report;
         }
         else
             console.log("error");
     });
 }
+
