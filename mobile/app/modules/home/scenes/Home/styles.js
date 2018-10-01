@@ -42,7 +42,6 @@ export const androidStyles = StyleSheet.create({
     navButtonContent:{
         height: 40,
         width: 40,
-        color: color.white
     },
 
     userView:{

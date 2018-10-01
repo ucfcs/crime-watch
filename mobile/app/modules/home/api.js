@@ -19,7 +19,21 @@ export function changePhone(user, phone, callback)
 export function getReport(phone, callback)
 {
         database.ref('reports').child(phone).on('value', (snapshot) =>{
-                console.log("A new report was detected!");
+                snapshot.forEach(function(childSnapshot){
+                       
+                        if (childSnapshot.child('latitude').exists() == false)
+                        {
+                                console.log("no gps found");
+                                navigator.geolocation.getCurrentPosition(
+                                        (position) => {
+                                                database.ref('reports').child(phone).child(childSnapshot.key).update({'latitude': position.coords.latitude, 'longitude': position.coords.longitude})
+                                        },
+                                        (error) => console.log(error),
+                                        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+                                    );
+                               
+                        }
+                });
                 callback(true, snapshot);
         });
 }
