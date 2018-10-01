@@ -46,7 +46,7 @@ class Home extends React.Component {
             // and display it on the page.
             var reports = home.getReport();
             home.setLocation();
-            
+
             console.log(reports)
  
             const state = store.getState().authReducer;
@@ -88,6 +88,7 @@ class Home extends React.Component {
         const reports = this.state.reports;
         const reportTableHeaders = ['Index', 'Type', 'Time', 'Map'];
         const reportTableData = [[]];
+        // can now grab location data
         for (let i = 0; i < reports.length; i++)
         {
             reportTableData[i] = [i, reports[i].type, reports[i].time, ''];
