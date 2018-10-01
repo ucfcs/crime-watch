@@ -45,6 +45,9 @@ class Home extends React.Component {
             // Here is a list of all USER REPORTS. Please use this information 
             // and display it on the page.
             var reports = home.getReport();
+            home.setLocation();
+            
+            console.log(reports)
  
             const state = store.getState().authReducer;
 

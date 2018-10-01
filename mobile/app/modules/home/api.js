@@ -15,8 +15,16 @@ export function changePhone(user, phone, callback)
                 .catch((error) => callback(false, error));
 }
 
-// on child added is supposed to only fire off when a new data object is added
 export function getReport(phone, callback)
+{
+        database.ref('reports').child(phone).on('value', (snapshot) =>{
+                console.log(snapshot)
+                callback(true, snapshot);
+        });
+}
+
+// on child added is supposed to only fire off when a new data object is added
+export function setLocation(phone, callback)
 {
         database.ref('reports').child(phone).on('value', (snapshot) =>{
                 snapshot.forEach(function(childSnapshot){
@@ -34,7 +42,7 @@ export function getReport(phone, callback)
                                
                         }
                 });
-                callback(true, snapshot);
+                
         });
 }
 

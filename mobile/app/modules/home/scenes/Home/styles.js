@@ -71,6 +71,32 @@ export const androidStyles = StyleSheet.create({
         borderWidth: 1,
     },
 
+    mapButton:{
+        width: 50,
+        height: 18,
+        backgroundColor: '#78B7BB',
+        borderRadius: 2,
+    },
+
+    reportsContainer:{
+        flex: 1,
+        backgroundColor: '#fff'
+    },
+
+    reportsHeader:{
+        height: 30,
+        backgroundColor: '#808B97'
+    },
+
+    reportsText:{
+        margin: 5
+    },
+
+    reportsRow:{
+        flexDirection: 'row',
+        backgroundColor: '#FFF1C1'
+    }
+
 });
 
 export const iosStyles = StyleSheet.create({
