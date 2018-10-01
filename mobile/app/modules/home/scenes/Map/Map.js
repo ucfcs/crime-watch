@@ -87,4 +87,9 @@ const styles = StyleSheet.create({
 
 })
 
+Map.defaultProps = {
+    latitude: undefined,
+    longitude: undefined,
+};
+
 export default connect(null, {})(Map);
