@@ -10,11 +10,13 @@ import { iosStyles, androidStyles } from "./styles";
 import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
-import { Table, Row, Rows } from 'react-native-table-component';
+import { Table, Row, Rows, TableWrapper, Cell } from 'react-native-table-component';
 
 import { actions as home } from '../../index';
 
 const { color } = theme;
+
+Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
 
 class Home extends React.Component {
     constructor(props){
@@ -27,7 +29,8 @@ class Home extends React.Component {
             username: '',
             gender: '',
             phone: '',
-            email: ''
+            email: '',
+            reports: []
         };
     }
 
@@ -52,8 +55,9 @@ class Home extends React.Component {
             var gender = state.gender;
             var phone = state.phone;
             var email = state.email;
+            var reports = state.reports;
    
-            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email});
+            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
         });
     }
 
@@ -78,7 +82,25 @@ class Home extends React.Component {
 
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
-     
+        const reports = this.state.reports;
+        const reportTableHeaders = ['Index', 'Type', 'Time', 'Map'];
+        const reportTableData = [[]];
+        for (let i = 0; i < reports.length; i++)
+        {
+            reportTableData[i] = [i, reports[i].type, reports[i].time, ''];
+        }
+        const reportMapButton = (reportIndex) => (
+            <TouchableOpacity onPress={() => {
+                    Actions.Map({
+                        longitude: reports[reportIndex].longitude,
+                        latitude: reports[reportIndex].latitude,
+                    });
+                }}>
+                <View style={styles.button}>
+                    <Text style={styles.reportMapButton}>MAP</Text>
+                </View>
+            </TouchableOpacity>
+        );
         return (
             <ScrollView style={styles.container}>
 
@@ -105,19 +127,30 @@ class Home extends React.Component {
                    </TouchableOpacity>
                 </View>
 
-                <View style={styles.userView}>
+                <View style={styles.spacer}>
+                    <Text style={styles.reportListTitle}>Report List</Text>
+                </View>
 
-                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}} style={styles.tableContainer}>
-                        <Row data={["Example", "Header"]} style={styles.head}/>
-                        <Rows data={[['1', '2'],['3', '4']]} style={styles.text}/>
-                      
+                <View style={styles.reportsContainer}>
+                    <Table borderStyle={{borderColor: 'transparent'}}>
+                        <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
+                        {
+                            reportTableData.map((rowData, index) => (
+                                <TableWrapper key={index} style={styles.reportsRow}>
+                                {
+                                    rowData.map((cellData, cellIndex) => (
+                                        <Cell key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
+                                    ))
+                                }
+                                </TableWrapper>
+                            ))
+                        }
                     </Table>
+                </View>
 
-                    <TouchableOpacity onPress={Actions.Map}>
+                <TouchableOpacity onPress={Actions.Map}>
                         <Text>PRESS HERE TO SEE REPORTS MAP</Text>
                     </TouchableOpacity>
-                    
-                </View>
 
             </ScrollView>
         );

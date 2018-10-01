@@ -75,12 +75,53 @@ export const androidStyles = StyleSheet.create({
 
 export const iosStyles = StyleSheet.create({
     container:{
-        flex:1,
-        paddingVertical: '30%'
+        flex:1
     },
 
-    userView:{
-        flex:0,
+    navView:{
+        flexDirection: 'row',
+        flex: 1,
+    },
+
+    navButton1:{
+        height: 100,
+        width: windowWidth / 3,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: color.light_blue,
+    },
+
+    navButton2:{
+        height: 100,
+        width: windowWidth / 3,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: color.orange,
+    },
+
+    navButton3:{
+        height: 100,
+        justifyContent: "center",
+        alignItems: "center",
+        width: windowWidth / 3,
+        backgroundColor: color.green,
+    },
+
+    navButtonContent:{
+        height: 40,
+        width: 40,
+        color: color.white
+    },
+
+    spacer:{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    reportListTitle:{
+        fontSize: 20,
+        fontWeight: 'bold'
     },
 
     containerView:{
@@ -93,8 +134,35 @@ export const iosStyles = StyleSheet.create({
     },
 
     button:{
+        width: 50,
+        height: 18,
+        backgroundColor: '#78B7BB',
+        borderRadius: 2,
+    },
+
+    mapButton:{
+        width: 50,
+        height: 18,
+        backgroundColor: '#78B7BB',
+        borderRadius: 2,
+    },
+
+    reportsContainer:{
         flex: 1,
-        padding: 2,
-        margin: 2,
+        backgroundColor: '#fff'
+    },
+
+    reportsHeader:{
+        height: 30,
+        backgroundColor: '#808B97'
+    },
+
+    reportsText:{
+        margin: 5
+    },
+
+    reportsRow:{
+        flexDirection: 'row',
+        backgroundColor: '#FFF1C1'
     }
 });
