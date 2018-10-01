@@ -90,7 +90,12 @@ class Home extends React.Component {
             reportTableData[i] = [i, reports[i].type, reports[i].time, ''];
         }
         const reportMapButton = (reportIndex) => (
-            <TouchableOpacity onPress={Actions.Map}>
+            <TouchableOpacity onPress={() => {
+                    Actions.Map({
+                        longitude: reports[reportIndex].longitude,
+                        latitude: reports[reportIndex].latitude,
+                    });
+                }}>
                 <View style={styles.button}>
                     <Text style={styles.reportMapButton}>MAP</Text>
                 </View>

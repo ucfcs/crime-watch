@@ -15,17 +15,28 @@ class Map extends React.Component {
     }
 
     componentDidMount() {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                this.setState({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    error: null
-                });
-            },
-            (error) => this.setState({ error: error.message }),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-        );
+        if (this.props.longitude && this.props.latitude)
+        {
+            this.setState({
+                latitude: this.props.latitude,
+                longitude: this.props.longitude,
+                error: null
+            });
+        }
+        else
+        {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        error: null
+                    });
+                },
+                (error) => this.setState({ error: error.message }),
+                { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+            );
+        }
     }
 
     render() {
