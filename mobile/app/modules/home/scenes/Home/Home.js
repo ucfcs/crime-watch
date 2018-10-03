@@ -149,7 +149,7 @@ class Home extends React.Component {
                 </View>
 
                 <View style={styles.reportsContainer}>
-            
+                {/*}
                     <Table borderStyle={{borderColor: 'transparent'}}>
                         <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                         {
@@ -164,7 +164,7 @@ class Home extends React.Component {
                             ))
                         }
                     </Table>
-                    
+                    */} 
                 </View>
             
             </ScrollView>
