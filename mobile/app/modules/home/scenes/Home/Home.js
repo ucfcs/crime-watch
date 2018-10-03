@@ -85,15 +85,18 @@ class Home extends React.Component {
         const reports = this.state.reports;
         const reportTableHeaders = ['Index', 'Type', 'Time', 'Map'];
         const reportTableData = [[]];
+        const reportLocations = [[]];
         for (let i = 0; i < reports.length; i++)
         {
             reportTableData[i] = [i, reports[i].type, reports[i].time, ''];
+            reportLocations[i] = [reports[i].latitude, reports[i].longitude]
         }
         const reportMapButton = (reportIndex) => (
             <TouchableOpacity onPress={() => {
                     Actions.Map({
                         longitude: reports[reportIndex].longitude,
                         latitude: reports[reportIndex].latitude,
+                        reportLocs: reportLocations
                     });
                 }}>
                 <View style={styles.button}>
@@ -119,11 +122,17 @@ class Home extends React.Component {
                         <Text>Henry</Text>
                    </TouchableOpacity>
 
-                   <TouchableOpacity onPress={Actions.Settings} style={styles.navButton3}>
+                   <TouchableOpacity onPress={() => {
+                        Actions.Map({
+                            longitude: undefined,
+                            latitude: undefined,
+                            reportLocs: reportLocations
+                        });
+                    }} style={styles.navButton3}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>
-                        <Text>53</Text>
+                        <Text>Report Map</Text>
                    </TouchableOpacity>
                 </View>
 
