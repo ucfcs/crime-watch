@@ -31,7 +31,7 @@ class Home extends React.Component {
             gender: '',
             phone: '',
             email: '',
-            reports: []
+            reports: new Array()
         };
      
         this.getReports = this.getReports.bind(this);
@@ -55,8 +55,6 @@ class Home extends React.Component {
             
             const state = store.getState().authReducer;
 
-            console.log(state);
-
             var uid = state.uid;
             var username = state.username;
             var gender = state.gender;
@@ -75,8 +73,7 @@ class Home extends React.Component {
         if (nextProps.reports != this.props.reports)
         {
             console.log("Detected prop change, so rerendering the state");
-            this.setState({ reports: [...this.state.reports, nextProps.reports[0]]});  
-            console.log(this.state);
+            this.setState({ reports: nextProps.reports});  
         }
     }
 
@@ -99,8 +96,8 @@ class Home extends React.Component {
 
         const reportTableHeaders = ['', 'Type', 'Time', 'Map'];
         const reportTableData = [[]];
-        
-        {/*
+
+        console.log(this.state.reports);
         // can now grab location data
         for (var report in reports)
         {
@@ -123,7 +120,7 @@ class Home extends React.Component {
             </TouchableOpacity>
         );
     
-            */}
+       
         
         return (
             <ScrollView style={styles.container}>
@@ -152,7 +149,7 @@ class Home extends React.Component {
                 </View>
 
                 <View style={styles.reportsContainer}>
-                {/*}
+            
                     <Table borderStyle={{borderColor: 'transparent'}}>
                         <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                         {
@@ -167,7 +164,7 @@ class Home extends React.Component {
                             ))
                         }
                     </Table>
-                    */} 
+                    
                 </View>
             
             </ScrollView>
