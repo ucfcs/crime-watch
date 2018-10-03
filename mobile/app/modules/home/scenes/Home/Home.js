@@ -96,19 +96,18 @@ class Home extends React.Component {
 
         const reportTableHeaders = ['', 'Type', 'Time', 'Map'];
         const reportTableData = [[]];
-
-        console.log(this.state.reports);
+    
         // can now grab location data
-        for (var report in reports)
+        for (var i in reports)
         {
-            reportTableData.push('', this.state.reports.type, this.state.reports.time, '');
+            reportTableData.push(i, reports[i].type, reports[i].time, '');
         }
     
         reportMapButton = (reportIndex) => (
             <TouchableOpacity onPress={() => {
                     Actions.Map({
-                        longitude: this.state.reports[reportIndex].longitude,
-                        latitude: this.state.reports[reportIndex].latitude,
+                        longitude: reports[reportIndex].longitude,
+                        latitude: reports[reportIndex].latitude,
                     });
                 }}>
             
@@ -144,12 +143,12 @@ class Home extends React.Component {
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>
-                        <Text>101</Text>
+                        <Text>100</Text>
                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.reportsContainer}>
-                {/*}
+
                     <Table borderStyle={{borderColor: 'transparent'}}>
                         <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                         {
@@ -164,7 +163,7 @@ class Home extends React.Component {
                             ))
                         }
                     </Table>
-                    */} 
+                
                 </View>
             
             </ScrollView>
