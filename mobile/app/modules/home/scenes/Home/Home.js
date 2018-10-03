@@ -13,6 +13,7 @@ import { actions as auth, theme } from "../../../auth/index"
 import { Table, Row, Rows, TableWrapper, Cell } from 'react-native-table-component';
 
 import { actions as home } from '../../index';
+const { getReports } = home;
 
 const { color } = theme;
 
@@ -32,6 +33,10 @@ class Home extends React.Component {
             email: '',
             reports: []
         };
+     
+        this.getReports = this.getReports.bind(this);
+        this.onSuccess = this.onSuccess.bind(this);
+        this.onError = this.onError.bind(this);
     }
 
     // The important part. ComponentDidMount happens ONCE when the PAGE is initially loaded. There is where you tap into the store to retrieve the current state. 
@@ -44,11 +49,10 @@ class Home extends React.Component {
 
             // Here is a list of all USER REPORTS. Please use this information 
             // and display it on the page.
-            var reports = home.getReport();
+            //var reports = home.getReport();
+            this.getReports();
             home.setLocation();
-
-            console.log(reports)
- 
+            
             const state = store.getState().authReducer;
 
             console.log(state);
@@ -68,11 +72,17 @@ class Home extends React.Component {
     // a rerender will happen via this.setState(). Place all of the variables that will be updated in here.
     //
     componentWillReceiveProps(nextProps) {
-        if (nextProps.gender != this.props.gender)
+        if (nextProps.reports != this.props.reports)
         {
             console.log("Detected prop change, so rerendering the state");
-            this.setState({ gender: nextProps.gender });  
+            this.setState({ reports: [...this.state.reports, nextProps.reports[0]]});  
+            console.log(this.state);
         }
+    }
+
+    getReports(value) {
+        this.setState({reports: value});
+        this.props.getReports();
     }
    
     onSuccess() {
@@ -86,25 +96,35 @@ class Home extends React.Component {
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const reports = this.state.reports;
-        const reportTableHeaders = ['Index', 'Type', 'Time', 'Map'];
+
+        const reportTableHeaders = ['', 'Type', 'Time', 'Map'];
         const reportTableData = [[]];
+        
+        {/*
         // can now grab location data
-        for (let i = 0; i < reports.length; i++)
+        for (var report in reports)
         {
-            reportTableData[i] = [i, reports[i].type, reports[i].time, ''];
+            reportTableData.push('', this.state.reports.type, this.state.reports.time, '');
         }
-        const reportMapButton = (reportIndex) => (
+    
+        reportMapButton = (reportIndex) => (
             <TouchableOpacity onPress={() => {
                     Actions.Map({
-                        longitude: reports[reportIndex].longitude,
-                        latitude: reports[reportIndex].latitude,
+                        longitude: this.state.reports[reportIndex].longitude,
+                        latitude: this.state.reports[reportIndex].latitude,
                     });
                 }}>
-                <View style={styles.button}>
-                    <Text style={styles.reportMapButton}>MAP</Text>
-                </View>
+            
+            
+                <Image style={styles.reportMapButton}
+                        source={require('../../../../assets/images/gps.png')}>
+                </Image>
+            
             </TouchableOpacity>
         );
+    
+            */}
+        
         return (
             <ScrollView style={styles.container}>
 
@@ -127,15 +147,12 @@ class Home extends React.Component {
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>
-                        <Text>53</Text>
+                        <Text>101</Text>
                    </TouchableOpacity>
                 </View>
 
-                <View style={styles.spacer}>
-                    <Text style={styles.reportListTitle}>Report List</Text>
-                </View>
-
                 <View style={styles.reportsContainer}>
+                {/*}
                     <Table borderStyle={{borderColor: 'transparent'}}>
                         <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                         {
@@ -150,12 +167,9 @@ class Home extends React.Component {
                             ))
                         }
                     </Table>
+                    */} 
                 </View>
-
-                <TouchableOpacity onPress={Actions.Map}>
-                        <Text>PRESS HERE TO SEE REPORTS MAP</Text>
-                    </TouchableOpacity>
-
+            
             </ScrollView>
         );
     }
@@ -164,10 +178,13 @@ class Home extends React.Component {
 // Not used until later
 const mapStateToProps = (state) => {
     return{
-        username: state.username,
-        gender: state.gender
+        reports: state.authReducer.reports
     }
 }
 
+const mapDispatchToProps = {
+    getReports
+  }
+    
 
-export default connect(null, {})(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

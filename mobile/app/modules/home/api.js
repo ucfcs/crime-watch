@@ -15,11 +15,16 @@ export function changePhone(user, phone, callback)
                 .catch((error) => callback(false, error));
 }
 
-export function getReport(phone, callback)
+export function getReports(phone, callback)
 {
+        var array = [];
+
         database.ref('reports').child(phone).on('value', (snapshot) =>{
-                console.log(snapshot)
-                callback(true, snapshot);
+                snapshot.forEach(function(childSnapshot){
+                        array.push(childSnapshot);
+                });
+               
+                callback(true, array);
         });
 }
 

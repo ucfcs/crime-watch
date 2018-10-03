@@ -7,7 +7,7 @@ import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import store from '../../../../redux/store';
 
-import styles from "./styles"
+import {androidStyles} from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
@@ -95,8 +95,10 @@ class Settings extends React.Component {
     }
 
     render() {
+        const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
+
         return (
-            <ScrollView style={{flex: 1, backgroundColor: (Platform.OS === 'ios') ? colors.iosSettingsBackground : colors.white}}>
+            <ScrollView style={styles.container}>
         
                 <SettingsCategoryHeader title={'My Account '} textStyle={(Platform.OS === 'android') ? {color: colors.black} : null}/>
         

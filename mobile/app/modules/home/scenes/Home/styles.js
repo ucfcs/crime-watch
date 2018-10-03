@@ -16,7 +16,7 @@ export const androidStyles = StyleSheet.create({
     },
 
     navButton1:{
-        height: 100,
+        height: 85,
         width: windowWidth / 3,
         justifyContent: "center",
         alignItems: "center",
@@ -24,7 +24,7 @@ export const androidStyles = StyleSheet.create({
     },
 
     navButton2:{
-        height: 100,
+        height: 85,
         width: windowWidth / 3,
         justifyContent: "center",
         alignItems: "center",
@@ -32,7 +32,7 @@ export const androidStyles = StyleSheet.create({
     },
 
     navButton3:{
-        height: 100,
+        height: 85,
         justifyContent: "center",
         alignItems: "center",
         width: windowWidth / 3,
@@ -79,23 +79,33 @@ export const androidStyles = StyleSheet.create({
     },
 
     reportsContainer:{
+        paddingTop: 30,
         flex: 1,
         backgroundColor: '#fff'
     },
 
     reportsHeader:{
-        height: 30,
-        backgroundColor: '#808B97'
+        height: 70,
+        backgroundColor: color.navy
     },
 
     reportsText:{
-        margin: 5
+        margin: 5,
+        color: color.white
     },
 
     reportsRow:{
         flexDirection: 'row',
-        backgroundColor: '#FFF1C1'
-    }
+        backgroundColor: color.white,
+        height: 80,
+        borderBottomWidth: 1,
+        borderBottomColor: color.light_grey
+    },
+
+    reportMapButton: {
+        height: 40,
+        width: 40
+    },
 
 });
 
@@ -137,12 +147,6 @@ export const iosStyles = StyleSheet.create({
         height: 40,
         width: 40,
         color: color.white
-    },
-
-    spacer:{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
 
     reportListTitle:{
