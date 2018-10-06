@@ -38,21 +38,13 @@ export function changePhone (user, phone)
 }
 
 // auto assigning the phone number, will need to pass in the current users phone
-export function getReport (phone = '4072277420')
+export function getReport (userPhoneNumber)
 {
     console.log("Waiting for reports");
-    api.getReport(phone, function (success, report)
+    api.getReport(userPhoneNumber, function (success, reports)
     {
         if (success)
-        {
-            //dispatch({type: t.DATA_RECEIVED, data: report})
-
-
-            // go to the most recent report and look to see if the location field is filled in
-            //console.log(report);
-
-            return report;
-        }
+            return reports;
         else
             console.log("error");
     });

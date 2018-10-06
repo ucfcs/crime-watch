@@ -18,6 +18,7 @@ export function changePhone(user, phone, callback)
 // on child added is supposed to only fire off when a new data object is added
 export function getReport(phone, callback)
 {
+        var reports = [];
         database.ref('reports').child(phone).on('value', (snapshot) =>{
                 snapshot.forEach(function(childSnapshot){
                        
@@ -33,8 +34,11 @@ export function getReport(phone, callback)
                                     );
                                
                         }
+                        reports.push([childSnapshot.val().description, childSnapshot.val().latitude, childSnapshot.val().longitude, childSnapshot.val().time, childSnapshot.val().type]);
                 });
-                callback(true, snapshot);
+                console.log("REPORTS FROM DB:");
+                console.log(reports);
+                callback(true, reports);
         });
 }
 
