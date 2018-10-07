@@ -13,7 +13,7 @@ import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
 
 const { signOut } = auth;
-const { changePhone, changeGender } = home;
+const { changePhone, changeGender, changeAlexaCode } = home;
 
 const { color } = theme;
 
@@ -29,14 +29,14 @@ class Settings extends React.Component {
             phone: '',
             allowedPushNotifications: false,
             gender: '',
-            email: ''
+            email: '',
+            alexaCode: ''
         };
-
-        console.log(props);
 
         // Any function that requires a state change will need to be bound onto the component. Do that for every new function here
         this.onPhoneChange = this.onPhoneChange.bind(this);
         this.onGenderChange = this.onGenderChange.bind(this);
+        this.onAlexaCodeChange = this.onAlexaCodeChange.bind(this);
         this.onSignOut = this.onSignOut.bind(this);
         this.onSuccess = this.onSuccess.bind(this);
         this.onError = this.onError.bind(this);
@@ -54,11 +54,18 @@ class Settings extends React.Component {
         this.props.changeGender(this.state.uid, value);
     }
 
+    onAlexaCodeChange(value) {
+        this.setState({alexaCode: value});
+        this.props.changeAlexaCode(this.state.uid, value);
+    }
+
     onSignOut() {
         this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this));
     }
 
     onSuccess() {
+        console.log("STATE JUST BEFORE SIGN OUT:");
+        console.log(this.state);
         Actions.reset("Auth");
     }
 
@@ -80,8 +87,9 @@ class Settings extends React.Component {
         var gender = state.gender;
         var phone = state.phone;
         var email = state.email;
+        var alexaCode = state.alexaCode;
 
-        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email});
+        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'alexaCode': alexaCode});
     }
 
     // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
@@ -172,6 +180,24 @@ class Settings extends React.Component {
                     value={this.state.gender}
                     styleModalButtonsText={{color: colors.black}}
                 />
+
+                <SettingsEditText
+                    title="Alexa Code"
+                    dialogDescription={'Add the code Alexa gives you in order to report an incident.'}
+                    valuePlaceholder="..."
+                    positiveButtonTitle={'Continue'}
+                    negativeButtonTitle={'Cancel'}
+                    buttonRightTitle={'Save'}
+                    onSaveValue={value => {
+                        this.onAlexaCodeChange(value);
+                    }}
+                    value={this.state.alexaCode}
+                    dialogAndroidProps={{
+                        widgetColor: colors.black,
+                        positiveColor: colors.black,
+                        negativeColor: colors.black,
+                    }}
+                />
                 
                 <SettingsDividerShort/>
         
@@ -226,6 +252,7 @@ const colors = {
   const mapDispatchToProps = {
     changeGender,
     changePhone,
+    changeAlexaCode,
     signOut
   }
     

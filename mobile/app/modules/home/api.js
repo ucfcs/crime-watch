@@ -15,6 +15,13 @@ export function changePhone(user, phone, callback)
                 .catch((error) => callback(false, error));
 }
 
+export function changeAlexaCode(uid, alexaCode, callback)
+{
+        database.ref('users').child(uid).update({'alexaCode': alexaCode})
+                .then((resp) => callback(true, resp))
+                .catch((error) => callback(false, error));
+}
+
 // on child added is supposed to only fire off when a new data object is added
 export function getReport(phone, callback)
 {
