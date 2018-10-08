@@ -96,9 +96,8 @@ class Settings extends React.Component {
         var gender = state.gender;
         var phone = state.phone;
         var email = state.email;
-        var alexaCode = state.alexaCode;
 
-        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'alexaCode': alexaCode});
+        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email});
     }
 
     // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
