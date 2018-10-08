@@ -11,9 +11,10 @@ import styles from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
+import { addAlexaCode } from "../../api"
 
 const { signOut } = auth;
-const { changePhone, changeGender, changeAlexaCode } = home;
+const { changePhone, changeGender } = home;
 
 const { color } = theme;
 
@@ -30,13 +31,11 @@ class Settings extends React.Component {
             allowedPushNotifications: false,
             gender: '',
             email: '',
-            alexaCode: ''
         };
 
         // Any function that requires a state change will need to be bound onto the component. Do that for every new function here
         this.onPhoneChange = this.onPhoneChange.bind(this);
         this.onGenderChange = this.onGenderChange.bind(this);
-        this.onAlexaCodeChange = this.onAlexaCodeChange.bind(this);
         this.onSignOut = this.onSignOut.bind(this);
         this.onSuccess = this.onSuccess.bind(this);
         this.onError = this.onError.bind(this);
@@ -54,9 +53,19 @@ class Settings extends React.Component {
         this.props.changeGender(this.state.uid, value);
     }
 
-    onAlexaCodeChange(value) {
-        this.setState({alexaCode: value});
-        this.props.changeAlexaCode(this.state.uid, value);
+    onAlexaCodeEnter(value) {
+        addAlexaCode(this.state.uid, this.state.phone, value, function (success, error) 
+        {
+            if (success)
+            {
+                console.log("Successfully added Alexa device ID to user table");
+            }
+            else
+            {
+                console.log("Unable to add Alexa device ID to user table: ");
+                console.log(error.message);
+            }
+        });
     }
 
     onSignOut() {
@@ -189,9 +198,8 @@ class Settings extends React.Component {
                     negativeButtonTitle={'Cancel'}
                     buttonRightTitle={'Save'}
                     onSaveValue={value => {
-                        this.onAlexaCodeChange(value);
+                        this.onAlexaCodeEnter(value);
                     }}
-                    value={this.state.alexaCode}
                     dialogAndroidProps={{
                         widgetColor: colors.black,
                         positiveColor: colors.black,
@@ -252,7 +260,6 @@ const colors = {
   const mapDispatchToProps = {
     changeGender,
     changePhone,
-    changeAlexaCode,
     signOut
   }
     

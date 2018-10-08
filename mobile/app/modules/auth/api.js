@@ -19,10 +19,9 @@ export function createUser (user, phone, email, callback)
     var email = email;
     var phone = phone;
     var gender = '';
-    var alexaCode = '';
     var deviceID = '';
     var reports = [];
-    userRef.child(user.uid).update({ ...user, email, phone, gender, alexaCode, deviceID, reports })
+    userRef.child(user.uid).update({ ...user, email, phone, gender, deviceID, reports })
         .then(() => callback(true, user, null))
         .catch((error) => callback(false, null, {message: error}));
 }

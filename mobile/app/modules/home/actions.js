@@ -37,24 +37,6 @@ export function changePhone (user, phone)
     };
 }
 
-export function changeAlexaCode (user, alexaCode)
-{
-    return (dispatch) =>
-    {
-        api.changeAlexaCode(user, alexaCode, function (success, data, error)
-        {
-            if (success)
-            {
-                dispatch({type: t.CHANGE_ALEXA_CODE, data: alexaCode});
-                console.log("ALEXA CODE CHANGED:")
-                console.log(alexaCode);
-            }
-            else if (error)
-                console.log("error: " + error.message);
-        });
-    };
-}
-
 // auto assigning the phone number, will need to pass in the current users phone
 export function getReport (phone = '4072277420')
 {

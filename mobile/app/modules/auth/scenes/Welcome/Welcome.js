@@ -56,8 +56,6 @@ class Welcome extends React.Component {
     
     onSubmit(data) {
         this.setState({error: error}); //clear out error messages
-        console.log("STATE JUST BEFORE LOGIN:");
-        console.log(this.state);
         this.props.login(data, this.onSuccess, this.onError)
     }
     

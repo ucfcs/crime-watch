@@ -28,10 +28,6 @@ const reducer = (state = initialState, action) =>
             console.log("Attempting to update phone number");
             return { ...state, phone: action.data};
 
-        case t.CHANGE_ALEXA_CODE:
-            console.log("Attempting to update alexa code");
-            return { ...state, alexaCode: action.data};
-
         default:
             return state;
 

@@ -15,11 +15,32 @@ export function changePhone(user, phone, callback)
                 .catch((error) => callback(false, error));
 }
 
-export function changeAlexaCode(uid, alexaCode, callback)
+export function addAlexaCode(uid, phoneNumber, alexaCode)
 {
-        database.ref('users').child(uid).update({'alexaCode': alexaCode})
-                .then((resp) => callback(true, resp))
-                .catch((error) => callback(false, error));
+        database.ref('alexa').child(phoneNumber).on('value', (snapshot) =>
+        {
+                if (snapshot === null)
+                {
+                        console.log("ALEXA CODE WAS NULL");
+                        // Error message
+                }
+                else
+                {
+                        var code = snapshot.child('code').val();
+                        var deviceId = snapshot.child('deviceID').val();
+                        if (code === alexaCode)
+                        {
+                                console.log("CODES MATCHED!");
+                                database.ref('users').child(uid).update({'deviceID': deviceId})
+                                        .then(() => callback(true, null))
+                                        .catch((error) => callback(false, error));
+                        }
+                        else
+                        console.log("Alexa code did not match");
+                }
+        });
+                // .then((resp) => callback(true, resp))
+                // .catch((error) => callback(false, error));
 }
 
 // on child added is supposed to only fire off when a new data object is added
