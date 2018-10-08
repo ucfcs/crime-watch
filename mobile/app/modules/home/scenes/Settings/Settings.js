@@ -63,7 +63,7 @@ class Settings extends React.Component {
             else
             {
                 console.log("Unable to add Alexa device ID to user table: ");
-                console.log(error.message);
+                console.log(error);
             }
         });
     }

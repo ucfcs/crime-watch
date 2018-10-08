@@ -17,7 +17,7 @@ export function changePhone(user, phone, callback)
 
 export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 {
-        database.ref('alexa').child(phoneNumber).on('value', (snapshot) =>
+        database.ref('alexa').child(phoneNumber).once('value', (snapshot) =>
         {
                 if (snapshot === null)
                 {
@@ -32,11 +32,16 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                         {
                                 console.log("CODES MATCHED!");
                                 database.ref('users').child(uid).update({'deviceID': deviceId})
-                                        .then(() => callback(true, null))
-                                        .catch((error) => callback(false, error));
+                                        .then(() =>
+                                        {
+                                                database.ref('reports').child(deviceId).push('')
+                                                        .then(() => callback(true, null))
+                                                        .catch((error) => callback(false, error.message));
+                                        })
+                                        .catch((error) => callback(false, error.message));                                
                         }
                         else
-                        console.log("Alexa code did not match");
+                                callback(false, "Matching Alexa code not found.");
                 }
         });
 }
