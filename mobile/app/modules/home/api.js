@@ -15,7 +15,7 @@ export function changePhone(user, phone, callback)
                 .catch((error) => callback(false, error));
 }
 
-export function addAlexaCode(uid, phoneNumber, alexaCode)
+export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 {
         database.ref('alexa').child(phoneNumber).on('value', (snapshot) =>
         {
