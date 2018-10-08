@@ -30,7 +30,7 @@ class Settings extends React.Component {
             phone: '',
             allowedPushNotifications: false,
             gender: '',
-            email: '',
+            email: ''
         };
 
         // Any function that requires a state change will need to be bound onto the component. Do that for every new function here

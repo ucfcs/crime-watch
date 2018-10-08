@@ -39,8 +39,6 @@ export function addAlexaCode(uid, phoneNumber, alexaCode)
                         console.log("Alexa code did not match");
                 }
         });
-                // .then((resp) => callback(true, resp))
-                // .catch((error) => callback(false, error));
 }
 
 // on child added is supposed to only fire off when a new data object is added
