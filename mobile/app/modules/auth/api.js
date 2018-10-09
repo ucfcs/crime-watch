@@ -42,14 +42,19 @@ export function getUser(user, callback)
     database.ref('users').child(user.uid).once('value')
         .then(function(snapshot) 
         {
-
             const exists = (snapshot.val() !== null);
-
-            //if the user exist in the DB, replace the user variable with the returned snapshot
             if (exists) user = snapshot.val();
-
-            const data = { exists, user }
-            callback(true, data, null);
+            database.ref('reports').child(user.phone).once('value')
+                .then(function(reportsSnapshot)
+                {
+                    user.reports = [];
+                    reportsSnapshot.forEach(function(report) {
+                        user.reports.push([report.val().description, report.val().latitude, report.val().longitude, report.val().time, report.val().type]);
+                    })
+                    const data = { exists, user };
+                    callback(true, data, null);
+                })
+                .catch(error => console.log("WELL THAT DIDNT WORK"));
         })
         .catch(error => callback(false, null, error));
 }

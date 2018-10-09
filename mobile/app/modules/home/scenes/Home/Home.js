@@ -44,11 +44,7 @@ class Home extends React.Component {
 
             // Here is a list of all USER REPORTS. Please use this information 
             // and display it on the page.
-            var reports = home.getReport();
- 
             const state = store.getState().authReducer;
-
-            console.log(state);
 
             var uid = state.uid;
             var username = state.username;
@@ -58,6 +54,8 @@ class Home extends React.Component {
             var reports = state.reports;
    
             this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
+            console.log("HOME STATE:");
+            console.log(this.state);
         });
     }
 
@@ -83,17 +81,22 @@ class Home extends React.Component {
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const reports = this.state.reports;
+        console.log("REPORTS JUST BEFORE RENDER ");
+        console.log(reports);
         const reportTableHeaders = ['Index', 'Type', 'Time', 'Map'];
         const reportTableData = [[]];
+        const reportLocations = [[]];
         for (let i = 0; i < reports.length; i++)
         {
-            reportTableData[i] = [i, reports[i].type, reports[i].time, ''];
+            reportTableData[i] = [i, reports[i][3], reports[i][4], ''];
+            reportLocations[i] = [reports[i][1], reports[i][2]];
         }
         const reportMapButton = (reportIndex) => (
             <TouchableOpacity onPress={() => {
                     Actions.Map({
-                        longitude: reports[reportIndex].longitude,
-                        latitude: reports[reportIndex].latitude,
+                        longitude: reports[reportIndex][2],
+                        latitude: reports[reportIndex][1],
+                        reportLocs: reportLocations
                     });
                 }}>
                 <View style={styles.button}>
@@ -119,11 +122,17 @@ class Home extends React.Component {
                         <Text>Henry</Text>
                    </TouchableOpacity>
 
-                   <TouchableOpacity onPress={Actions.Settings} style={styles.navButton3}>
+                   <TouchableOpacity onPress={() => {
+                        Actions.Map({
+                            longitude: undefined,
+                            latitude: undefined,
+                            reportLocs: reportLocations
+                        });
+                    }} style={styles.navButton3}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>
-                        <Text>53</Text>
+                        <Text>Report Map</Text>
                    </TouchableOpacity>
                 </View>
 
