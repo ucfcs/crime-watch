@@ -6,8 +6,7 @@ const resizeMode = 'contain';
 
 export const androidStyles = StyleSheet.create({
     container:{
-        flex:1,
-        backgroundColor: color.white
+        flex:1
     },
 
     navView:{
@@ -40,12 +39,17 @@ export const androidStyles = StyleSheet.create({
     },
 
     navButtonContent:{
-        height: 40,
-        width: 40,
+        height: 30,
+        width: 30,
+        marginBottom: 5
+    },
+
+    navText:{
+        color: color.white
     },
 
     userView:{
-        flex:100,
+        flex: 1,
         paddingVertical: "20%",
         justifyContent: "center",
         alignItems: "center"
@@ -79,9 +83,12 @@ export const androidStyles = StyleSheet.create({
     },
 
     reportsContainer:{
-        paddingTop: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 20,
+        padding: 20,
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: color.white
     },
 
     reportsHeader:{
@@ -106,6 +113,11 @@ export const androidStyles = StyleSheet.create({
         height: 40,
         width: 40
     },
+
+    // pie chart
+    pieContainer:{
+        margin: 40,
+    }
 
 });
 
@@ -152,10 +164,6 @@ export const iosStyles = StyleSheet.create({
     reportListTitle:{
         fontSize: 20,
         fontWeight: 'bold'
-    },
-
-    containerView:{
-        backgroundColor: 'transparent'
     },
 
     buttonContainer:{

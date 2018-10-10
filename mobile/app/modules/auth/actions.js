@@ -44,6 +44,7 @@ export function login(data, successCB, errorCB)
     {
         api.login(data, function (success, data, error) 
         {
+            console.log(data);
             if (success) 
             {
                 if (data.exists) 

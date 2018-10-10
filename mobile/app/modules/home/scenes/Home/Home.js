@@ -17,6 +17,9 @@ const { getReports } = home;
 
 const { color } = theme;
 
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme} from 'victory-native'
+
+
 Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
 
 class Home extends React.Component {
@@ -31,7 +34,7 @@ class Home extends React.Component {
             gender: '',
             phone: '',
             email: '',
-            reports: new Array()
+            reports: []
         };
      
         this.getReports = this.getReports.bind(this);
@@ -54,7 +57,7 @@ class Home extends React.Component {
             home.setLocation();
             
             const state = store.getState().authReducer;
-
+            console.log(state);
             var uid = state.uid;
             var username = state.username;
             var gender = state.gender;
@@ -73,6 +76,7 @@ class Home extends React.Component {
         if (nextProps.reports != this.props.reports)
         {
             console.log("Detected prop change, so rerendering the state");
+
             this.setState({ reports: nextProps.reports});  
         }
     }
@@ -96,6 +100,7 @@ class Home extends React.Component {
 
         const reportTableHeaders = ['', 'Type', 'Time', 'Map'];
         const reportTableData = [[]];
+        
     
         // can now grab location data
         for (var i in reports)
@@ -118,9 +123,12 @@ class Home extends React.Component {
             
             </TouchableOpacity>
         );
-    
-       
-        
+
+        if(this.state.reports)
+        {
+            console.log(this.state.reports);
+        }
+
         return (
             <ScrollView style={styles.container}>
 
@@ -129,26 +137,26 @@ class Home extends React.Component {
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/settings.png')}>
                         </Image>
-                        <Text>Settings</Text>
+                        <Text style={styles.navText}>Settings</Text>
                    </TouchableOpacity>
 
                    <TouchableOpacity onPress={Actions.Settings} style={styles.navButton2}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/user.png')}>
                         </Image>
-                        <Text>Henry</Text>
+                        <Text style={styles.navText}>{this.state.username}</Text>
                    </TouchableOpacity>
 
                    <TouchableOpacity onPress={Actions.Settings} style={styles.navButton3}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>
-                        <Text>100</Text>
+                        <Text style={styles.navText}>100</Text>
                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.reportsContainer}>
-
+                {/*}
                     <Table borderStyle={{borderColor: 'transparent'}}>
                         <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                         {
@@ -163,18 +171,49 @@ class Home extends React.Component {
                             ))
                         }
                     </Table>
-                
+                    */}
+                </View>
+                <View style={styles.reportsContainer}>
+                    <VictoryPie
+                    padding={100}
+                    colorScale={[ color.green, color.orange, color.light_blue ]}
+                        data={[
+                            { x: "Pedestrian", y: 35 },
+                            { x: "Traffic", y: 40 },
+                            { x: "Vehicle", y: 55 }
+                        ]}
+                    />
+                </View>
+                <View style={styles.reportsContainer}>
+                    <VictoryChart
+                    theme={VictoryTheme.material}
+                    >
+                    <VictoryBar
+                        padding={100}
+                        style={{ data: { fill: "#c43a31" } }}
+                        alignment="start"
+                        data={[
+                            { x: 'Jan', y: 1, y0: 0 },
+                            { x: 'Feb', y: 2, y0: 0 },
+                            { x: 'Mar', y: 3, y0: 0 },
+                            { x: 'Apr', y: 4, y0: 0 },
+                            { x: 'May', y: 5, y0: 0 }
+                          ]}
+                    />
+                    </VictoryChart>
+
                 </View>
             
             </ScrollView>
         );
-    }
+    }q
 }
+
 
 // Not used until later
 const mapStateToProps = (state) => {
     return{
-        reports: state.authReducer.reports
+        'reports': state.authReducer.reports
     }
 }
 
