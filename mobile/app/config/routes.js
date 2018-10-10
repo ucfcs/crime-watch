@@ -46,7 +46,7 @@ export default class extends React.Component {
         return (
             <Router>
                 <Scene key="root" hideNavBar 
-                       navigationBarStyle={{backgroundColor: "#1e4351"}}
+                       navigationBarStyle={{backgroundColor: color.navy}}
                        titleStyle={navTitleStyle}
                        navBarButtonColor={color.white}
                        backButtonTintColor={color.white}>

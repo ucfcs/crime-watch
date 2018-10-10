@@ -37,6 +37,7 @@ export function changePhone (user, phone)
     };
 }
 
+
 // auto assigning the phone number, will need to pass in the current users phone
 export function getReport (userPhoneNumber)
 {

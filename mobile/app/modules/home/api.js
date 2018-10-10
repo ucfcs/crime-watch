@@ -47,7 +47,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 }
 
 // on child added is supposed to only fire off when a new data object is added
-export function getReport(phone, callback)
+export function setLocation(phone, callback)
 {
         var reports = [];
         database.ref('reports').child(phone).on('value', (snapshot) =>{
@@ -67,6 +67,7 @@ export function getReport(phone, callback)
                         }
                         reports.push([childSnapshot.val().description, childSnapshot.val().latitude, childSnapshot.val().longitude, childSnapshot.val().time, childSnapshot.val().type]);
                 });
+
                 console.log("REPORTS FROM DB:");
                 console.log(reports);
                 callback(true, reports);
