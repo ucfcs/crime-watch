@@ -1,7 +1,6 @@
 import React from 'react';
 var { View, ScrollView, Alert, Text, Platform, TouchableOpacity, Image } = require('react-native');
-import bindActionCreators from 'redux';
-import {Button} from 'react-native-elements'
+
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
@@ -11,7 +10,7 @@ import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
 import { Table, Row, Rows, TableWrapper, Cell } from 'react-native-table-component';
-
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme} from 'victory-native';
 import { actions as home } from '../../index';
 
 const { color } = theme;
@@ -32,6 +31,10 @@ class Home extends React.Component {
             email: '',
             reports: []
         };
+
+        //this.getReports = this.getReports.bind(this);
+        this.onSuccess = this.onSuccess.bind(this);
+        this.onError = this.onError.bind(this);
     }
 
     // The important part. ComponentDidMount happens ONCE when the PAGE is initially loaded. There is where you tap into the store to retrieve the current state. 
@@ -42,20 +45,23 @@ class Home extends React.Component {
     componentDidMount = async () => {
         this.props.navigation.addListener('willFocus', () =>{
 
+            
+
             // Here is a list of all USER REPORTS. Please use this information 
             // and display it on the page.
             const state = store.getState().authReducer;
-
+            console.log(state);
             var uid = state.uid;
             var username = state.username;
             var gender = state.gender;
             var phone = state.phone;
             var email = state.email;
             var reports = state.reports;
+            var deviceID = state.deviceID;
    
             this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
-            console.log("HOME STATE:");
-            console.log(this.state);
+
+            home.setLocation(deviceID);
         });
     }
 
@@ -70,6 +76,12 @@ class Home extends React.Component {
         }
     }
    
+    /*
+    getReports(value) {
+        this.setState({reports: value});
+        this.props.getReports();
+    }
+   */
     onSuccess() {
         Actions.reset("Auth")
     }
@@ -157,22 +169,61 @@ class Home extends React.Component {
                     </Table>
                 </View>
 
-                <TouchableOpacity onPress={Actions.Map}>
-                        <Text>PRESS HERE TO SEE REPORTS MAP</Text>
-                    </TouchableOpacity>
+                <View style={styles.spacer}>
+                    <Text style={styles.reportListTitle}>Report List</Text>
+                </View>
+                    
+                <View style={styles.reportsContainer}>
+                    <VictoryPie
+                    padding={100}
+                    colorScale={[ color.green, color.orange, color.light_blue ]}
+                        data={[
+                            { x: "Pedestrian", y: 35 },
+                            { x: "Traffic", y: 40 },
+                            { x: "Vehicle", y: 55 }
+                        ]}
+                    />
+                </View>
+
+                <View style={styles.spacer}>
+                    <Text style={styles.reportListTitle}>Report List</Text>
+                </View>
+                
+                <View style={styles.reportsContainer}>
+                    <VictoryChart
+                    theme={VictoryTheme.material}
+                    >
+                    <VictoryBar
+                        padding={100}
+                        style={{ data: { fill: "#c43a31" } }}
+                        alignment="start"
+                        data={[
+                            { x: 'Jan', y: 1, y0: 0 },
+                            { x: 'Feb', y: 2, y0: 0 },
+                            { x: 'Mar', y: 3, y0: 0 },
+                            { x: 'Apr', y: 4, y0: 0 },
+                            { x: 'May', y: 5, y0: 0 }
+                          ]}
+                    />
+                    </VictoryChart>
+
+                </View>
 
             </ScrollView>
         );
     }
 }
 
-// Not used until later
 const mapStateToProps = (state) => {
     return{
-        username: state.username,
-        gender: state.gender
+        //'reports': state.authReducer.reports
     }
 }
 
+/*
+const mapDispatchToProps = {
+    getReports
+  }
+   */ 
 
 export default connect(null, {})(Home);

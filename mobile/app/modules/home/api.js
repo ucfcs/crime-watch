@@ -47,6 +47,34 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 }
 
 // on child added is supposed to only fire off when a new data object is added
+export function setLocation(deviceID, callback)
+{
+        var reports = [];
+        database.ref('reports').child(deviceID).on('value', (snapshot) =>{
+                snapshot.forEach(function(childSnapshot){
+                       
+                        if (childSnapshot.child('latitude').exists() == false)
+                        {
+                                console.log("no gps found");
+                                navigator.geolocation.getCurrentPosition(
+                                        (position) => {
+                                                database.ref('reports').child(deviceID).child(childSnapshot.key).update({'latitude': position.coords.latitude, 'longitude': position.coords.longitude})
+                                        },
+                                        (error) => console.log(error),
+                                        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+                                    );
+                               
+                        }
+                        reports.push([childSnapshot.val().description, childSnapshot.val().latitude, childSnapshot.val().longitude, childSnapshot.val().time, childSnapshot.val().type]);
+                });
+
+                console.log("REPORTS FROM DB:");
+                console.log(reports);
+                callback(true, reports);
+        });
+}
+
+// on child added is supposed to only fire off when a new data object is added
 export function getReport(phone, callback)
 {
         var reports = [];

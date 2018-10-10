@@ -12,6 +12,7 @@ export const androidStyles = StyleSheet.create({
     navView:{
         flexDirection: 'row',
         flex: 1,
+        marginBottom: 40
     },
 
     navButton1:{
@@ -55,24 +56,29 @@ export const androidStyles = StyleSheet.create({
         alignItems: "center"
     },
 
-    tableContainer:{
-        flex: 1,
-        height:400,
-        width:400
+    reportListTitle:{
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: color.white
+    },
+
+    spacer:{
+        backgroundColor: color.navy,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 60
     },
 
     buttonContainer:{
-        justifyContent:"center",
-        alignItems:"center",
+        flex:1,
+        alignItems: "center"
     },
 
     button:{
-        flex: 1,
-        height: 35,
-        width: 35,
-        marginTop: 12,
-        borderRadius: 8,
-        borderWidth: 1,
+        width: 50,
+        height: 18,
+        backgroundColor: '#78B7BB',
+        borderRadius: 2,
     },
 
     mapButton:{
@@ -83,30 +89,23 @@ export const androidStyles = StyleSheet.create({
     },
 
     reportsContainer:{
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: 20,
-        padding: 20,
         flex: 1,
-        backgroundColor: color.white
+        backgroundColor: color.white,
+        marginBottom: 40
     },
 
     reportsHeader:{
-        height: 70,
-        backgroundColor: color.navy
+        height: 30,
+        backgroundColor: '#808B97'
     },
 
     reportsText:{
-        margin: 5,
-        color: color.white
+        margin: 5
     },
 
     reportsRow:{
         flexDirection: 'row',
-        backgroundColor: color.white,
-        height: 80,
-        borderBottomWidth: 1,
-        borderBottomColor: color.light_grey
+        backgroundColor: color.white
     },
 
     reportMapButton: {
