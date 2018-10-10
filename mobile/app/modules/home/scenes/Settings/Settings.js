@@ -11,6 +11,7 @@ import {androidStyles} from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
+import { addAlexaCode } from "../../api"
 
 const { signOut } = auth;
 const { changePhone, changeGender } = home;
@@ -32,8 +33,6 @@ class Settings extends React.Component {
             email: ''
         };
 
-        console.log(props);
-
         // Any function that requires a state change will need to be bound onto the component. Do that for every new function here
         this.onPhoneChange = this.onPhoneChange.bind(this);
         this.onGenderChange = this.onGenderChange.bind(this);
@@ -54,11 +53,28 @@ class Settings extends React.Component {
         this.props.changeGender(this.state.uid, value);
     }
 
+    onAlexaCodeEnter(value) {
+        addAlexaCode(this.state.uid, this.state.phone, value, function (success, error) 
+        {
+            if (success)
+            {
+                console.log("Successfully added Alexa device ID to user table");
+            }
+            else
+            {
+                console.log("Unable to add Alexa device ID to user table: ");
+                console.log(error);
+            }
+        });
+    }
+
     onSignOut() {
         this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this));
     }
 
     onSuccess() {
+        console.log("STATE JUST BEFORE SIGN OUT:");
+        console.log(this.state);
         Actions.reset("Auth");
     }
 
@@ -173,6 +189,23 @@ class Settings extends React.Component {
                     }}
                     value={this.state.gender}
                     styleModalButtonsText={{color: colors.black}}
+                />
+
+                <SettingsEditText
+                    title="Alexa Code"
+                    dialogDescription={'Add the code Alexa gives you in order to report an incident.'}
+                    valuePlaceholder="..."
+                    positiveButtonTitle={'Continue'}
+                    negativeButtonTitle={'Cancel'}
+                    buttonRightTitle={'Save'}
+                    onSaveValue={value => {
+                        this.onAlexaCodeEnter(value);
+                    }}
+                    dialogAndroidProps={{
+                        widgetColor: colors.black,
+                        positiveColor: colors.black,
+                        negativeColor: colors.black,
+                    }}
                 />
                 
                 <SettingsDividerShort/>

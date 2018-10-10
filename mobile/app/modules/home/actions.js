@@ -39,6 +39,7 @@ export function changePhone (user, phone)
 
 
 // auto assigning the phone number, will need to pass in the current users phone
+<<<<<<< HEAD
 export function getReports (phone = '4072277420')
 {
     console.log("Waiting for reports");
@@ -62,6 +63,17 @@ export function setLocation (phone = '4072277420')
     api.setLocation(phone, function ()
     {
        
+=======
+export function getReport (userPhoneNumber)
+{
+    console.log("Waiting for reports");
+    api.getReport(userPhoneNumber, function (success, reports)
+    {
+        if (success)
+            return reports;
+        else
+            console.log("error");
+>>>>>>> 837a2372470937a2b2fc9a2c8e2300273b75aeac
     });
 }
 
