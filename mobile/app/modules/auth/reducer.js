@@ -20,13 +20,18 @@ const reducer = (state = initialState, action) =>
             return {...state, isLoggedIn: false, user: null};
     
         case t.CHANGE_GENDER:
-            console.log("Attempting to update gender");
-            console.log(action.data);
+            //console.log("Attempting to update gender");
+            //console.log(action.data);
             return { ...state, gender: action.data};
 
         case t.CHANGE_PHONE:
-            console.log("Attempting to update phone number");
+           // console.log("Attempting to update phone number");
             return { ...state, phone: action.data};
+
+        case t.GET_REPORTS:
+            //console.log("Received new reports");
+            //console.log(action.data);
+            return { ...state, reports: action.data};
 
         default:
             return state;

@@ -37,6 +37,17 @@ export function changePhone (user, phone)
     };
 }
 
+export function setLocation (deviceID)
+{
+    api.setLocation(deviceID, function (success, reports)
+    {
+        if (success)
+            console.log("Success");
+        else
+            console.log("Error");
+    });
+}
+
 // auto assigning the phone number, will need to pass in the current users phone
 export function getReport (userPhoneNumber)
 {
@@ -49,4 +60,3 @@ export function getReport (userPhoneNumber)
             console.log("error");
     });
 }
-

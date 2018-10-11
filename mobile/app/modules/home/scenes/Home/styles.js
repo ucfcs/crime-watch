@@ -1,18 +1,20 @@
 import { StyleSheet } from 'react-native';
 import { theme } from "../../index"
+import { windowHeight } from '../../../../styles/theme';
 const { padding, color, fontSize, fontFamily, windowWidth, normalize } = theme;
 
 const resizeMode = 'contain';
 
 export const androidStyles = StyleSheet.create({
     container:{
-        flex:1,
-        backgroundColor: color.white
+        flex:1
     },
 
     navView:{
         flexDirection: 'row',
         flex: 1,
+        position: 'absolute',
+        bottom: 0
     },
 
     navButton1:{
@@ -40,36 +42,88 @@ export const androidStyles = StyleSheet.create({
     },
 
     navButtonContent:{
-        height: 40,
-        width: 40,
+        height: 30,
+        width: 30,
+        marginBottom: 5
+    },
+
+    navText:{
+        color: color.white
     },
 
     userView:{
-        flex:100,
+        flex: 1,
         paddingVertical: "20%",
         justifyContent: "center",
         alignItems: "center"
     },
 
-    tableContainer:{
-        flex: 1,
-        height:400,
-        width:400
+    reportListTitle:{
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: color.white
+    },
+
+    spacer:{
+        backgroundColor: color.navy,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 60
+    },
+
+    spacerText:{
+        color: color.white,
+        fontSize: 24
     },
 
     buttonContainer:{
-        justifyContent:"center",
-        alignItems:"center",
+        flex:1,
+        alignItems: "center"
     },
 
     button:{
-        flex: 1,
-        height: 35,
-        width: 35,
-        marginTop: 12,
-        borderRadius: 8,
-        borderWidth: 1,
+        width: 50,
+        height: 18,
+        backgroundColor: '#78B7BB',
+        borderRadius: 2,
     },
+
+    mapButton:{
+        width: 50,
+        height: 18,
+        backgroundColor: '#78B7BB',
+        borderRadius: 2,
+    },
+
+    reportsContainer:{
+        flex: 2,
+        backgroundColor: color.white,
+        margin: 'auto'
+    },
+
+    reportsHeader:{
+        height: 30,
+        backgroundColor: '#808B97'
+    },
+
+    reportsText:{
+        margin: 5
+    },
+
+    reportsRow:{
+        flexDirection: 'row',
+        backgroundColor: color.white
+    },
+
+    reportMapButton: {
+        height: 40,
+        width: 40
+    },
+
+    // pie chart
+    pieContainer:{
+        margin: 40,
+    }
 
 });
 
@@ -113,19 +167,9 @@ export const iosStyles = StyleSheet.create({
         color: color.white
     },
 
-    spacer:{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-
     reportListTitle:{
         fontSize: 20,
         fontWeight: 'bold'
-    },
-
-    containerView:{
-        backgroundColor: 'transparent'
     },
 
     buttonContainer:{
