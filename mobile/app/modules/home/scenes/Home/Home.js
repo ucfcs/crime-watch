@@ -12,6 +12,7 @@ import { actions as auth, theme } from "../../../auth/index"
 import { Table, Row, Rows, TableWrapper, Cell } from 'react-native-table-component';
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme} from 'victory-native';
 import { actions as home } from '../../index';
+import Swiper from 'react-native-swiper';
 
 const { color } = theme;
 
@@ -76,12 +77,34 @@ class Home extends React.Component {
         }
     }
    
-    /*
-    getReports(value) {
-        this.setState({reports: value});
-        this.props.getReports();
+    onSwipeLeft(gestureState) {
+        this.setState({myText: 'You swiped left!'});
     }
-   */
+    
+    onSwipeRight(gestureState) {
+        this.setState({myText: 'You swiped right!'});
+    }
+
+    onSwipe(gestureName, gestureState) {
+        const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+        this.setState({gestureName: gestureName});
+
+        switch (gestureName) {
+        case SWIPE_UP:
+            this.setState({backgroundColor: 'red'});
+            break;
+        case SWIPE_DOWN:
+            this.setState({backgroundColor: 'green'});
+            break;
+        case SWIPE_LEFT:
+            this.setState({backgroundColor: 'blue'});
+            break;
+        case SWIPE_RIGHT:
+            this.setState({backgroundColor: 'yellow'});
+            break;
+        }
+    }
+
     onSuccess() {
         Actions.reset("Auth")
     }
@@ -116,8 +139,65 @@ class Home extends React.Component {
                 </View>
             </TouchableOpacity>
         );
+
+        
         return (
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
+        
+                <Swiper style={styles.reportsContainer} autoplay={false}>
+
+                    <View>
+                        <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
+                        <Table borderStyle={{borderColor: 'transparent'}}>
+                            <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
+                            {
+                                reportTableData.map((rowData, index) => (
+                                    <TableWrapper key={index} style={styles.reportsRow}>
+                                    {
+                                        rowData.map((cellData, cellIndex) => (
+                                            <Cell key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
+                                        ))
+                                    }
+                                    </TableWrapper>
+                                ))
+                            }
+                        </Table>
+                    </View>
+
+                    <View>
+                        <View style={styles.spacer}><Text style={styles.spacerText}>Pie Chart</Text></View>
+                        <VictoryPie
+                        padding={100}
+                        colorScale={[ color.green, color.orange, color.light_blue ]}
+                            data={[
+                                { x: "Pedestrian", y: 35 },
+                                { x: "Traffic", y: 40 },
+                                { x: "Vehicle", y: 55 }
+                            ]}
+                        />
+                    </View>
+
+                    <View>
+                        <View style={styles.spacer}><Text style={styles.spacerText}>Line Chart</Text></View>
+                        <VictoryChart
+                        theme={VictoryTheme.material}
+                        >
+                        <VictoryBar
+                            padding={100}
+                            style={{ data: { fill: "#c43a31" } }}
+                            alignment="start"
+                            data={[
+                                { x: 'Jan', y: 1, y0: 0 },
+                                { x: 'Feb', y: 2, y0: 0 },
+                                { x: 'Mar', y: 3, y0: 0 },
+                                { x: 'Apr', y: 4, y0: 0 },
+                                { x: 'May', y: 5, y0: 0 }
+                            ]}
+                        />
+                        </VictoryChart>
+
+                    </View>
+                </Swiper>
 
                 <View style={styles.navView}>
                     <TouchableOpacity onPress={Actions.Settings} style={styles.navButton1}>
@@ -147,69 +227,7 @@ class Home extends React.Component {
                         <Text>Report Map</Text>
                    </TouchableOpacity>
                 </View>
-
-                <View style={styles.spacer}>
-                    <Text style={styles.reportListTitle}>Report List</Text>
-                </View>
-
-                <View style={styles.reportsContainer}>
-                    <Table borderStyle={{borderColor: 'transparent'}}>
-                        <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
-                        {
-                            reportTableData.map((rowData, index) => (
-                                <TableWrapper key={index} style={styles.reportsRow}>
-                                {
-                                    rowData.map((cellData, cellIndex) => (
-                                        <Cell key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
-                                    ))
-                                }
-                                </TableWrapper>
-                            ))
-                        }
-                    </Table>
-                </View>
-
-                <View style={styles.spacer}>
-                    <Text style={styles.reportListTitle}>Report List</Text>
-                </View>
-                    
-                <View style={styles.reportsContainer}>
-                    <VictoryPie
-                    padding={100}
-                    colorScale={[ color.green, color.orange, color.light_blue ]}
-                        data={[
-                            { x: "Pedestrian", y: 35 },
-                            { x: "Traffic", y: 40 },
-                            { x: "Vehicle", y: 55 }
-                        ]}
-                    />
-                </View>
-
-                <View style={styles.spacer}>
-                    <Text style={styles.reportListTitle}>Report List</Text>
-                </View>
-                
-                <View style={styles.reportsContainer}>
-                    <VictoryChart
-                    theme={VictoryTheme.material}
-                    >
-                    <VictoryBar
-                        padding={100}
-                        style={{ data: { fill: "#c43a31" } }}
-                        alignment="start"
-                        data={[
-                            { x: 'Jan', y: 1, y0: 0 },
-                            { x: 'Feb', y: 2, y0: 0 },
-                            { x: 'Mar', y: 3, y0: 0 },
-                            { x: 'Apr', y: 4, y0: 0 },
-                            { x: 'May', y: 5, y0: 0 }
-                          ]}
-                    />
-                    </VictoryChart>
-
-                </View>
-
-            </ScrollView>
+            </View>
         );
     }
 }

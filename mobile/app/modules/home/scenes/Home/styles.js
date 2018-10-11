@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { theme } from "../../index"
+import { windowHeight } from '../../../../styles/theme';
 const { padding, color, fontSize, fontFamily, windowWidth, normalize } = theme;
 
 const resizeMode = 'contain';
@@ -12,11 +13,12 @@ export const androidStyles = StyleSheet.create({
     navView:{
         flexDirection: 'row',
         flex: 1,
-        marginBottom: 40
+        position: 'absolute',
+        bottom: 0
     },
 
     navButton1:{
-        height: 85,
+        height: 100,
         width: windowWidth / 3,
         justifyContent: "center",
         alignItems: "center",
@@ -24,7 +26,7 @@ export const androidStyles = StyleSheet.create({
     },
 
     navButton2:{
-        height: 85,
+        height: 100,
         width: windowWidth / 3,
         justifyContent: "center",
         alignItems: "center",
@@ -32,7 +34,7 @@ export const androidStyles = StyleSheet.create({
     },
 
     navButton3:{
-        height: 85,
+        height: 100,
         justifyContent: "center",
         alignItems: "center",
         width: windowWidth / 3,
@@ -69,6 +71,11 @@ export const androidStyles = StyleSheet.create({
         height: 60
     },
 
+    spacerText:{
+        color: color.white,
+        fontSize: 24
+    },
+
     buttonContainer:{
         flex:1,
         alignItems: "center"
@@ -89,9 +96,9 @@ export const androidStyles = StyleSheet.create({
     },
 
     reportsContainer:{
-        flex: 1,
+        flex: 2,
         backgroundColor: color.white,
-        marginBottom: 40
+        margin: 'auto'
     },
 
     reportsHeader:{
