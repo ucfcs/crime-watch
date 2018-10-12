@@ -15,6 +15,7 @@ import { addAlexaCode } from "../../api"
 
 const { signOut } = auth;
 const { changePhone, changeGender } = home;
+import DialogAndroid from 'react-native-dialogs';
 
 const { color } = theme;
 
@@ -190,7 +191,8 @@ class Settings extends React.Component {
                     value={this.state.gender}
                     styleModalButtonsText={{color: colors.black}}
                 />
-
+                
+                {/**This part breaks on andnroid, i can't figure out why. */}
                 <SettingsEditText
                     title="Alexa Code"
                     dialogDescription={'Add the code Alexa gives you in order to report an incident.'}

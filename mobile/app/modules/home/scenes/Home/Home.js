@@ -118,12 +118,12 @@ class Home extends React.Component {
         const reports = this.state.reports;
         console.log("REPORTS JUST BEFORE RENDER ");
         console.log(reports);
-        const reportTableHeaders = ['Index', 'Type', 'Time', 'Map'];
+        const reportTableHeaders = ['Time', 'Type', 'Description', 'Map'];
         const reportTableData = [[]];
         const reportLocations = [[]];
         for (let i = 0; i < reports.length; i++)
         {
-            reportTableData[i] = [i, reports[i][3], reports[i][4], ''];
+            reportTableData[i] = [reports[i][3], reports[i][4], reports[i][0], ''];
             reportLocations[i] = [reports[i][1], reports[i][2]];
         }
         const reportMapButton = (reportIndex) => (
