@@ -2,17 +2,21 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import {connect} from 'react-redux';
+import { getOtherReportLocations } from "../../api"
+
 
 class Map extends React.Component {
     constructor(props){
         super(props);
 
         this.state = {
+            phone: 0,
             currLatitude: 0.0,
             currLongitude: 0.0,
             focusLatitude: 0.0,
             focusLongitude: 0.0,
-            reportCoords: [[]],
+            userReportCoords: [[]],
+            otherReportCoords: [[]],
             error: null
         }
     }
@@ -21,19 +25,59 @@ class Map extends React.Component {
         navigator.geolocation.getCurrentPosition(
             (position) => { 
                 this.setState({
+                    phone: this.props.phone,
                     currLatitude: position.coords.latitude,
                     currLongitude: position.coords.longitude,
                     focusLatitude: position.coords.latitude,
                     focusLongitude: position.coords.longitude,
-                    reportCoords: this.props.reportLocs,
+                    userReportCoords: this.props.reportLocs,
                     error: null
-                })
+                });
                 if (this.props.latitude && this.props.longitude)
                 {
                     this.setState({
                         focusLatitude: this.props.latitude,
                         focusLongitude: this.props.longitude
+                    });
+                }
+                console.log("YOU PRESSED VIEW ALL Reports");
+                console.log(this.props.viewAllReports);
+                console.log(getOtherReportLocations111(0));
+                if (this.props.viewAllReports)
+                {
+                    var blah = getOtherReportLocations111(0);
+                    console.log("HELLO");
+                    console.log(blah);
+                    this.setState({
+                        otherReportCoords: getOtherReportLocations111()
                     })
+                    // allReportCoords = undefined;
+                    // getOtherReportLocations(this.state.phone, function (success, reportCoords) 
+                    // {
+                    //     if (success)
+                    //     {
+                    //         console.log("Retrieved all report coordinates");
+                    //         allReportCoords = reportCoords;
+
+                    //         // this.setState({
+                    //         //     otherReportCoord: reportCoords
+                    //         // })
+                    //     }
+                    //     else
+                    //     {
+                    //         console.log("Unable to retrieved all report coordinates");
+                    //     }
+                    // });
+                    // console.log(allReportCoords);
+
+                    // if (allReportCoords)
+                    // {
+                    //     console.log("Setting state:");
+                    //     console(allReportCoords);
+                    //     this.setState({
+                    //             otherReportCoords: allReportCoords
+                    //         })
+                    // }
                 }
              },
             (error) => this.setState({ error: error.message }),
@@ -54,7 +98,7 @@ class Map extends React.Component {
                     longitudeDelta: 0.08
                 }}
                 >
-                    {this.state.reportCoords.map(coordinate => (
+                    {this.state.userReportCoords.map(coordinate => (
                         <Marker 
                             coordinate={{
                                 latitude: coordinate[0],
@@ -63,12 +107,22 @@ class Map extends React.Component {
                             description={coordinate[0] + " " + coordinate[1]}
                         />
                     ))}
+                    {this.state.otherReportCoords.map(coordinate => (
+                        <Marker 
+                            coordinate={{
+                                latitude: coordinate[0],
+                                longitude: coordinate[1]
+                            }}
+                            description={coordinate[0] + " " + coordinate[1]}
+                            pinColor={'rgb(10, 10, 10)'}
+                        />
+                    ))}
                     <MapView.Marker
                         coordinate={{
                             latitude: this.state.currLatitude,
                             longitude: this.state.currLongitude
                         }}
-                        pinColor={'rgb(46, 52, 242)'}
+                        pinColor={'rgb(79, 225, 67)'}
                         title={"Current Position"}
                         description={this.state.currLatitude + " " + this.state.currLongitude}    
                     />
@@ -100,9 +154,11 @@ const styles = StyleSheet.create({
 })
 
 Map.defaultProps = {
+    phone: undefined,
     latitude: undefined,
     longitude: undefined,
-    reportLocs: [[]]
+    reportLocs: [[]],
+    viewAllReports: false
 };
 
 export default connect(null, {})(Map);

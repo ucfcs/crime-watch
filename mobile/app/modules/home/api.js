@@ -46,6 +46,33 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
         });
 }
 
+export function getOtherReportLocations(phone, callback)
+{
+        var reportCoords = [];
+        database.ref('reports').on('value', (snapshot) =>{
+                snapshot.forEach(function(childSnapshot){
+                        if (childSnapshot.key != phone)
+                        {
+                                childSnapshot.forEach(function(report)
+                                {
+                                        if(report.child('latitude').exists())
+                                                reportCoords.push([report.val().latitude, report.val().longitude]);
+                                });
+                        }
+                        else
+                                console.log("phone numbers matched");
+                });
+                console.log("reportCoords FROM DB:");
+                console.log(reportCoords);
+                callback(true, reportCoords);
+        });
+}
+
+export function getOtherReportLocations111(phone)
+{
+        return 0;
+}
+
 // on child added is supposed to only fire off when a new data object is added
 export function getReport(phone, callback)
 {

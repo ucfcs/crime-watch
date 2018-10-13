@@ -157,7 +157,13 @@ class Home extends React.Component {
                     </Table>
                 </View>
 
-                <TouchableOpacity onPress={Actions.Map}>
+                <TouchableOpacity onPress={() => {
+                    Actions.Map({
+                        phone: this.state.phone,
+                        reportLocs: reportLocations,
+                        viewAllReports: true
+                    });
+                }}>
                         <Text>PRESS HERE TO SEE REPORTS MAP</Text>
                     </TouchableOpacity>
 
