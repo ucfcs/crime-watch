@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import store from '../../../../redux/store';
 
 import {androidStyles} from "./styles"
+import {iosStyles} from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
