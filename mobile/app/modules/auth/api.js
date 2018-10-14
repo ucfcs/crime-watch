@@ -44,7 +44,7 @@ export function getUser(user, callback)
         {
             const exists = (snapshot.val() !== null);
             if (exists) user = snapshot.val();
-            database.ref('reports').child(user.phone).once('value')
+            database.ref('reports').child(user.deviceID).once('value')
                 .then(function(reportsSnapshot)
                 {
                     user.reports = [];
