@@ -48,6 +48,14 @@ export function setLocation (deviceID)
     });
 }
 
+export function searchListener (deviceID)
+{
+    api.searchListener(deviceID, function (success, data)
+    {
+        
+    });
+}
+
 // auto assigning the phone number, will need to pass in the current users phone
 export function getReport (userPhoneNumber)
 {

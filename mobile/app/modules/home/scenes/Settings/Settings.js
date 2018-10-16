@@ -1,5 +1,5 @@
 import React from 'react';
-var { View, StyleSheet, Alert, Text, ScrollView, Platform } = require('react-native');
+var { View, TouchableHighlight, Alert, Text, ScrollView, Platform, TextInput} = require('react-native');
 
 import {SettingsDividerShort, SettingsDividerLong, SettingsEditText, SettingsCategoryHeader, SettingsSwitch, SettingsPicker} from 'react-native-settings-components';
 import {Button} from 'react-native-elements'
@@ -15,7 +15,7 @@ import { addAlexaCode } from "../../api"
 
 const { signOut } = auth;
 const { changePhone, changeGender } = home;
-import DialogAndroid from 'react-native-dialogs';
+
 
 const { color } = theme;
 
@@ -26,6 +26,7 @@ class Settings extends React.Component {
         // Set some initial state (variables that you need to display somewhere on this screen)
         //
         this.state = { 
+            alexa: '',
             uid: '',
             username: '',
             phone: '',
@@ -55,6 +56,7 @@ class Settings extends React.Component {
     }
 
     onAlexaCodeEnter(value) {
+        console.log(value);
         addAlexaCode(this.state.uid, this.state.phone, value, function (success, error) 
         {
             if (success)
@@ -113,6 +115,41 @@ class Settings extends React.Component {
 
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
+        var alexaCodeBox;
+        if (Platform.OS === 'ios')
+        {
+            alexaCodeBox = 
+            <SettingsEditText
+                    title="Alexa Code"
+                    dialogDescription={'Add the code Alexa gives you in order to report an incident.'}
+                    valuePlaceholder="..."
+                    positiveButtonTitle={'Continue'}
+                    negativeButtonTitle={'Cancel'}
+                    buttonRightTitle={'Save'}
+                    onSaveValue={value => {
+                        this.onAlexaCodeEnter(value);
+                    }}
+                    value={'000000'}
+                    dialogAndroidProps={{
+                        widgetColor: colors.black,
+                        positiveColor: colors.black,
+                        negativeColor: colors.black,
+                    }}
+                />
+        }
+        else
+        {
+            alexaCodeBox = <TextInput 
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            placeholder={"Enter Alexa Code"}
+            keyboardType='numeric'
+            blurOnSubmit={true}
+            maxLength={6}
+            clearButtonMode="always"
+            onSubmitEditing={(event) => this.onAlexaCodeEnter(event.nativeEvent.text)}
+            />
+
+        }
 
         return (
             <ScrollView style={styles.container}>
@@ -192,24 +229,9 @@ class Settings extends React.Component {
                     styleModalButtonsText={{color: colors.black}}
                 />
                 
-                {/**This part breaks on andnroid, i can't figure out why. */}
-                <SettingsEditText
-                    title="Alexa Code"
-                    dialogDescription={'Add the code Alexa gives you in order to report an incident.'}
-                    valuePlaceholder="..."
-                    positiveButtonTitle={'Continue'}
-                    negativeButtonTitle={'Cancel'}
-                    buttonRightTitle={'Save'}
-                    onSaveValue={value => {
-                        this.onAlexaCodeEnter(value);
-                    }}
-                    dialogAndroidProps={{
-                        widgetColor: colors.black,
-                        positiveColor: colors.black,
-                        negativeColor: colors.black,
-                    }}
-                />
-                
+                {/** Box to enter in alexa code, different between android and ios */}
+                {alexaCodeBox}
+
                 <SettingsDividerShort/>
         
                 <SettingsSwitch

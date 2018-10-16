@@ -17,6 +17,7 @@ export function changePhone(user, phone, callback)
 
 export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 {
+        // will need to add functionality to detect if user already ahs a linked device
         database.ref('alexa').child(phoneNumber).once('value', (snapshot) =>
         {
                 if (snapshot === null)
@@ -34,7 +35,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                 database.ref('users').child(uid).update({'deviceID': deviceId})
                                         .then(() =>
                                         {
-                                                database.ref('reports').child(deviceId).push('')
+                                                database.ref('reports').child('search').set({'bool': false})
                                                         .then(() => callback(true, null))
                                                         .catch((error) => callback(false, error.message));
                                         })
@@ -71,6 +72,14 @@ export function setLocation(deviceID, callback)
                 console.log("REPORTS FROM DB:");
                 console.log(reports);
                 callback(true, reports);
+        });
+}
+
+export function searchListener(deviceID, callback)
+{
+        database.ref('reports').child(deviceID).child('search').on('child_changed', (snapshot) =>{
+                console.log('searching');
+                console.log(snapshot);
         });
 }
 

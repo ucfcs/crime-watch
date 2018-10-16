@@ -63,6 +63,7 @@ class Home extends React.Component {
             this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
 
             home.setLocation(deviceID);
+            home.searchListener(deviceID);
         });
     }
 
@@ -74,34 +75,6 @@ class Home extends React.Component {
         {
             console.log("Detected prop change, so rerendering the state");
             this.setState({ gender: nextProps.gender });  
-        }
-    }
-   
-    onSwipeLeft(gestureState) {
-        this.setState({myText: 'You swiped left!'});
-    }
-    
-    onSwipeRight(gestureState) {
-        this.setState({myText: 'You swiped right!'});
-    }
-
-    onSwipe(gestureName, gestureState) {
-        const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
-        this.setState({gestureName: gestureName});
-
-        switch (gestureName) {
-        case SWIPE_UP:
-            this.setState({backgroundColor: 'red'});
-            break;
-        case SWIPE_DOWN:
-            this.setState({backgroundColor: 'green'});
-            break;
-        case SWIPE_LEFT:
-            this.setState({backgroundColor: 'blue'});
-            break;
-        case SWIPE_RIGHT:
-            this.setState({backgroundColor: 'yellow'});
-            break;
         }
     }
 
