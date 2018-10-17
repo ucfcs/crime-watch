@@ -40,17 +40,11 @@ class Home extends React.Component {
 
     // The important part. ComponentDidMount happens ONCE when the PAGE is initially loaded. There is where you tap into the store to retrieve the current state. 
     // Update this.state by using the setState method on each unique field that you'll need for the page
-    //
-    // NOTE ** We wrap the state stuff inside this.props.navigation.addListener(). It's an asynchronous function that actively listens for a page navigation event.
-    // It's the only method I could think of that will allow the state to be updated after going back a page.
     componentDidMount = async () => {
-        this.props.navigation.addListener('willFocus', () =>{
-
-            
-
             // Here is a list of all USER REPORTS. Please use this information 
             // and display it on the page.
             const state = store.getState().authReducer;
+            console.log("STATE");
             console.log(state);
             var uid = state.uid;
             var username = state.username;
@@ -63,7 +57,6 @@ class Home extends React.Component {
             this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
 
             home.setLocation(deviceID);
-        });
     }
 
     // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
@@ -76,33 +69,9 @@ class Home extends React.Component {
             this.setState({ gender: nextProps.gender });  
         }
     }
-   
-    onSwipeLeft(gestureState) {
-        this.setState({myText: 'You swiped left!'});
-    }
-    
-    onSwipeRight(gestureState) {
-        this.setState({myText: 'You swiped right!'});
-    }
 
-    onSwipe(gestureName, gestureState) {
-        const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
-        this.setState({gestureName: gestureName});
-
-        switch (gestureName) {
-        case SWIPE_UP:
-            this.setState({backgroundColor: 'red'});
-            break;
-        case SWIPE_DOWN:
-            this.setState({backgroundColor: 'green'});
-            break;
-        case SWIPE_LEFT:
-            this.setState({backgroundColor: 'blue'});
-            break;
-        case SWIPE_RIGHT:
-            this.setState({backgroundColor: 'yellow'});
-            break;
-        }
+    onSwipe(index) {
+        console.log("You Swipped to index " + index);
     }
 
     onSuccess() {
@@ -118,14 +87,51 @@ class Home extends React.Component {
         const reports = this.state.reports;
         console.log("REPORTS JUST BEFORE RENDER ");
         console.log(reports);
-        const reportTableHeaders = ['Index', 'Type', 'Time', 'Map'];
+        const reportTableHeaders = ['Time', 'Type', 'Description', 'Map'];
         const reportTableData = [[]];
         const reportLocations = [[]];
+        var percentageVehicle = 0;
+        var percentagePedestrian = 0;
+        var percentageOther = 0;
         for (let i = 0; i < reports.length; i++)
         {
-            reportTableData[i] = [i, reports[i][3], reports[i][4], ''];
+            reportTableData[i] = [reports[i][3], reports[i][4], reports[i][0], ''];
             reportLocations[i] = [reports[i][1], reports[i][2]];
+            if (reports[i][4] == "Vehicle")
+                percentageVehicle++;
+            else if (reports[i][4] == "Pedestrian")
+                percentagePedestrian++;
+            else
+                percentageOther++;
         }
+        percentageVehicle = percentageVehicle/reports.length;
+        percentagePedestrian = percentagePedestrian/reports.length;
+        percentageOther = percentageOther/reports.length;
+        var pieChartData = [
+            { x: "Vehicle", y: percentageVehicle },
+            { x: "Pedestrian", y: percentagePedestrian },
+            { x: "Other", y: percentageOther }
+        ]
+        var pieChartColors = [color.green, color.orange, color.light_blue];
+        if (percentageVehicle == 0)
+        {
+            pieChartData.splice(0, 1);
+            pieChartColors.splice(0, 1);
+        }
+        if (percentagePedestrian == 0)
+        {
+            pieChartData.splice(1, 1);
+            pieChartColors.splice(1, 1);
+        }
+        if (percentageOther == 0)
+        {
+            pieChartData.splice(2, 1);
+            pieChartColors.splice(2, 1);
+        }
+        console.log("Pie Chart Data:");
+        console.log(pieChartData);
+        console.log("Pie Chart Colors:");
+        console.log(pieChartColors);
         const reportMapButton = (reportIndex) => (
             <TouchableOpacity onPress={() => {
                     Actions.Map({
@@ -144,7 +150,7 @@ class Home extends React.Component {
         return (
             <View style={styles.container}>
         
-                <Swiper style={styles.reportsContainer} showsButtons={true} autoplay={false}>
+                <Swiper style={styles.reportsContainer} showsButtons={true} autoplay={false} onIndexChanged={this.onSwipe}>
 
                     <View>
                         <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
@@ -168,12 +174,8 @@ class Home extends React.Component {
                         <View style={styles.spacer}><Text style={styles.spacerText}>Pie Chart</Text></View>
                         <VictoryPie
                         padding={100}
-                        colorScale={[ color.green, color.orange, color.light_blue ]}
-                            data={[
-                                { x: "Pedestrian", y: 35 },
-                                { x: "Traffic", y: 40 },
-                                { x: "Vehicle", y: 55 }
-                            ]}
+                        colorScale={pieChartColors}
+                            data={pieChartData}
                         />
                     </View>
 
