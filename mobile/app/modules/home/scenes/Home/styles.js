@@ -135,6 +135,8 @@ export const iosStyles = StyleSheet.create({
     navView:{
         flexDirection: 'row',
         flex: 1,
+        position: 'absolute',
+        bottom: 0
     },
 
     navButton1:{
@@ -162,18 +164,43 @@ export const iosStyles = StyleSheet.create({
     },
 
     navButtonContent:{
-        height: 40,
-        width: 40,
+        height: 30,
+        width: 30,
+        margin: 5,
         color: color.white
+    },
+
+    navText:{
+        color: color.white
+    },
+
+    userView:{
+        flex:1,
+        paddingVertical: '20%',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     reportListTitle:{
         fontSize: 20,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: color.white
+    },
+
+    spacer:{
+        backgroundColor: color.navy,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 60
+    },
+
+    spacerText:{
+        color: color.white,
+        fontSize: 24
     },
 
     buttonContainer:{
-        flex:1,
+        flex: 1,
         alignItems: "center"
     },
 
@@ -181,19 +208,18 @@ export const iosStyles = StyleSheet.create({
         width: 50,
         height: 18,
         backgroundColor: '#78B7BB',
-        borderRadius: 2,
+        borderRadius: 2
     },
 
     mapButton:{
         width: 50,
         height: 18,
         backgroundColor: '#78B7BB',
-        borderRadius: 2,
+        borderRadius: 2
     },
 
     reportsContainer:{
-        flex: 1,
-        backgroundColor: '#fff'
+        
     },
 
     reportsHeader:{
@@ -207,6 +233,15 @@ export const iosStyles = StyleSheet.create({
 
     reportsRow:{
         flexDirection: 'row',
-        backgroundColor: '#FFF1C1'
+        backgroundColor: color.white
+    },
+
+    reportMapButton:{
+        height: 40,
+        width: 40
+    },
+
+    pieContainer:{
+        margin: 40
     }
 });

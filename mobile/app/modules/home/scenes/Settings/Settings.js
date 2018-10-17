@@ -7,8 +7,7 @@ import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import store from '../../../../redux/store';
 
-import {androidStyles} from "./styles"
-import {iosStyles} from "./styles"
+import {androidStyles, iosStyles} from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
@@ -16,7 +15,6 @@ import { addAlexaCode } from "../../api"
 
 const { signOut } = auth;
 const { changePhone, changeGender } = home;
-import DialogAndroid from 'react-native-dialogs';
 
 const { color } = theme;
 
@@ -192,8 +190,7 @@ class Settings extends React.Component {
                     value={this.state.gender}
                     styleModalButtonsText={{color: colors.black}}
                 />
-                
-                {/**This part breaks on andnroid, i can't figure out why. */}
+
                 <SettingsEditText
                     title="Alexa Code"
                     dialogDescription={'Add the code Alexa gives you in order to report an incident.'}
