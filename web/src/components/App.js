@@ -16,8 +16,7 @@ import './App.css';
 const App = () =>
   <Router>
     <div>
-    <Navigation />
-
+    <Navigation/>
     <hr/>
 
       <Route exact path={routes.LANDING} component={() => <LandingPage />} />
