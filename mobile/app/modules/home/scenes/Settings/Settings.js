@@ -15,11 +15,6 @@ import { addAlexaCode } from "../../api"
 
 const { signOut } = auth;
 const { changePhone, changeGender } = home;
-<<<<<<< HEAD
-
-=======
->>>>>>> f6acbce9b1d31499911279464e088aaedf4afc93
-
 const { color } = theme;
 
 class Settings extends React.Component {
@@ -231,31 +226,10 @@ class Settings extends React.Component {
                     value={this.state.gender}
                     styleModalButtonsText={{color: colors.black}}
                 />
-<<<<<<< HEAD
                 
                 {/** Box to enter in alexa code, different between android and ios */}
                 {alexaCodeBox}
 
-=======
-
-                <SettingsEditText
-                    title="Alexa Code"
-                    dialogDescription={'Add the code Alexa gives you in order to report an incident.'}
-                    valuePlaceholder="..."
-                    positiveButtonTitle={'Continue'}
-                    negativeButtonTitle={'Cancel'}
-                    buttonRightTitle={'Save'}
-                    onSaveValue={value => {
-                        this.onAlexaCodeEnter(value);
-                    }}
-                    dialogAndroidProps={{
-                        widgetColor: colors.black,
-                        positiveColor: colors.black,
-                        negativeColor: colors.black,
-                    }}
-                />
-                
->>>>>>> f6acbce9b1d31499911279464e088aaedf4afc93
                 <SettingsDividerShort/>
         
                 <SettingsSwitch

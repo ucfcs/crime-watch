@@ -35,14 +35,16 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                 database.ref('users').child(uid).update({'deviceID': deviceId})
                                         .then(() =>
                                         {
-                                                database.ref('reports').child('search').set({'bool': false})
-                                                        .then(() => callback(true, null))
-                                                        .catch((error) => callback(false, error.message));
+                                                
                                         })
-                                        .catch((error) => callback(false, error.message));                                
-                        }
+                                        .catch((error) => callback(false, error.message));    
+                                        
+                                database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
+                                .then(() => callback(true, null))
+                                .catch((error) => callback(false, error.message));
+                }
                         else
-                                callback(false, "Matching Alexa code not found.");
+                        callback(false, "Matching Alexa code not found.");
                 }
         });
 }
@@ -50,28 +52,31 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 // on child added is supposed to only fire off when a new data object is added
 export function setLocation(deviceID, callback)
 {
-        var reports = [];
-        database.ref('reports').child(deviceID).on('value', (snapshot) =>{
-                snapshot.forEach(function(childSnapshot){
-                       
-                        if (childSnapshot.child('latitude').exists() == false)
-                        {
-                                console.log("no gps found");
-                                navigator.geolocation.getCurrentPosition(
-                                        (position) => {
-                                                database.ref('reports').child(deviceID).child(childSnapshot.key).update({'latitude': position.coords.latitude, 'longitude': position.coords.longitude})
-                                        },
-                                        (error) => console.log(error),
-                                        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-                                    );
-                               
-                        }
-                        reports.push([childSnapshot.val().description, childSnapshot.val().latitude, childSnapshot.val().longitude, childSnapshot.val().time, childSnapshot.val().type]);
-                });
-
-                console.log("REPORTS FROM DB:");
-                console.log(reports);
-                callback(true, reports);
+        // Look for a newly added report in the reports table, and add that report into the user table
+        // under user -> reports
+        database.ref('reports').child(deviceID).child('report').on('child_added', (snapshot) =>{
+      
+                
+                if (snapshot.child('latitude').exists() == false)
+                {
+                        console.log("no gps found");
+                        navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                        database.ref('users').child(uid).child(reports).push({
+                                                'description': snapshot.val().description,
+                                                'latitude': position.coords.latitude, 
+                                                'longitude': position.coords.longitude,
+                                                'time': snapshot.val().time,
+                                                'type': snapshot.val().type
+                                        })
+                                },
+                                (error) => console.log(error),
+                                { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+                                );
+                        
+                }
+                
+                callback(true, null);
         });
 }
 
@@ -83,29 +88,15 @@ export function searchListener(deviceID, callback)
         });
 }
 
+/*
 // on child added is supposed to only fire off when a new data object is added
-export function getReport(phone, callback)
+export function getReport(deviceID, callback)
 {
-        var reports = [];
-        database.ref('reports').child(phone).on('value', (snapshot) =>{
-                snapshot.forEach(function(childSnapshot){
-                       
-                        if (childSnapshot.child('latitude').exists() == false)
-                        {
-                                console.log("no gps found");
-                                navigator.geolocation.getCurrentPosition(
-                                        (position) => {
-                                                database.ref('reports').child(phone).child(childSnapshot.key).update({'latitude': position.coords.latitude, 'longitude': position.coords.longitude})
-                                        },
-                                        (error) => console.log(error),
-                                        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-                                    );
-                               
-                        }
-                        reports.push([childSnapshot.val().description, childSnapshot.val().latitude, childSnapshot.val().longitude, childSnapshot.val().time, childSnapshot.val().type]);
-                });
-                console.log("REPORTS FROM DB:");
-                console.log(reports);
-                callback(true, reports);
+        database.ref('reports').child(deviceID).endAt().limitToLast(1).on('child_added', (snapshot) =>{
+    
+               console.log(snapshot);
+               
+               callback(true, snapshot);
         });
 }
+*/
