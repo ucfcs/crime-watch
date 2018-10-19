@@ -32,16 +32,26 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                         if (code === alexaCode)
                         {
                                 console.log("CODES MATCHED!");
+
+                                // First call will update the deviceID in the user table
                                 database.ref('users').child(uid).update({'deviceID': deviceId})
-                                        .then(() =>
-                                        {
-                                                
+                                        .then(() =>{
+                                                // Second call Creates a new deviceID-key object in the reports table
+                                                database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
+                                                .then(() => {
+                                                        // Third call creates a reports object in the user table
+                                                        database.ref('users').child(uid).child('reports').set('')
+                                                        .then(() => {
+                                                                // Fourth call wipes the Alexa Code
+
+                                                                callback(true, null);
+                                                        })
+                                                        .catch((error) => callback(false, error.message));
+                                                })
+                                                .catch((error) => callback(false, error.message));
                                         })
                                         .catch((error) => callback(false, error.message));    
-                                        
-                                database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
-                                .then(() => callback(true, null))
-                                .catch((error) => callback(false, error.message));
+         
                 }
                         else
                         callback(false, "Matching Alexa code not found.");
@@ -50,13 +60,14 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 }
 
 // on child added is supposed to only fire off when a new data object is added
-export function setLocation(deviceID, callback)
+export function setLocation(uid, deviceID, callback)
 {
+        console.log("Listening for changes to reports table");
         // Look for a newly added report in the reports table, and add that report into the user table
         // under user -> reports
-        database.ref('reports').child(deviceID).child('report').on('child_added', (snapshot) =>{
-      
+        database.ref('reports').child(deviceID).on("child_added", (snapshot) =>{
                 
+                console.log("Detected change in database");
                 if (snapshot.child('latitude').exists() == false)
                 {
                         console.log("no gps found");
@@ -68,6 +79,13 @@ export function setLocation(deviceID, callback)
                                                 'longitude': position.coords.longitude,
                                                 'time': snapshot.val().time,
                                                 'type': snapshot.val().type
+                                        })
+                                        .then(() => {
+
+                                        })
+                                        .catch((error) =>
+                                        {
+                                                console.log(error);
                                         })
                                 },
                                 (error) => console.log(error),
