@@ -56,7 +56,7 @@ class Home extends React.Component {
    
             this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
 
-            home.setLocation(deviceID);
+            home.setLocation(deviceID, uid);
     }
 
     // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
@@ -93,41 +93,52 @@ class Home extends React.Component {
         var percentageVehicle = 0;
         var percentagePedestrian = 0;
         var percentageOther = 0;
-        for (let i = 0; i < reports.length; i++)
+        if (reports)
         {
-            reportTableData[i] = [reports[i][3], reports[i][4], reports[i][0], ''];
-            reportLocations[i] = [reports[i][1], reports[i][2]];
-            if (reports[i][4] == "Vehicle")
-                percentageVehicle++;
-            else if (reports[i][4] == "Pedestrian")
-                percentagePedestrian++;
-            else
-                percentageOther++;
+            for (let i = 0; i < reports.length; i++)
+            {
+                reportTableData[i] = [reports[i][3], reports[i][4], reports[i][0], ''];
+                reportLocations[i] = [reports[i][1], reports[i][2]];
+                if (reports[i][4] == "Vehicle")
+                    percentageVehicle++;
+                else if (reports[i][4] == "Pedestrian")
+                    percentagePedestrian++;
+                else
+                    percentageOther++;
+            }
+            var pieChartData = [];
+            if (reports.length > 0)
+            {
+                percentageVehicle = percentageVehicle/reports.length;
+                percentagePedestrian = percentagePedestrian/reports.length;
+                percentageOther = percentageOther/reports.length;
+                pieChartData = [
+                    { x: "Vehicle", y: percentageVehicle },
+                    { x: "Pedestrian", y: percentagePedestrian },
+                    { x: "Other", y: percentageOther }
+                ]
+                var pieChartColors = [color.green, color.orange, color.light_blue];
+                if (percentageVehicle == 0)
+                {
+                    console.log("No Vehicles");
+                    pieChartData.splice(0, 1);
+                    pieChartColors.splice(0, 1);
+                }
+                if (percentagePedestrian == 0)
+                {
+                    console.log("No Pedestrians");
+                    pieChartData.splice(1, 1);
+                    pieChartColors.splice(1, 1);
+                }
+                if (percentageOther == 0)
+                {
+                    console.log("No Other");
+                    pieChartData.splice(2, 1);
+                    pieChartColors.splice(2, 1);
+                }
+            }
         }
-        percentageVehicle = percentageVehicle/reports.length;
-        percentagePedestrian = percentagePedestrian/reports.length;
-        percentageOther = percentageOther/reports.length;
-        var pieChartData = [
-            { x: "Vehicle", y: percentageVehicle },
-            { x: "Pedestrian", y: percentagePedestrian },
-            { x: "Other", y: percentageOther }
-        ]
-        var pieChartColors = [color.green, color.orange, color.light_blue];
-        if (percentageVehicle == 0)
-        {
-            pieChartData.splice(0, 1);
-            pieChartColors.splice(0, 1);
-        }
-        if (percentagePedestrian == 0)
-        {
-            pieChartData.splice(1, 1);
-            pieChartColors.splice(1, 1);
-        }
-        if (percentageOther == 0)
-        {
-            pieChartData.splice(2, 1);
-            pieChartColors.splice(2, 1);
-        }
+        
         console.log("Pie Chart Data:");
         console.log(pieChartData);
         console.log("Pie Chart Colors:");

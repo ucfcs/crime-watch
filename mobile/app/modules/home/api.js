@@ -17,6 +17,8 @@ export function changePhone(user, phone, callback)
 
 export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 {
+        console.log("ADDALEXACODE CALLED");
+        console.log(phoneNumber);
         database.ref('alexa').child(phoneNumber).once('value', (snapshot) =>
         {
                 if (snapshot === null)
@@ -34,44 +36,67 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                 database.ref('users').child(uid).update({'deviceID': deviceId})
                                         .then(() =>
                                         {
-                                                database.ref('reports').child(deviceId).push('')
-                                                        .then(() => callback(true, null))
-                                                        .catch((error) => callback(false, error.message));
+                                                database.ref('reports').child(deviceId).set({
+                                                        'report': '',
+                                                        'search': {'bool': false, 'speech': ''}
+                                                }).then(() => {
+                                                        removeAlexaCode(phoneNumber);
+                                                        callback(true, phoneNumber);
+                                                }).catch((error) => callback(false, error.message));
                                         })
                                         .catch((error) => callback(false, error.message));                                
                         }
                         else
                                 callback(false, "Matching Alexa code not found.");
                 }
-        });
+        })
+        .catch((error) => callback(false, error.message));
+}
+
+export function removeAlexaCode(phoneNumber)
+{
+        database.ref('alexa').child(phoneNumber).remove();
 }
 
 // on child added is supposed to only fire off when a new data object is added
-export function setLocation(deviceID, callback)
+export function setLocation(deviceID, uid, callback)
 {
-        var reports = [];
-        database.ref('reports').child(deviceID).on('value', (snapshot) =>{
-                snapshot.forEach(function(childSnapshot){
-                       
-                        if (childSnapshot.child('latitude').exists() == false)
+        database.ref('reports').child(deviceID).child('report').endAt().limitToLast(1).on('child_added', function(snapshot)
+        {
+                console.log("LATEST REPORT ADDED KEY AND VAL:");
+                console.log(snapshot.key + " " + snapshot.val());
+                console.log("type descrption time exist:");
+                console.log(snapshot.child('type').exists() + " " + snapshot.child('description').exists() + " " + snapshot.child('time').exists());
+                if (snapshot.child('type').exists() && snapshot.child('description').exists() && snapshot.child('time').exists())
                         {
-                                console.log("no gps found");
-                                navigator.geolocation.getCurrentPosition(
-                                        (position) => {
-                                                database.ref('reports').child(deviceID).child(childSnapshot.key).update({'latitude': position.coords.latitude, 'longitude': position.coords.longitude})
+                                console.log("TYPE EXISTED");
+                                if (!snapshot.child('latitude').exists())
+                                {
+                                        console.log("no gps found");
+                                        navigator.geolocation.getCurrentPosition((position) => {
+                                                //nine five four four zero one three zero two zero
+                                                console.log("CHILD VALUEs TEST ~~~~~");
+                                                console.log(snapshot.val().type + " " + snapshot.val().time + " " + snapshot.val().description);
+                                                console.log("CHILD VALUE TEST ~~~~~");
+                                                database.ref('users').child(uid).child('reports').push({
+                                                        'type': snapshot.val().type, 
+                                                        'description': snapshot.val().description, 
+                                                        'time': snapshot.val().time, 
+                                                        'latitude': position.coords.latitude, 
+                                                        'longitude': position.coords.longitude})
+                                                        .then(() =>
+                                                        {
+                                                                callback(true, null);
+                                                        })
                                         },
                                         (error) => console.log(error),
                                         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
                                     );
                                
+                                }
                         }
-                        reports.push([childSnapshot.val().description, childSnapshot.val().latitude, childSnapshot.val().longitude, childSnapshot.val().time, childSnapshot.val().type]);
-                });
-
-                console.log("REPORTS FROM DB:");
-                console.log(reports);
-                callback(true, reports);
-        });
+                callback(false, "Report was not valid");
+        })
 }
 
 // on child added is supposed to only fire off when a new data object is added

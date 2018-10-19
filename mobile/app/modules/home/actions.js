@@ -37,14 +37,14 @@ export function changePhone (user, phone)
     };
 }
 
-export function setLocation (deviceID)
+export function setLocation (deviceID, uid)
 {
-    api.setLocation(deviceID, function (success, reports)
+    api.setLocation(deviceID, uid, function (success, message)
     {
         if (success)
-            console.log("Success");
+            console.log("Successfully set location and saved to the user's table");
         else
-            console.log("Error");
+            console.log("Error: " + message);
     });
 }
 

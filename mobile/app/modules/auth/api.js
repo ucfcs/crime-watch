@@ -20,7 +20,7 @@ export function createUser (user, phone, email, callback)
     var phone = phone;
     var gender = '';
     var deviceID = '';
-    var reports = [];
+    var reports = [''];
     userRef.child(user.uid).update({ ...user, email, phone, gender, deviceID, reports })
         .then(() => callback(true, user, null))
         .catch((error) => callback(false, null, {message: error}));
@@ -44,17 +44,8 @@ export function getUser(user, callback)
         {
             const exists = (snapshot.val() !== null);
             if (exists) user = snapshot.val();
-            database.ref('reports').child(user.deviceID).once('value')
-                .then(function(reportsSnapshot)
-                {
-                    user.reports = [];
-                    reportsSnapshot.forEach(function(report) {
-                        user.reports.push([report.val().description, report.val().latitude, report.val().longitude, report.val().time, report.val().type]);
-                    })
-                    const data = { exists, user };
-                    callback(true, data, null);
-                })
-                .catch(error => console.log("WELL THAT DIDNT WORK"));
+            const data = { exists, user };
+            callback(true, data, null);
         })
         .catch(error => callback(false, null, error));
 }

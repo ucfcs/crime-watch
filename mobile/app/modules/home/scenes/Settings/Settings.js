@@ -11,7 +11,7 @@ import {androidStyles, iosStyles} from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
-import { addAlexaCode } from "../../api"
+import { addAlexaCode, removeAlexaCode } from "../../api"
 
 const { signOut } = auth;
 const { changePhone, changeGender } = home;
