@@ -48,15 +48,27 @@ export function setLocation (deviceID)
     });
 }
 
+export function searchListener (deviceID)
+{
+    api.searchListener(deviceID, function (success, data)
+    {
+        
+    });
+}
+
 // auto assigning the phone number, will need to pass in the current users phone
-export function getReport (userPhoneNumber)
+export function getReport (deviceID)
 {
     console.log("Waiting for reports");
-    api.getReport(userPhoneNumber, function (success, reports)
+
+    return (dispatch) =>
     {
-        if (success)
-            return reports;
-        else
-            console.log("error");
-    });
+        api.getReport(deviceID, function (success, report)
+        {
+            if (success)
+                dispatch({type: t.ADD_REPORT, data: report});
+            else
+                console.log("error");
+        });
+    }
 }

@@ -40,23 +40,27 @@ class Home extends React.Component {
 
     // The important part. ComponentDidMount happens ONCE when the PAGE is initially loaded. There is where you tap into the store to retrieve the current state. 
     // Update this.state by using the setState method on each unique field that you'll need for the page
+    //
+    // NOTE ** We wrap the state stuff inside this.props.navigation.addListener(). It's an asynchronous function that actively listens for a page navigation event.
+    // It's the only method I could think of that will allow the state to be updated after going back a page.
     componentDidMount = async () => {
-            // Here is a list of all USER REPORTS. Please use this information 
-            // and display it on the page.
-            const state = store.getState().authReducer;
-            console.log("STATE");
-            console.log(state);
-            var uid = state.uid;
-            var username = state.username;
-            var gender = state.gender;
-            var phone = state.phone;
-            var email = state.email;
-            var reports = state.reports;
-            var deviceID = state.deviceID;
-   
-            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
+        // Here is a list of all USER REPORTS. Please use this information 
+        // and display it on the page.
+        const state = store.getState().authReducer;
+        console.log("STATE");
+        console.log(state);
+        var uid = state.uid;
+        var username = state.username;
+        var gender = state.gender;
+        var phone = state.phone;
+        var email = state.email;
+        var reports = state.reports;
+        var deviceID = state.deviceID;
 
-            home.setLocation(deviceID);
+        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
+
+        //home.setLocation(deviceID);
+        //home.getReport(deviceID);
     }
 
     // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
@@ -67,6 +71,11 @@ class Home extends React.Component {
         {
             console.log("Detected prop change, so rerendering the state");
             this.setState({ gender: nextProps.gender });  
+        }
+        if(nextProps.reports != this.props.reports)
+        {
+            console.log("Detected prop change, so rerendering the state");
+            this.setState({ reports: nextProps.reports });
         }
     }
 
@@ -87,12 +96,15 @@ class Home extends React.Component {
         const reports = this.state.reports;
         console.log("REPORTS JUST BEFORE RENDER ");
         console.log(reports);
-        const reportTableHeaders = ['Time', 'Type', 'Description', 'Map'];
-        const reportTableData = [[]];
-        const reportLocations = [[]];
+
         var percentageVehicle = 0;
         var percentagePedestrian = 0;
         var percentageOther = 0;
+
+        const reportTableHeaders = ['Time', 'Type', 'Description', 'Map'];
+        const reportTableData = [[]];
+        const reportLocations = [[]];
+
         for (let i = 0; i < reports.length; i++)
         {
             reportTableData[i] = [reports[i][3], reports[i][4], reports[i][0], ''];
@@ -104,6 +116,7 @@ class Home extends React.Component {
             else
                 percentageOther++;
         }
+
         percentageVehicle = percentageVehicle/reports.length;
         percentagePedestrian = percentagePedestrian/reports.length;
         percentageOther = percentageOther/reports.length;
@@ -132,6 +145,7 @@ class Home extends React.Component {
         console.log(pieChartData);
         console.log("Pie Chart Colors:");
         console.log(pieChartColors);
+        
         const reportMapButton = (reportIndex) => (
             <TouchableOpacity onPress={() => {
                     Actions.Map({
@@ -150,7 +164,7 @@ class Home extends React.Component {
         return (
             <View style={styles.container}>
         
-                <Swiper style={styles.reportsContainer} showsButtons={true} autoplay={false} onIndexChanged={this.onSwipe}>
+                <Swiper style={styles.reportsContainer} autoplay={false} onIndexChanged={this.onSwipe}>
 
                     <View>
                         <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
@@ -246,4 +260,4 @@ const mapDispatchToProps = {
   }
    */ 
 
-export default connect(null, {})(Home);
+export default connect(mapStateToProps, {})(Home);
