@@ -20,7 +20,7 @@ export function createUser (user, phone, email, callback)
     var phone = phone;
     var gender = '';
     var deviceID = '';
-    var reports = [];
+    var reports = [''];
     userRef.child(user.uid).update({ ...user, email, phone, gender, deviceID, reports })
         .then(() => callback(true, user, null))
         .catch((error) => callback(false, null, {message: error}));
@@ -42,19 +42,14 @@ export function getUser(user, callback)
     database.ref('users').child(user.uid).once('value')
         .then(function(snapshot) 
         {
+
             const exists = (snapshot.val() !== null);
+
+            //if the user exist in the DB, replace the user variable with the returned snapshot
             if (exists) user = snapshot.val();
-            database.ref('reports').child(user.deviceID).once('value')
-                .then(function(reportsSnapshot)
-                {
-                    user.reports = [];
-                    reportsSnapshot.forEach(function(report) {
-                        user.reports.push([report.val().description, report.val().latitude, report.val().longitude, report.val().time, report.val().type]);
-                    })
-                    const data = { exists, user };
-                    callback(true, data, null);
-                })
-                .catch(error => console.log("WELL THAT DIDNT WORK"));
+
+            const data = { exists, user }
+            callback(true, data, null);
         })
         .catch(error => callback(false, null, error));
 }
@@ -78,14 +73,3 @@ export function signOut (callback)
             if (callback) callback(false, null, error)
         });
 }
-
-
-/*
-//Sign user in using Facebook
-export function signInWithFacebook (fbToken, callback) {
-    const credential = provider.credential(fbToken);
-    auth.signInWithCredential(credential)
-        .then((user) => getUser(user, callback))
-        .catch((error) => callback(false, null, error));
-}
-*/

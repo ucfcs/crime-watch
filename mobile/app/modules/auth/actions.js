@@ -2,8 +2,6 @@ import * as t from './actionTypes';
 import * as api from './api';
 import { auth } from "../../config/firebase";
 
-import { AsyncStorage } from 'react-native';
-
 export function register(data, successCB, errorCB) 
 {
     return (dispatch) => 
@@ -121,18 +119,3 @@ export function checkLoginStatus(callback)
         });
     };
 }
-
-
-
-/*
-export function signInWithFacebook(facebookToken, successCB, errorCB) {
-    return (dispatch) => {
-        api.signInWithFacebook(facebookToken, function (success, data, error) {
-            if (success) {
-                if (data.exists) dispatch({type: t.LOGGED_IN, data: data.user});
-                successCB(data);
-            }else if (error) errorCB(error)
-        });
-    };
-}
-*/

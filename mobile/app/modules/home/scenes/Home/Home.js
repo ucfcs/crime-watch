@@ -9,11 +9,11 @@ import { iosStyles, androidStyles } from "./styles";
 import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
-import { Table, Row, Rows, TableWrapper, Cell } from 'react-native-table-component';
+import { Table, Row, TableWrapper, Cell } from 'react-native-table-component';
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme} from 'victory-native';
 import { actions as home } from '../../index';
 import Swiper from 'react-native-swiper';
-
+const { setLocation } = home;
 const { color } = theme;
 
 Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
@@ -22,8 +22,6 @@ class Home extends React.Component {
     constructor(props){
         super(props);
 
-        // Set some initial state (variables that you need to display somewhere on this screen)
-        // I don't need it all for this home page but why not 
         this.state = { 
             uid: '',
             username: '',
@@ -33,22 +31,15 @@ class Home extends React.Component {
             reports: []
         };
 
-        //this.getReports = this.getReports.bind(this);
+        this.onSetLocation = this.onSetLocation.bind(this);
         this.onSuccess = this.onSuccess.bind(this);
         this.onError = this.onError.bind(this);
     }
 
-    // The important part. ComponentDidMount happens ONCE when the PAGE is initially loaded. There is where you tap into the store to retrieve the current state. 
-    // Update this.state by using the setState method on each unique field that you'll need for the page
-    //
-    // NOTE ** We wrap the state stuff inside this.props.navigation.addListener(). It's an asynchronous function that actively listens for a page navigation event.
-    // It's the only method I could think of that will allow the state to be updated after going back a page.
-    componentDidMount = async () => {
-        // Here is a list of all USER REPORTS. Please use this information 
-        // and display it on the page.
+   componentDidMount = async () => {
+
         const state = store.getState().authReducer;
-        console.log("STATE");
-        console.log(state);
+
         var uid = state.uid;
         var username = state.username;
         var gender = state.gender;
@@ -56,27 +47,29 @@ class Home extends React.Component {
         var email = state.email;
         var reports = state.reports;
         var deviceID = state.deviceID;
+        var reportArray = Object.values(reports)
 
-        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
+        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
 
-        home.setLocation(uid, deviceID);
-        //home.getReport(deviceID);
+        this.onSetLocation(uid, deviceID);
     }
 
-    // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
-    // a rerender will happen via this.setState(). Place all of the variables that will be updated in here.
-    //
     componentWillReceiveProps(nextProps) {
+        console.log("Detected prop change");
         if (nextProps.gender != this.props.gender)
         {
-            console.log("Detected prop change, so rerendering the state");
             this.setState({ gender: nextProps.gender });  
         }
         if(nextProps.reports != this.props.reports)
         {
-            console.log("Detected prop change, so rerendering the state");
-            this.setState({ reports: nextProps.reports });
+            var reportArray = Object.values(nextProps.reports)
+
+            this.setState({ reports: reportArray });
         }
+    }
+
+    onSetLocation(uid, deviceID) {
+        this.props.setLocation(uid, deviceID);
     }
 
     onSwipe(index) {
@@ -94,8 +87,6 @@ class Home extends React.Component {
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const reports = this.state.reports;
-        console.log("REPORTS JUST BEFORE RENDER ");
-        console.log(reports);
 
         var percentageVehicle = 0;
         var percentagePedestrian = 0;
@@ -105,15 +96,16 @@ class Home extends React.Component {
         const reportTableData = [[]];
         const reportLocations = [[]];
 
-        for (let i = 0; i < reports.length; i++)
+        for (var i = 0; i < reports.length; i++)
         {
-            reportTableData[i] = [reports[i][3], reports[i][4], reports[i][0], ''];
-            reportLocations[i] = [reports[i][1], reports[i][2]];
-            if (reports[i][4] == "Vehicle")
+            reportTableData[i] = [reports[i].time, reports[i].type, reports[i].description, ''];
+            reportLocations[i] = [reports[i].latitude, reports[i].longitude];
+
+            if (reports[i].type == "Vehicle")
                 percentageVehicle++;
-            else if (reports[i][4] == "Pedestrian")
+            else if (reports[i].type == "Pedestrian")
                 percentagePedestrian++;
-            else
+            else 
                 percentageOther++;
         }
 
@@ -141,10 +133,6 @@ class Home extends React.Component {
             pieChartData.splice(2, 1);
             pieChartColors.splice(2, 1);
         }
-        console.log("Pie Chart Data:");
-        console.log(pieChartData);
-        console.log("Pie Chart Colors:");
-        console.log(pieChartColors);
         
         const reportMapButton = (reportIndex) => (
             <TouchableOpacity onPress={() => {
@@ -159,30 +147,31 @@ class Home extends React.Component {
                 </View>
             </TouchableOpacity>
         );
-
         
         return (
             <View style={styles.container}>
         
                 <Swiper style={styles.reportsContainer} autoplay={false} onIndexChanged={this.onSwipe}>
 
-                    <View>
+                    <ScrollView>
                         <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
                         <Table borderStyle={{borderColor: 'transparent'}}>
-                            <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
-                            {
-                                reportTableData.map((rowData, index) => (
-                                    <TableWrapper key={index} style={styles.reportsRow}>
-                                    {
-                                        rowData.map((cellData, cellIndex) => (
-                                            <Cell key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
-                                        ))
-                                    }
-                                    </TableWrapper>
-                                ))
-                            }
+                        
+                                <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
+                                {
+                                    reportTableData.map((rowData, index) => (
+                                        <TableWrapper key={index} style={styles.reportsRow}>
+                                        {
+                                            rowData.map((cellData, cellIndex) => (
+                                                <Cell key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
+                                            ))
+                                        }
+                                        </TableWrapper>
+                                    ))
+                                }
+                         
                         </Table>
-                    </View>
+                    </ScrollView>
 
                     <View>
                         <View style={styles.spacer}><Text style={styles.spacerText}>Pie Chart</Text></View>
@@ -250,14 +239,13 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => {
     return{
-        //'reports': state.authReducer.reports
+        'reports': state.authReducer.reports
     }
 }
 
-/*
-const mapDispatchToProps = {
-    getReports
-  }
-   */ 
 
-export default connect(mapStateToProps, {})(Home);
+const mapDispatchToProps = {
+    setLocation
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

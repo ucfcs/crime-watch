@@ -1,4 +1,4 @@
-import { auth, database, provider } from "../../config/firebase";
+import { database } from "../../config/firebase";
 
 
 export function changeGender(user, gender, callback) 
@@ -39,15 +39,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                                 // Second call Creates a new deviceID-key object in the reports table
                                                 database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
                                                 .then(() => {
-                                                        // Third call creates a reports object in the user table
-                                                        database.ref('users').child(uid).child('reports').set('')
-                                                        .then(() => {
-                                                                // Fourth call wipes the Alexa Code
-
-                                                                callback(true, null);
-                                                        })
-                                                        .catch((error) => callback(false, error.message));
-                                                })
+                                                        callback(true, null)})
                                                 .catch((error) => callback(false, error.message));
                                         })
                                         .catch((error) => callback(false, error.message));    
@@ -62,40 +54,46 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 // on child added is supposed to only fire off when a new data object is added
 export function setLocation(uid, deviceID, callback)
 {
-        console.log("Listening for changes to reports table");
-        // Look for a newly added report in the reports table, and add that report into the user table
-        // under user -> reports
-        database.ref('reports').child(deviceID).on("child_added", (snapshot) =>{
-                
-                console.log("Detected change in database");
-                if (snapshot.child('latitude').exists() == false)
-                {
-                        console.log("no gps found");
-                        navigator.geolocation.getCurrentPosition(
-                                (position) => {
-                                        database.ref('users').child(uid).child(reports).push({
-                                                'description': snapshot.val().description,
-                                                'latitude': position.coords.latitude, 
-                                                'longitude': position.coords.longitude,
-                                                'time': snapshot.val().time,
-                                                'type': snapshot.val().type
-                                        })
-                                        .then(() => {
-
-                                        })
-                                        .catch((error) =>
-                                        {
-                                                console.log(error);
-                                        })
-                                },
-                                (error) => console.log(error),
-                                { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-                                );
-                        
-                }
-                
-                callback(true, null);
-        });
+        database.ref('reports').child(deviceID).child('report').endAt().limitToLast(1).on('child_changed', function(snapshot)
+        {
+                console.log("LATEST REPORT ADDED KEY AND VAL:");
+                console.log(snapshot.key + " " + snapshot.val());
+                console.log("type descrption time exist:");
+                console.log(snapshot.child('type').exists() + " " + snapshot.child('description').exists() + " " + snapshot.child('time').exists());
+                if (snapshot.child('type').exists() && snapshot.child('description').exists() && snapshot.child('time').exists())
+                        {
+                                console.log("TYPE EXISTED");
+                                if (!snapshot.child('latitude').exists())
+                                {
+                                        console.log("no gps found");
+                                        navigator.geolocation.getCurrentPosition((position) => {
+                                                //nine five four four zero one three zero two zero
+                                                console.log("CHILD VALUEs TEST ~~~~~");
+                                                console.log(snapshot.val().type + " " + snapshot.val().time + " " + snapshot.val().description);
+                                                console.log("CHILD VALUE TEST ~~~~~");
+                                                database.ref('users').child(uid).child('reports').push({
+                                                        'type': snapshot.val().type, 
+                                                        'description': snapshot.val().description, 
+                                                        'time': snapshot.val().time, 
+                                                        'latitude': position.coords.latitude, 
+                                                        'longitude': position.coords.longitude})
+                                                        .then(() =>
+                                                        {
+                                                                database.ref('users').child(uid).child('reports').on('value', function(snapshot)
+                                                                {
+                                                                        console.log(snapshot.val());
+                                                                        callback(true, snapshot.val());
+                                                                })
+                                                        })
+                                        },
+                                        (error) => console.log(error),
+                                        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+                                    );
+                               
+                                }
+                        }
+                callback(false, "Report was not valid");
+        })
 }
 
 export function searchListener(deviceID, callback)
@@ -105,16 +103,3 @@ export function searchListener(deviceID, callback)
                 console.log(snapshot);
         });
 }
-
-/*
-// on child added is supposed to only fire off when a new data object is added
-export function getReport(deviceID, callback)
-{
-        database.ref('reports').child(deviceID).endAt().limitToLast(1).on('child_added', (snapshot) =>{
-    
-               console.log(snapshot);
-               
-               callback(true, snapshot);
-        });
-}
-*/
