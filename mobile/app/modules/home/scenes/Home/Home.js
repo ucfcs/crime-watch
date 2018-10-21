@@ -91,7 +91,7 @@ class Home extends React.Component {
         var percentageVehicle = 0;
         var percentagePedestrian = 0;
         var percentageAnimal = 0;
-        var percentageOther = 0;
+        var percentageTraffic = 0;
         var percentageConstruction = 0;
         const reportTableHeaders = ['Time', 'Type', 'Description', 'Map'];
         const reportTableData = [[]];
@@ -106,20 +106,24 @@ class Home extends React.Component {
                 percentageVehicle++;
             else if (reports[i].type == "Pedestrian")
                 percentagePedestrian++;
-            else 
-                percentageOther++;
+            else if (reports[i].type == "Construction")
+                percentageConstruction++;
+            else if (reports[i].type == "Traffic")
+                percentageTraffic++;
+            else
+                percentageAnimal++;
         }
 
         percentageVehicle = percentageVehicle/reports.length;
         percentagePedestrian = percentagePedestrian/reports.length;
-        percentageOther = percentageOther/reports.length;
+        percentageTraffic = percentageTraffic/reports.length;
         percentageAnimal = percentageAnimal/reports.length;
         percentageConstruction = percentageConstruction/reports.length;
 
         var pieChartData = [
             { x: "Vehicle", y: percentageVehicle },
             { x: "Pedestrian", y: percentagePedestrian },
-            { x: "Other", y: percentageOther },
+            { x: "Traffic", y: percentageTraffic },
             { x: "Animal", y: percentageAnimal },
             { x: "Construction", y: percentageConstruction }
         ]
@@ -134,7 +138,7 @@ class Home extends React.Component {
             pieChartData.splice(1, 1);
             pieChartColors.splice(1, 1);
         }
-        if (percentageOther == 0)
+        if (percentageTraffic == 0)
         {
             pieChartData.splice(2, 1);
             pieChartColors.splice(2, 1);
