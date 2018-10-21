@@ -90,8 +90,9 @@ class Home extends React.Component {
 
         var percentageVehicle = 0;
         var percentagePedestrian = 0;
+        var percentageAnimal = 0;
         var percentageOther = 0;
-
+        var percentageConstruction = 0;
         const reportTableHeaders = ['Time', 'Type', 'Description', 'Map'];
         const reportTableData = [[]];
         const reportLocations = [[]];
@@ -112,12 +113,17 @@ class Home extends React.Component {
         percentageVehicle = percentageVehicle/reports.length;
         percentagePedestrian = percentagePedestrian/reports.length;
         percentageOther = percentageOther/reports.length;
+        percentageAnimal = percentageAnimal/reports.length;
+        percentageConstruction = percentageConstruction/reports.length;
+
         var pieChartData = [
             { x: "Vehicle", y: percentageVehicle },
             { x: "Pedestrian", y: percentagePedestrian },
-            { x: "Other", y: percentageOther }
+            { x: "Other", y: percentageOther },
+            { x: "Animal", y: percentageAnimal },
+            { x: "Construction", y: percentageConstruction }
         ]
-        var pieChartColors = [color.green, color.orange, color.light_blue];
+        var pieChartColors = [color.green, color.orange, color.light_blue, color.navy, color.grey];
         if (percentageVehicle == 0)
         {
             pieChartData.splice(0, 1);
@@ -132,6 +138,16 @@ class Home extends React.Component {
         {
             pieChartData.splice(2, 1);
             pieChartColors.splice(2, 1);
+        }
+        if (percentageAnimal == 0)
+        {
+            pieChartData.splice(3, 1);
+            pieChartColors.splice(3, 1);
+        }
+        if (percentageConstruction == 0)
+        {
+            pieChartData.splice(4, 1);
+            pieChartColors.splice(4, 1);
         }
         
         const reportMapButton = (reportIndex) => (
