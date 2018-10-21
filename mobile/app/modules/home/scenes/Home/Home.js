@@ -59,7 +59,7 @@ class Home extends React.Component {
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
 
-        //home.setLocation(deviceID);
+        home.setLocation(uid, deviceID);
         //home.getReport(deviceID);
     }
 

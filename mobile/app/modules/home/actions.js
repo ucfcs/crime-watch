@@ -37,7 +37,7 @@ export function changePhone (user, phone)
     };
 }
 
-export function setLocation (deviceID)
+export function setLocation (uid, deviceID)
 {
     api.setLocation(deviceID, function (success, reports)
     {
