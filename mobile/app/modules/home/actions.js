@@ -24,7 +24,7 @@ export function changePhone (user, phone)
 {
     return (dispatch) =>
     {
-        api.changePhone(user, phone, function (success, data, error) 
+        api.changePhone(user, phone, function (success, phone, error) 
         {
             if (success)
             {
@@ -39,13 +39,20 @@ export function changePhone (user, phone)
 
 export function setLocation (uid, deviceID)
 {
-    api.setLocation(deviceID, function (success, reports)
+    return (dispatch) =>
     {
-        if (success)
-            console.log("Success");
-        else
-            console.log("Error");
-    });
+        api.setLocation(uid, deviceID, function (success, reports)
+        {
+            if (success)
+            {
+                console.log("Received new report");
+                console.log(reports);
+                dispatch({type: t.ADD_REPORT, data: reports});
+            }
+            else
+                console.log("Error");
+        });
+    };
 }
 
 export function searchListener (deviceID)
@@ -56,7 +63,6 @@ export function searchListener (deviceID)
     });
 }
 
-// auto assigning the phone number, will need to pass in the current users phone
 export function getReport (deviceID)
 {
     console.log("Waiting for reports");

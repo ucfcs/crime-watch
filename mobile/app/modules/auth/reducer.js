@@ -29,7 +29,7 @@ const reducer = (state = initialState, action) =>
             return { ...state, phone: action.data};
 
         case t.ADD_REPORT:
-            //console.log("Received new reports");
+            console.log("Received new reports in reducer");
             //console.log(action.data);
             return { ...state, reports: action.data};
 
