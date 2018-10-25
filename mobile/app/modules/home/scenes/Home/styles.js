@@ -68,7 +68,7 @@ export const androidStyles = StyleSheet.create({
         backgroundColor: color.navy,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 60
+        height: 60,
     },
 
     spacerText:{
@@ -112,7 +112,8 @@ export const androidStyles = StyleSheet.create({
 
     reportsRow:{
         flexDirection: 'row',
-        backgroundColor: color.white
+        backgroundColor: color.white,
+        height: 60,
     },
 
     reportMapButton: {
@@ -123,7 +124,7 @@ export const androidStyles = StyleSheet.create({
     // pie chart
     pieContainer:{
         margin: 40,
-    }
+    },
 
 });
 

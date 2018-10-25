@@ -39,7 +39,7 @@ class Home extends React.Component {
    componentDidMount = async () => {
 
         const state = store.getState().authReducer;
-
+        console.log(state);
         var uid = state.uid;
         var username = state.username;
         var gender = state.gender;
@@ -50,12 +50,12 @@ class Home extends React.Component {
         var reportArray = Object.values(reports)
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
-
+        
         this.onSetLocation(uid, deviceID);
+        home.searchListener(deviceID);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("Detected prop change");
         if (nextProps.gender != this.props.gender)
         {
             this.setState({ gender: nextProps.gender });  
@@ -67,6 +67,7 @@ class Home extends React.Component {
             this.setState({ reports: reportArray });
         }
     }
+
 
     onSetLocation(uid, deviceID) {
         this.props.setLocation(uid, deviceID);
@@ -93,13 +94,13 @@ class Home extends React.Component {
         var percentageAnimal = 0;
         var percentageTraffic = 0;
         var percentageConstruction = 0;
-        const reportTableHeaders = ['Time', 'Type', 'Description', 'Map'];
+        const reportTableHeaders = ['Time', 'Type', 'Description'];
         const reportTableData = [[]];
         const reportLocations = [[]];
 
         for (var i = 0; i < reports.length; i++)
         {
-            reportTableData[i] = [reports[i].time, reports[i].type, reports[i].description, ''];
+            reportTableData[i] = [reports[i].time, reports[i].type, reports[i].description];
             reportLocations[i] = [reports[i].latitude, reports[i].longitude];
 
             if (reports[i].type == "Vehicle")
@@ -167,7 +168,8 @@ class Home extends React.Component {
                 </View>
             </TouchableOpacity>
         );
-        
+
+
         return (
             <View style={styles.container}>
         
@@ -180,6 +182,7 @@ class Home extends React.Component {
                                 <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                                 {
                                     reportTableData.map((rowData, index) => (
+                                        <TouchableOpacity key={index} onPress={Actions.Map}>
                                         <TableWrapper key={index} style={styles.reportsRow}>
                                         {
                                             rowData.map((cellData, cellIndex) => (
@@ -187,6 +190,7 @@ class Home extends React.Component {
                                             ))
                                         }
                                         </TableWrapper>
+                                        </TouchableOpacity>
                                     ))
                                 }
                          
