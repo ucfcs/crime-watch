@@ -57,7 +57,7 @@ export function setLocation (uid, deviceID)
 
 export function searchListener (deviceID)
 {
-    api.searchListener(deviceID, function (success, data)
+    api.searchListener(deviceID, function (success)
     {
         
     });
