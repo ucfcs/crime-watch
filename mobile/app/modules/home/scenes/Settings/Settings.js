@@ -214,7 +214,7 @@ class Settings extends React.Component {
                 <SettingsDividerShort/>
         
                 <SettingsSwitch
-                    title={'Allow Push Notifications'}
+                    title={''}
                     onSaveValue={(value) => {
                         console.log('allow push notifications:', value);
                         this.setState({

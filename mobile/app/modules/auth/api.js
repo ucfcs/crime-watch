@@ -43,7 +43,9 @@ export function getUser(user, callback)
         {
             const exists = (snapshot.val() !== null);
             if (exists) user = snapshot.val();
-            database.ref('reports').child(user.deviceID).child('report').once('value')
+            if (user.deviceID)
+            {
+                database.ref('reports').child(user.deviceID).child('report').once('value')
                 .then(function(reportsSnapshot)
                 {
                     user.reports = [];
@@ -67,6 +69,12 @@ export function getUser(user, callback)
                     const data = { exists, user }
                     callback(true, data, null);
                 });
+            }
+            else
+            {
+                const data = { exists, user }
+                callback(true, data, null);
+            }
         })
         .catch(error => callback(false, null, error));
 }
