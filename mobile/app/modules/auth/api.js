@@ -43,7 +43,7 @@ export function getUser(user, callback)
         {
             const exists = (snapshot.val() !== null);
             if (exists) user = snapshot.val();
-            if (user.deviceID)
+            if (user.deviceID && user.deviceID != "")
             {
                 database.ref('reports').child(user.deviceID).child('report').once('value')
                 .then(function(reportsSnapshot)
@@ -67,7 +67,7 @@ export function getUser(user, callback)
                 .catch(error => 
                 {
                     const data = { exists, user }
-                    callback(true, data, null);
+                    callback(true, data, error);
                 });
             }
             else
