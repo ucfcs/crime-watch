@@ -125,40 +125,32 @@ class Home extends React.Component {
         percentageAnimal = percentageAnimal/reports.length;
         percentageConstruction = percentageConstruction/reports.length;
 
-        var pieChartData = [
-            { x: "Vehicle", y: percentageVehicle },
-            { x: "Pedestrian", y: percentagePedestrian },
-            { x: "Traffic", y: percentageTraffic },
-            { x: "Animal", y: percentageAnimal },
-            { x: "Construction", y: percentageConstruction }
-        ]
-        console.log("PIE CHART DATA:");
-        console.log(pieChartData);
-        var pieChartColors = [color.green, color.orange, color.light_blue, color.navy, color.red];
-        if (percentageVehicle == 0)
+        var pieChartData = [];
+        var pieChartColors= [];
+        if (percentageVehicle != 0)
         {
-            pieChartData.splice(0, 1);
-            pieChartColors.splice(0, 1);
+            pieChartData.push({ x: "Vehicle", y: percentageVehicle });
+            pieChartColors.push(color.green);
         }
-        if (percentagePedestrian == 0)
+        if (percentagePedestrian != 0)
         {
-            pieChartData.splice(1, 1);
-            pieChartColors.splice(1, 1);
+            pieChartData.push({ x: "Pedestrian", y: percentagePedestrian });
+            pieChartColors.push(color.orange);
         }
-        if (percentageTraffic == 0)
+        if (percentageTraffic != 0)
         {
-            pieChartData.splice(2, 1);
-            pieChartColors.splice(2, 1);
+            pieChartData.push({ x: "Traffic", y: percentageTraffic });
+            pieChartColors.push(color.light_black);
         }
-        if (percentageAnimal == 0)
+        if (percentageAnimal != 0)
         {
-            pieChartData.splice(3, 1);
-            pieChartColors.splice(3, 1);
+            pieChartData.push({ x: "Animal", y: percentageAnimal });
+            pieChartColors.push(color.navy);
         }
-        if (percentageConstruction == 0)
+        if (percentageConstruction != 0)
         {
-            pieChartData.splice(4, 1);
-            pieChartColors.splice(4, 1);
+            pieChartData.push({ x: "Construction", y: percentageConstruction });
+            pieChartColors.push(color.red);
         }
         console.log("PIE CHART DATA AFTER:");
         console.log(pieChartData);

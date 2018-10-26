@@ -106,6 +106,8 @@ export function checkLoginStatus(callback)
                     else if (error) 
                     {
                         //unable to get user
+                        console.log("checkLoginStatus error:");
+                        console.log(error);
                         dispatch({type: t.LOGGED_OUT});
                         callback(false, false);
                     }
