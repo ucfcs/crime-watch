@@ -39,6 +39,7 @@ class Home extends React.Component {
    componentDidMount = async () => {
 
         const state = store.getState().authReducer;
+        console.log("HOME STATE");
         console.log(state);
         var uid = state.uid;
         var username = state.username;
@@ -51,8 +52,11 @@ class Home extends React.Component {
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
         
-        this.onSetLocation(uid, deviceID);
-        home.searchListener(deviceID);
+        if (deviceID && deviceID !== "")
+        {
+            this.onSetLocation(uid, deviceID);
+            home.searchListener(deviceID);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -154,21 +158,6 @@ class Home extends React.Component {
             pieChartData.splice(4, 1);
             pieChartColors.splice(4, 1);
         }
-        
-        const reportMapButton = (reportIndex) => (
-            <TouchableOpacity onPress={() => {
-                    Actions.Map({
-                        longitude: reports[reportIndex][2],
-                        latitude: reports[reportIndex][1],
-                        reportLocs: reportLocations
-                    });
-                }}>
-                <View style={styles.button}>
-                    <Text style={styles.reportMapButton}>MAP</Text>
-                </View>
-            </TouchableOpacity>
-        );
-
 
         return (
             <View style={styles.container}>
@@ -182,11 +171,17 @@ class Home extends React.Component {
                                 <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                                 {
                                     reportTableData.map((rowData, index) => (
-                                        <TouchableOpacity key={index} onPress={Actions.Map}>
+                                        <TouchableOpacity key={index} onPress={() => {
+                                            Actions.Map({
+                                                longitude: reports[index][2],
+                                                latitude: reports[index][1],
+                                                reportLocs: reportLocations
+                                            });
+                                        }}>
                                         <TableWrapper key={index} style={styles.reportsRow}>
                                         {
                                             rowData.map((cellData, cellIndex) => (
-                                                <Cell key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
+                                                <Cell key={cellIndex} data={cellData}/>
                                             ))
                                         }
                                         </TableWrapper>

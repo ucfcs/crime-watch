@@ -48,6 +48,7 @@ export function getUser(user, callback)
                 {
                     user.reports = [];
                     reportsSnapshot.forEach(function(report) {
+                        console.log("GET USER API; REPORT:");
                         console.log(report);
                         user.reports.push({
                             'date': report.val().date,

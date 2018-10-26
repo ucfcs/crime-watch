@@ -50,7 +50,7 @@ export function setLocation (uid, deviceID)
                 dispatch({type: t.ADD_REPORT, data: reports});
             }
             else
-                console.log("Error");
+                console.log("Error in setLocation");
         });
     };
 }

@@ -79,7 +79,13 @@ export function setLocation(uid, deviceID, callback)
                 }
                 else
                 {
-                        callback(false,  null);
+                        database.ref('reports').child(deviceID).child('report').on('value', function (snapshot)
+                                                {
+                                                        console.log("SNAPSHOT VAL IN SET LOCATION API");
+                                                        console.log(snapshot.val());
+                                                        callback(true, snapshot.val())
+                                                })
+                        //callback(false,  null);
                 }
         });
 }
