@@ -99,7 +99,7 @@ export function searchListener(deviceID, callback)
 
 
 
-                        
+
                         var speechResponse = "There have been five major incidents in this area."
                         database.ref('reports').child(deviceID).child('search').set({'bool':'false', 'speech': speechResponse});
                 }
@@ -111,3 +111,14 @@ export function searchListener(deviceID, callback)
         });
 }
 
+export function getReports()
+{
+        console.log("INSIDE GETREPORTS");
+        database.ref('reports').child.on('value', (snapshot) => {
+                snapshot.forEach(function (childSnapshot) {
+                       // console.log(childSnapshot.report);
+                })
+
+                return null;
+        });
+}

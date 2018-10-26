@@ -116,6 +116,10 @@ export const androidStyles = StyleSheet.create({
         height: 60,
     },
 
+    reportsCell:{
+        borderWidth: 0,
+    },
+
     reportMapButton: {
         height: 40,
         width: 40

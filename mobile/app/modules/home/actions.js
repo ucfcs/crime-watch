@@ -45,8 +45,8 @@ export function setLocation (uid, deviceID)
         {
             if (success)
             {
-                console.log("Received new report");
-                console.log(reports);
+                //console.log("Received new report");
+                //console.log(reports);
                 dispatch({type: t.ADD_REPORT, data: reports});
             }
             else
@@ -63,18 +63,18 @@ export function searchListener (deviceID)
     });
 }
 
-export function getReport (deviceID)
+export function getReports ()
 {
     console.log("Waiting for reports");
 
-    return (dispatch) =>
-    {
-        api.getReport(deviceID, function (success, report)
+   // return (dispatch) =>
+    //{
+        api.getReport(deviceID, function (success, reports)
         {
             if (success)
-                dispatch({type: t.ADD_REPORT, data: report});
+                return reports;
             else
                 console.log("error");
         });
-    }
+    //}
 }

@@ -13,7 +13,7 @@ import { Table, Row, TableWrapper, Cell } from 'react-native-table-component';
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme} from 'victory-native';
 import { actions as home } from '../../index';
 import Swiper from 'react-native-swiper';
-const { setLocation } = home;
+const { setLocation, getReports } = home;
 const { color } = theme;
 
 Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
@@ -28,9 +28,10 @@ class Home extends React.Component {
             gender: '',
             phone: '',
             email: '',
-            reports: []
+            reports: [],
         };
 
+        this.onGetReports = this.onGetReports.bind(this);
         this.onSetLocation = this.onSetLocation.bind(this);
         this.onSuccess = this.onSuccess.bind(this);
         this.onError = this.onError.bind(this);
@@ -51,6 +52,7 @@ class Home extends React.Component {
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
         
+        this.onGetReports();
         this.onSetLocation(uid, deviceID);
         home.searchListener(deviceID);
     }
@@ -68,6 +70,9 @@ class Home extends React.Component {
         }
     }
 
+    onGetReports() {
+        var reports = getReports();
+    }
 
     onSetLocation(uid, deviceID) {
         this.props.setLocation(uid, deviceID);
@@ -186,7 +191,7 @@ class Home extends React.Component {
                                         <TableWrapper key={index} style={styles.reportsRow}>
                                         {
                                             rowData.map((cellData, cellIndex) => (
-                                                <Cell key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
+                                                <Cell borderStyle={{borderColor: 'transparent'}} key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
                                             ))
                                         }
                                         </TableWrapper>
