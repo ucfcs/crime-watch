@@ -127,7 +127,7 @@ class Settings extends React.Component {
                     onSaveValue={value => {
                         this.onAlexaCodeEnter(value);
                     }}
-                    value={'000000'}
+                    value={''}
                     dialogAndroidProps={{
                         widgetColor: colors.black,
                         positiveColor: colors.black,
@@ -206,25 +206,6 @@ class Settings extends React.Component {
                         positiveColor: colors.black,
                         negativeColor: colors.black,
                     }}
-                />
-        
-                <SettingsPicker
-                    title="Gender"
-                    dialogDescription={'Choose your gender.'}
-                    possibleValues={[
-                        {label: '...', value: ''},
-                        {label: 'male', value: 'male'},
-                        {label: 'female', value: 'female'},
-                        {label: 'other', value: 'other'}
-                    ]}
-                    positiveButtonTitle={'Continue'}
-                    negativeButtonTitle={'Cancel'}
-                    buttonRightTitle={'Save'}
-                    onSaveValue={value => {
-                        this.onGenderChange(value);
-                    }}
-                    value={this.state.gender}
-                    styleModalButtonsText={{color: colors.black}}
                 />
                 
                 {/** Box to enter in alexa code, different between android and ios */}
