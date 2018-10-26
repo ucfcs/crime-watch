@@ -79,7 +79,13 @@ export function setLocation(uid, deviceID, callback)
                 }
                 else
                 {
-                        callback(false,  null);
+                        database.ref('reports').child(deviceID).child('report').on('value', function (snapshot)
+                                                {
+                                                        console.log("SNAPSHOT VAL IN SET LOCATION API");
+                                                        //console.log(snapshot.val());
+                                                        callback(true, snapshot.val())
+                                                })
+                        //callback(false,  null);
                 }
         });
 }
@@ -111,12 +117,13 @@ export function searchListener(deviceID, callback)
         });
 }
 
-export function getReports()
+export function getReports(callback)
 {
         console.log("INSIDE GETREPORTS");
         database.ref('reports').child.on('value', (snapshot) => {
                 snapshot.forEach(function (childSnapshot) {
                        // console.log(childSnapshot.report);
+                       callback(false);
                 })
 
                 return null;

@@ -46,11 +46,10 @@ export function setLocation (uid, deviceID)
             if (success)
             {
                 //console.log("Received new report");
-                //console.log(reports);
                 dispatch({type: t.ADD_REPORT, data: reports});
             }
             else
-                console.log("Error");
+                console.log("Error in setLocation");
         });
     };
 }
@@ -69,7 +68,7 @@ export function getReports ()
 
    // return (dispatch) =>
     //{
-        api.getReport(deviceID, function (success, reports)
+        api.getReports( function (success, reports)
         {
             if (success)
                 return reports;

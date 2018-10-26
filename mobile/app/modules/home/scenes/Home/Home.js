@@ -40,7 +40,8 @@ class Home extends React.Component {
    componentDidMount = async () => {
 
         const state = store.getState().authReducer;
-        console.log(state);
+        //console.log("HOME STATE");
+        
         var uid = state.uid;
         var username = state.username;
         var gender = state.gender;
@@ -52,9 +53,12 @@ class Home extends React.Component {
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
         
-        this.onGetReports();
-        this.onSetLocation(uid, deviceID);
-        home.searchListener(deviceID);
+        if (deviceID && deviceID !== "")
+        {
+            this.onGetReports();
+            this.onSetLocation(uid, deviceID);
+            home.searchListener(deviceID);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -93,19 +97,23 @@ class Home extends React.Component {
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const reports = this.state.reports;
-
+ 
         var percentageVehicle = 0;
         var percentagePedestrian = 0;
         var percentageAnimal = 0;
         var percentageTraffic = 0;
         var percentageConstruction = 0;
-        const reportTableHeaders = ['Time', 'Type', 'Description'];
+        const reportTableHeaders = ['', 'Description', 'Date'];
         const reportTableData = [[]];
         const reportLocations = [[]];
 
         for (var i = 0; i < reports.length; i++)
         {
-            reportTableData[i] = [reports[i].time, reports[i].type, reports[i].description];
+            reportTableData[i] = [<Image
+                style={{width: 30, height: 30}}
+                source={require('../../../../assets/images/gps.png')}
+            />,
+            reports[i].type + ' / \n' +  reports[i].description, reports[i].date + '\n' + reports[i].time ];
             reportLocations[i] = [reports[i].latitude, reports[i].longitude];
 
             if (reports[i].type == "Vehicle")
@@ -160,21 +168,6 @@ class Home extends React.Component {
             pieChartColors.splice(4, 1);
         }
         
-        const reportMapButton = (reportIndex) => (
-            <TouchableOpacity onPress={() => {
-                    Actions.Map({
-                        longitude: reports[reportIndex][2],
-                        latitude: reports[reportIndex][1],
-                        reportLocs: reportLocations
-                    });
-                }}>
-                <View style={styles.button}>
-                    <Text style={styles.reportMapButton}>MAP</Text>
-                </View>
-            </TouchableOpacity>
-        );
-
-
         return (
             <View style={styles.container}>
         
@@ -187,14 +180,20 @@ class Home extends React.Component {
                                 <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                                 {
                                     reportTableData.map((rowData, index) => (
-                                        <TouchableOpacity key={index} onPress={Actions.Map}>
-                                        <TableWrapper key={index} style={styles.reportsRow}>
-                                        {
-                                            rowData.map((cellData, cellIndex) => (
-                                                <Cell borderStyle={{borderColor: 'transparent'}} key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
-                                            ))
-                                        }
-                                        </TableWrapper>
+                                        <TouchableOpacity key={index} onPress={() => {
+                                                Actions.Map({
+                                                    longitude: reports[index].longitude,
+                                                    latitude: reports[index].latitude,
+                                                    reportLocs: reportLocations
+                                                });
+                                            }}>
+                                            <TableWrapper key={index} style={styles.reportsRow}>
+                                            {
+                                                rowData.map((cellData, cellIndex) => (
+                                                    <Cell borderStyle={{borderColor: 'transparent'}} key={cellIndex} data={cellData}/>
+                                                ))
+                                            }
+                                            </TableWrapper>
                                         </TouchableOpacity>
                                     ))
                                 }
