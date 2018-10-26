@@ -115,7 +115,7 @@ class Home extends React.Component {
                 percentageConstruction++;
             else if (reports[i].type == "Traffic")
                 percentageTraffic++;
-            else
+            else if (reports[i].type == "Animal")
                 percentageAnimal++;
         }
 
@@ -132,7 +132,9 @@ class Home extends React.Component {
             { x: "Animal", y: percentageAnimal },
             { x: "Construction", y: percentageConstruction }
         ]
-        var pieChartColors = [color.green, color.orange, color.light_blue, color.navy, color.grey];
+        console.log("PIE CHART DATA:");
+        console.log(pieChartData);
+        var pieChartColors = [color.green, color.orange, color.light_blue, color.navy, color.red];
         if (percentageVehicle == 0)
         {
             pieChartData.splice(0, 1);
@@ -158,6 +160,8 @@ class Home extends React.Component {
             pieChartData.splice(4, 1);
             pieChartColors.splice(4, 1);
         }
+        console.log("PIE CHART DATA AFTER:");
+        console.log(pieChartData);
 
         return (
             <View style={styles.container}>

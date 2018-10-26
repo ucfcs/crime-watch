@@ -55,8 +55,8 @@ export function getUser(user, callback)
                             'type': report.val().type, 
                             'description': report.val().description, 
                             'time': report.val().time, 
-                            'latitude': report.latitude, 
-                            'longitude': report.longitude
+                            'latitude': report.val().latitude, 
+                            'longitude': report.val().longitude
                         });
                     })
                     const data = { exists, user };
