@@ -152,8 +152,6 @@ class Home extends React.Component {
             pieChartData.push({ x: "Construction", y: percentageConstruction });
             pieChartColors.push(color.red);
         }
-        console.log("PIE CHART DATA AFTER:");
-        console.log(pieChartData);
 
         return (
             <View style={styles.container}>
