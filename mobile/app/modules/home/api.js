@@ -54,6 +54,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
 // on child added is supposed to only fire off when a new data object is added
 export function setLocation(uid, deviceID, callback)
 {
+        console.log("Listening for new reports");
         var reports = [];
         database.ref('reports').child(deviceID).child('report').endAt().limitToLast(1).on('child_added', (snapshot) =>{
     
@@ -119,7 +120,6 @@ export function searchListener(deviceID, callback)
 
 export function getReports(callback)
 {
-        console.log("INSIDE GETREPORTS");
         database.ref('reports').child.on('value', (snapshot) => {
                 snapshot.forEach(function (childSnapshot) {
                        // console.log(childSnapshot.report);
