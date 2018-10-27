@@ -39,7 +39,9 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                                 // Second call Creates a new deviceID-key object in the reports table
                                                 database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
                                                 .then(() => {
-                                                        callback(true, null)})
+                                                        removeAlexaCode(phoneNumber);
+                                                        callback(true, null);
+                                                })
                                                 .catch((error) => callback(false, error.message));
                                         })
                                         .catch((error) => callback(false, error.message));    
@@ -49,6 +51,12 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                         callback(false, "Matching Alexa code not found.");
                 }
         });
+}
+
+export function removeAlexaCode(phoneNumber)
+{
+        if(phoneNumber && phoneNumber !== "")
+                database.ref('alexa').child(phoneNumber).remove();
 }
 
 // on child added is supposed to only fire off when a new data object is added
