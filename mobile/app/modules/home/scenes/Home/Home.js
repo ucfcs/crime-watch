@@ -49,7 +49,9 @@ class Home extends React.Component {
         var email = state.email;
         var reports = state.reports;
         var deviceID = state.deviceID;
-        var reportArray = Object.values(reports)
+        var reportArray = Object.values(reports);
+        if (deviceID == "")
+            reportArray = [];
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
         
@@ -128,11 +130,14 @@ class Home extends React.Component {
                 percentageAnimal++;
         }
 
-        percentageVehicle = percentageVehicle/reports.length;
-        percentagePedestrian = percentagePedestrian/reports.length;
-        percentageTraffic = percentageTraffic/reports.length;
-        percentageAnimal = percentageAnimal/reports.length;
-        percentageConstruction = percentageConstruction/reports.length;
+        if (reports.length > 0)
+        {
+            percentageVehicle = percentageVehicle/reports.length;
+            percentagePedestrian = percentagePedestrian/reports.length;
+            percentageTraffic = percentageTraffic/reports.length;
+            percentageAnimal = percentageAnimal/reports.length;
+            percentageConstruction = percentageConstruction/reports.length;
+        }
 
         var pieChartData = [];
         var pieChartColors= [];
