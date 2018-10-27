@@ -97,13 +97,15 @@ export const androidStyles = StyleSheet.create({
 
     reportsContainer:{
         flex: 2,
-        backgroundColor: color.white,
-        margin: 'auto'
+        backgroundColor: color.light_grey,
+        margin: 'auto',
+        marginBottom: 100
     },
 
     reportsHeader:{
-        height: 30,
-        backgroundColor: '#808B97'
+        height: 45,
+        backgroundColor: color.light_grey,
+        paddingLeft: 20
     },
 
     reportsText:{
@@ -113,7 +115,14 @@ export const androidStyles = StyleSheet.create({
     reportsRow:{
         flexDirection: 'row',
         backgroundColor: color.white,
-        height: 60,
+        height: 80,
+        marginBottom: 1,
+        alignContent: 'center',
+        paddingLeft: 40
+    },
+
+    reportsCell:{
+        borderWidth: 0,
     },
 
     reportMapButton: {

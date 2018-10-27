@@ -39,9 +39,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                                 // Second call Creates a new deviceID-key object in the reports table
                                                 database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
                                                 .then(() => {
-                                                        removeAlexaCode(phoneNumber);
-                                                        callback(true, null);
-                                                })
+                                                        callback(true, null)})
                                                 .catch((error) => callback(false, error.message));
                                         })
                                         .catch((error) => callback(false, error.message));    
@@ -51,12 +49,6 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                         callback(false, "Matching Alexa code not found.");
                 }
         });
-}
-
-export function removeAlexaCode(phoneNumber)
-{
-        if(phoneNumber && phoneNumber !== "")
-                database.ref('alexa').child(phoneNumber).remove();
 }
 
 // on child added is supposed to only fire off when a new data object is added
@@ -87,7 +79,13 @@ export function setLocation(uid, deviceID, callback)
                 }
                 else
                 {
-                        callback(false,  null);
+                        database.ref('reports').child(deviceID).child('report').on('value', function (snapshot)
+                                                {
+                                                        console.log("SNAPSHOT VAL IN SET LOCATION API");
+                                                        //console.log(snapshot.val());
+                                                        callback(true, snapshot.val())
+                                                })
+                        //callback(false,  null);
                 }
         });
 }
@@ -107,7 +105,7 @@ export function searchListener(deviceID, callback)
 
 
 
-                        
+
                         var speechResponse = "There have been five major incidents in this area."
                         database.ref('reports').child(deviceID).child('search').set({'bool':'false', 'speech': speechResponse});
                 }
@@ -119,3 +117,15 @@ export function searchListener(deviceID, callback)
         });
 }
 
+export function getReports(callback)
+{
+        console.log("INSIDE GETREPORTS");
+        database.ref('reports').child.on('value', (snapshot) => {
+                snapshot.forEach(function (childSnapshot) {
+                       // console.log(childSnapshot.report);
+                       callback(false);
+                })
+
+                return null;
+        });
+}
