@@ -165,7 +165,7 @@ class Home extends React.Component {
         return (
             <View style={styles.container}>
         
-                <Swiper style={styles.reportsContainer} autoplay={false} onIndexChanged={this.onSwipe}>
+                <Swiper style={styles.reportsContainer} autoplay={false}>
 
                     <ScrollView>
                         <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>

@@ -6,8 +6,8 @@ import {connect} from 'react-redux';
 class Map extends React.Component {
     constructor(props){
         super(props);
-        console.log("MAP PROPS:");
-        console.log(props);
+        // console.log("MAP PROPS:");
+        // console.log(props);
         this.state = {
             currLatitude: 0.0,
             currLongitude: 0.0,

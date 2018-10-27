@@ -62,16 +62,16 @@ export function removeAlexaCode(phoneNumber)
 // on child added is supposed to only fire off when a new data object is added
 export function setLocation(uid, deviceID, callback)
 {
-        var reports = [];
         database.ref('reports').child(deviceID).child('report').endAt().limitToLast(1).on('child_added', (snapshot) =>{
-    
-                       
                 if (snapshot.child('latitude').exists() == false)
                 {
-                        console.log("no gps found");
+                        console.log("adding current GPS location to new report");
                         navigator.geolocation.getCurrentPosition(
                                 (position) => {
-                                        database.ref('reports').child(deviceID).child('report').child(snapshot.key).update({'latitude': position.coords.latitude, 'longitude': position.coords.longitude})
+                                        database.ref('reports').child(deviceID).child('report').child(snapshot.key)
+                                        .update({
+                                                'latitude': position.coords.latitude,
+                                                'longitude': position.coords.longitude})
                                         .then(function ()
                                         {
                                                 database.ref('reports').child(deviceID).child('report').on('value', function (snapshot)
@@ -86,16 +86,9 @@ export function setLocation(uid, deviceID, callback)
                         
                 }
                 else
-                {
-                        database.ref('reports').child(deviceID).child('report').on('value', function (snapshot)
-                                                {
-                                                        console.log("SNAPSHOT VAL IN SET LOCATION API");
-                                                        //console.log(snapshot.val());
-                                                        callback(true, snapshot.val())
-                                                })
-                        //callback(false,  null);
-                }
-        });
+                        callback(false,  "Report already had coordinates");
+        })
+        .catch(error => callback(false, error.message));
 }
 
 export function searchListener(deviceID, callback)
@@ -128,12 +121,16 @@ export function searchListener(deviceID, callback)
 export function getReports(callback)
 {
         console.log("INSIDE GETREPORTS");
-        database.ref('reports').child.on('value', (snapshot) => {
-                snapshot.forEach(function (childSnapshot) {
-                       // console.log(childSnapshot.report);
-                       callback(false);
-                })
+        // database.ref('reports').child.on('value', (snapshot) => {
+        //         console.log("INSIDE GETREPORTS DATABASE CALL");
+        //         console.log(snapshot.report);
+        //         callback(false, null);
+        //         // snapshot.forEach(function (childSnapshot) {
+        //         //         console.log("INSIDE GETREPORTS DATABASE CALL");
+        //         //         console.log(childSnapshot.report);
+        //         //        callback(false);
+        //         // })
 
-                return null;
-        });
+        //         //return null;
+        // });
 }

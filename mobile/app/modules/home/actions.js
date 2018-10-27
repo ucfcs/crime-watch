@@ -45,11 +45,12 @@ export function setLocation (uid, deviceID)
         {
             if (success)
             {
-                //console.log("Received new report");
+                console.log("Received new report");
                 dispatch({type: t.ADD_REPORT, data: reports});
             }
             else
-                console.log("Error in setLocation");
+                console.log("Error in setLocation:");
+                console.log(reports);
         });
     };
 }
