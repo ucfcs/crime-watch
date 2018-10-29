@@ -39,7 +39,9 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                                 // Second call Creates a new deviceID-key object in the reports table
                                                 database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
                                                 .then(() => {
-                                                        callback(true, null)})
+                                                        removeAlexaCode(phoneNumber);
+                                                        callback(true, null);
+                                                })
                                                 .catch((error) => callback(false, error.message));
                                         })
                                         .catch((error) => callback(false, error.message));    
@@ -51,20 +53,25 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
         });
 }
 
-// on child added is supposed to only fire off when a new data object is added
-export function setLocation(uid, deviceID, callback)
+export function removeAlexaCode(phoneNumber)
 {
-        console.log("Listening for new reports");
-        var reports = [];
+        if(phoneNumber && phoneNumber !== "")
+                database.ref('alexa').child(phoneNumber).remove();
+}
+
+// on child added is supposed to only fire off when a new data object is added
+export function setLocation(deviceID, callback)
+{
         database.ref('reports').child(deviceID).child('report').endAt().limitToLast(1).on('child_added', (snapshot) =>{
-    
-                       
                 if (snapshot.child('latitude').exists() == false)
                 {
-                        console.log("no gps found");
+                        console.log("adding current GPS location to new report");
                         navigator.geolocation.getCurrentPosition(
                                 (position) => {
-                                        database.ref('reports').child(deviceID).child('report').child(snapshot.key).update({'latitude': position.coords.latitude, 'longitude': position.coords.longitude})
+                                        database.ref('reports').child(deviceID).child('report').child(snapshot.key)
+                                        .update({
+                                                'latitude': position.coords.latitude,
+                                                'longitude': position.coords.longitude})
                                         .then(function ()
                                         {
                                                 database.ref('reports').child(deviceID).child('report').on('value', function (snapshot)
@@ -79,22 +86,13 @@ export function setLocation(uid, deviceID, callback)
                         
                 }
                 else
-                {
-                        database.ref('reports').child(deviceID).child('report').on('value', function (snapshot)
-                                                {
-                                                        console.log("SNAPSHOT VAL IN SET LOCATION API");
-                                                        //console.log(snapshot.val());
-                                                        callback(true, snapshot.val())
-                                                })
-                        //callback(false,  null);
-                }
-        });
+                        callback(false,  "Report already had coordinates");
+        })
 }
 
 export function searchListener(deviceID, callback)
 {
-        console.log("listening for search requests");
-        database.ref('reports').child(deviceID).child('search').on('child_changed', (snapshot) =>{
+        database.ref('reports').child(deviceID).child('search').on('child_changed', (snapshot) => {
                 console.log('searching request');
                 
                 if(snapshot.val() === true)
@@ -115,17 +113,19 @@ export function searchListener(deviceID, callback)
                         callback(false);
                 }
                 
-        });
+        })
 }
 
 export function getReports(callback)
 {
-        database.ref('reports').child.on('value', (snapshot) => {
+        var reports = []
+         database.ref('reports').on('value', (snapshot) => {
                 snapshot.forEach(function (childSnapshot) {
-                       // console.log(childSnapshot.report);
-                       callback(false);
+                        var array = Object.values(childSnapshot.val().report);
+                        reports.push(...array);
                 })
-
-                return null;
-        });
+                
+                // return an array of all reports in the database
+                callback(true, reports);
+         })
 }

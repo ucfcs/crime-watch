@@ -43,10 +43,13 @@ export function getUser(user, callback)
         {
             const exists = (snapshot.val() !== null);
             if (exists) user = snapshot.val();
-            database.ref('reports').child(user.deviceID).child('report').once('value')
+            if (user.deviceID && user.deviceID != "")
+            {
+                database.ref('reports').child(user.deviceID).child('report').once('value')
                 .then(function(reportsSnapshot)
                 {
                     user.reports = [];
+                    user.allReports = [];
                     reportsSnapshot.forEach(function(report) {
                         
                         user.reports.push({
@@ -64,8 +67,14 @@ export function getUser(user, callback)
                 .catch(error => 
                 {
                     const data = { exists, user }
-                    callback(true, data, null);
+                    callback(true, data, error);
                 });
+            }
+            else
+            {
+                const data = { exists, user }
+                callback(true, data, null);
+            }
         })
         .catch(error => callback(false, null, error));
 }

@@ -13,7 +13,7 @@ import { Table, Row, TableWrapper, Cell } from 'react-native-table-component';
 import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme} from 'victory-native';
 import { actions as home } from '../../index';
 import Swiper from 'react-native-swiper';
-const { setLocation, getReports } = home;
+const { setLocation, getReports, searchListener } = home;
 const { color } = theme;
 
 Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
@@ -21,7 +21,7 @@ Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
 class Home extends React.Component {
     constructor(props){
         super(props);
-
+    
         this.state = { 
             uid: '',
             username: '',
@@ -29,10 +29,12 @@ class Home extends React.Component {
             phone: '',
             email: '',
             reports: [],
+            allReports: []
         };
 
         this.onGetReports = this.onGetReports.bind(this);
         this.onSetLocation = this.onSetLocation.bind(this);
+        this.onSearchListener = this.onSearchListener.bind(this);
         this.onSuccess = this.onSuccess.bind(this);
         this.onError = this.onError.bind(this);
     }
@@ -49,15 +51,19 @@ class Home extends React.Component {
         var email = state.email;
         var reports = state.reports;
         var deviceID = state.deviceID;
-        var reportArray = Object.values(reports)
+        var reportArray = Object.values(reports);
+        var allReports = state.allReports
+        
+        if (deviceID == "")
+            reportArray = [];
 
-        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
+        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray, 'allReports': allReports});
         
         if (deviceID && deviceID !== "")
         {
             this.onGetReports();
-            this.onSetLocation(uid, deviceID);
-            home.searchListener(deviceID);
+            this.onSetLocation(deviceID);
+            this.onSearchListener(deviceID);
         }
     }
 
@@ -72,14 +78,25 @@ class Home extends React.Component {
 
             this.setState({ reports: reportArray });
         }
+        if(nextProps.allReports != this.props.allReports)
+        {
+            this.setState({ allReports: nextProps.allReports });
+        }
     }
 
     onGetReports() {
-        var reports = getReports();
+        //var reports = getReports();
+        //this.setState({'allReports': reports});
+        this.props.getReports();
     }
 
-    onSetLocation(uid, deviceID) {
-        this.props.setLocation(uid, deviceID);
+    onSetLocation(deviceID) {
+        this.props.setLocation(deviceID);
+    }
+
+    onSearchListener(deviceID)
+    {
+        searchListener(deviceID);
     }
 
     onSwipe(index) {
@@ -97,6 +114,7 @@ class Home extends React.Component {
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const reports = this.state.reports;
+        const allReports = this.state.allReports;
  
         var percentageVehicle = 0;
         var percentagePedestrian = 0;
@@ -115,63 +133,63 @@ class Home extends React.Component {
             />,
             reports[i].type + ' / \n' +  reports[i].description, reports[i].date + '\n' + reports[i].time ];
             reportLocations[i] = [reports[i].latitude, reports[i].longitude];
+        }
 
-            if (reports[i].type == "Vehicle")
+        for (var i = 0; i < allReports.length; i++)
+        {
+            if (allReports[i].type == "Vehicle")
                 percentageVehicle++;
-            else if (reports[i].type == "Pedestrian")
+            else if (allReports[i].type == "Pedestrian")
                 percentagePedestrian++;
-            else if (reports[i].type == "Construction")
+            else if (allReports[i].type == "Construction")
                 percentageConstruction++;
-            else if (reports[i].type == "Traffic")
+            else if (allReports[i].type == "Traffic")
                 percentageTraffic++;
-            else
+            else if (allReports[i].type == "Animal")
                 percentageAnimal++;
         }
 
-        percentageVehicle = percentageVehicle/reports.length;
-        percentagePedestrian = percentagePedestrian/reports.length;
-        percentageTraffic = percentageTraffic/reports.length;
-        percentageAnimal = percentageAnimal/reports.length;
-        percentageConstruction = percentageConstruction/reports.length;
+        if (allReports.length > 0)
+        {
+            percentageVehicle = percentageVehicle/allReports.length;
+            percentagePedestrian = percentagePedestrian/allReports.length;
+            percentageTraffic = percentageTraffic/allReports.length;
+            percentageAnimal = percentageAnimal/allReports.length;
+            percentageConstruction = percentageConstruction/allReports.length;
+        }
 
-        var pieChartData = [
-            { x: "Vehicle", y: percentageVehicle },
-            { x: "Pedestrian", y: percentagePedestrian },
-            { x: "Traffic", y: percentageTraffic },
-            { x: "Animal", y: percentageAnimal },
-            { x: "Construction", y: percentageConstruction }
-        ]
-        var pieChartColors = [color.green, color.orange, color.light_blue, color.navy, color.grey];
-        if (percentageVehicle == 0)
+        var pieChartData = [];
+        var pieChartColors= [];
+        if (percentageVehicle != 0)
         {
-            pieChartData.splice(0, 1);
-            pieChartColors.splice(0, 1);
+            pieChartData.push({ x: "Vehicle", y: percentageVehicle });
+            pieChartColors.push(color.green);
         }
-        if (percentagePedestrian == 0)
+        if (percentagePedestrian != 0)
         {
-            pieChartData.splice(1, 1);
-            pieChartColors.splice(1, 1);
+            pieChartData.push({ x: "Pedestrian", y: percentagePedestrian });
+            pieChartColors.push(color.orange);
         }
-        if (percentageTraffic == 0)
+        if (percentageTraffic != 0)
         {
-            pieChartData.splice(2, 1);
-            pieChartColors.splice(2, 1);
+            pieChartData.push({ x: "Traffic", y: percentageTraffic });
+            pieChartColors.push(color.light_black);
         }
-        if (percentageAnimal == 0)
+        if (percentageAnimal != 0)
         {
-            pieChartData.splice(3, 1);
-            pieChartColors.splice(3, 1);
+            pieChartData.push({ x: "Animal", y: percentageAnimal });
+            pieChartColors.push(color.navy);
         }
-        if (percentageConstruction == 0)
+        if (percentageConstruction != 0)
         {
-            pieChartData.splice(4, 1);
-            pieChartColors.splice(4, 1);
+            pieChartData.push({ x: "Construction", y: percentageConstruction });
+            pieChartColors.push(color.red);
         }
-        
+
         return (
             <View style={styles.container}>
         
-                <Swiper style={styles.reportsContainer} autoplay={false} onIndexChanged={this.onSwipe}>
+                <Swiper style={styles.reportsContainer} autoplay={false}>
 
                     <ScrollView>
                         <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
@@ -267,12 +285,14 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => {
     return{
-        'reports': state.authReducer.reports
+        'reports': state.authReducer.reports,
+        'allReports': state.authReducer.allReports
     }
 }
 
 
 const mapDispatchToProps = {
+    getReports,
     setLocation
   }
 

@@ -37,11 +37,12 @@ export function changePhone (user, phone)
     };
 }
 
-export function setLocation (uid, deviceID)
+export function setLocation (deviceID)
 {
+    console.log("Waiting on a new user report");
     return (dispatch) =>
     {
-        api.setLocation(uid, deviceID, function (success, reports)
+        api.setLocation(deviceID, function (success, reports)
         {
             if (success)
             {
@@ -49,31 +50,38 @@ export function setLocation (uid, deviceID)
                 dispatch({type: t.ADD_REPORT, data: reports});
             }
             else
-                console.log("Error in setLocation");
+                console.log("No new reports detected");
+                //console.log(reports);
         });
     };
 }
 
 export function searchListener (deviceID)
 {
+    console.log("Listening for search requests");
     api.searchListener(deviceID, function (success)
     {
-        
+        if (success)
+        {
+
+        }
+        else
+            console.log("Nothing new");
     });
 }
 
 export function getReports ()
 {
-    console.log("Waiting for reports");
+    console.log("Waiting for ALL reports");
 
-   // return (dispatch) =>
-    //{
+    return dispatch => 
+    {
         api.getReports( function (success, reports)
         {
             if (success)
-                return reports;
+                dispatch({type: t.ALL_REPORTS, data: reports});
             else
                 console.log("error");
         });
-    //}
+    }
 }

@@ -33,6 +33,8 @@ const reducer = (state = initialState, action) =>
             //console.log(action.data);
             return { ...state, reports: action.data};
 
+        case t.ALL_REPORTS:
+            return { ...state, allReports: action.data};
         default:
             return state;
 
