@@ -7,7 +7,8 @@ const resizeMode = 'contain';
 
 export const androidStyles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        backgroundColor: color.white
     },
 
     scrollContentContainer:{
@@ -135,7 +136,8 @@ export const androidStyles = StyleSheet.create({
 
 export const iosStyles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        backgroundColor: color.white
     },
 
     scrollContentContainer:{
