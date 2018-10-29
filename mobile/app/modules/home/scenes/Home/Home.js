@@ -88,6 +88,10 @@ class Home extends React.Component {
         Alert.alert('Oops!', error.message);
     }
 
+    onSwipe = (index) => {
+        console.log('index changed', index);
+      }
+
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const reports = this.state.reports;
@@ -162,7 +166,7 @@ class Home extends React.Component {
         return (
             <View style={styles.container}>
         
-                <Swiper style={styles.reportsContainer} autoplay={false}>
+                <Swiper style={styles.reportsContainer} index={0} onIndexChanged={this.onSwipe} autoplay={false}>
 
                     <ScrollView contentContainerStyle={styles.scrollContentContainer}>
                         <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
@@ -201,7 +205,7 @@ class Home extends React.Component {
                         />
                     </View>
 
-                    <View>
+                    {/* <View>
                         <View style={styles.spacer}><Text style={styles.spacerText}>Line Chart</Text></View>
                         <VictoryChart
                         theme={VictoryTheme.material}
@@ -220,7 +224,7 @@ class Home extends React.Component {
                         />
                         </VictoryChart>
 
-                    </View>
+                    </View> */}
                 </Swiper>
 
                 <View style={styles.navView}>
