@@ -40,7 +40,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                                 database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
                                                 .then(() => {
                                                         removeAlexaCode(phoneNumber);
-                                                        callback(true, null);
+                                                        callback(true, deviceId);
                                                 })
                                                 .catch((error) => callback(false, error.message));
                                         })
@@ -60,7 +60,7 @@ export function removeAlexaCode(phoneNumber)
 }
 
 // on child added is supposed to only fire off when a new data object is added
-export function setLocation(uid, deviceID, callback)
+export function setLocation(deviceID, callback)
 {
         database.ref('reports').child(deviceID).child('report').endAt().limitToLast(1).on('child_added', (snapshot) =>{
                 if (snapshot.child('latitude').exists() == false)

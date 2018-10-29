@@ -3,6 +3,7 @@ import { auth, database, provider } from "../../config/firebase";
 //Register the user using email and password
 export function register(data, callback) 
 {
+    console.log("REGISTER DATA");
     console.log(data);
     const { email, password, phone, username } = data;
     

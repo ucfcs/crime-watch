@@ -37,30 +37,40 @@ export function changePhone (user, phone)
     };
 }
 
-export function setLocation (uid, deviceID)
+export function setLocation (deviceID)
 {
     return (dispatch) =>
     {
-        api.setLocation(uid, deviceID, function (success, reports)
+        if (deviceID && deviceID != "")
         {
-            if (success)
+            api.setLocation(deviceID, function (success, reports)
             {
-                console.log("Received new report");
-                dispatch({type: t.ADD_REPORT, data: reports});
-            }
-            else
-                console.log("Error in setLocation:");
-                console.log(reports);
-        });
+                if (success)
+                {
+                    console.log("Received new report");
+                    dispatch({type: t.ADD_REPORT, data: reports});
+                }
+                else
+                    console.log("Error in setLocation:");
+                    console.log(reports);
+            });
+        }
+        else
+            console.log("DeviceID was null/undefined or empty");
     };
 }
 
 export function searchListener (deviceID)
 {
-    api.searchListener(deviceID, function (success)
+    if (deviceID && deviceID != "")
     {
-        
-    });
+        api.searchListener(deviceID, function (success)
+        {
+            
+        });
+    }
+    else
+        console.log("DeviceID was null/undefined or empty");
 }
 
 export function getReports ()

@@ -11,6 +11,7 @@ import {androidStyles, iosStyles} from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
+import { setLocation } from "../../api"
 import { addAlexaCode } from "../../api"
 
 const { signOut } = auth;
@@ -60,6 +61,13 @@ class Settings extends React.Component {
             if (success)
             {
                 console.log("Successfully added Alexa device ID to user table");
+                setLocation(error, function (success, error) 
+                {
+                    if (success)
+                        console.log("Successfully called report event listener");
+                    else
+                        console.log("Unable to call report event listener");
+                });
             }
             else
             {
