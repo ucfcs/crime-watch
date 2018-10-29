@@ -54,13 +54,9 @@ class Home extends React.Component {
             reportArray = [];
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
-        
-        if (deviceID && deviceID !== "")
-        {
-            this.onGetReports();
-            this.onSetLocation(uid, deviceID);
-            home.searchListener(deviceID);
-        }
+        this.onGetReports();
+        this.onSetLocation(deviceID);
+        home.searchListener(deviceID);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -80,12 +76,8 @@ class Home extends React.Component {
         var reports = getReports();
     }
 
-    onSetLocation(uid, deviceID) {
-        this.props.setLocation(uid, deviceID);
-    }
-
-    onSwipe(index) {
-        console.log("You Swipped to index " + index);
+    onSetLocation(deviceID) {
+        this.props.setLocation(deviceID);
     }
 
     onSuccess() {
@@ -99,7 +91,7 @@ class Home extends React.Component {
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const reports = this.state.reports;
- 
+        console.log("HOME RENDER WAS CALLED");
         var percentageVehicle = 0;
         var percentagePedestrian = 0;
         var percentageAnimal = 0;
@@ -172,7 +164,7 @@ class Home extends React.Component {
         
                 <Swiper style={styles.reportsContainer} autoplay={false}>
 
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={styles.scrollContentContainer}>
                         <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
                         <Table borderStyle={{borderColor: 'transparent'}}>
                         
@@ -239,20 +231,13 @@ class Home extends React.Component {
                         <Text>Settings</Text>
                    </TouchableOpacity>
 
-                   <TouchableOpacity onPress={Actions.Settings} style={styles.navButton2}>
-                        <Image style={styles.navButtonContent}
-                            source={require('../../../../assets/images/user.png')}>
-                        </Image>
-                        <Text>Henry</Text>
-                   </TouchableOpacity>
-
                    <TouchableOpacity onPress={() => {
                         Actions.Map({
                             longitude: undefined,
                             latitude: undefined,
                             reportLocs: reportLocations
                         });
-                    }} style={styles.navButton3}>
+                    }} style={styles.navButton2}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>

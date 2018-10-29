@@ -10,6 +10,10 @@ export const androidStyles = StyleSheet.create({
         flex:1
     },
 
+    scrollContentContainer:{
+        paddingBottom: 100
+    },
+
     navView:{
         flexDirection: 'row',
         flex: 1,
@@ -19,7 +23,7 @@ export const androidStyles = StyleSheet.create({
 
     navButton1:{
         height: 100,
-        width: windowWidth / 3,
+        width: windowWidth / 2,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: color.light_blue,
@@ -27,17 +31,9 @@ export const androidStyles = StyleSheet.create({
 
     navButton2:{
         height: 100,
-        width: windowWidth / 3,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: color.orange,
-    },
-
-    navButton3:{
-        height: 100,
-        justifyContent: "center",
-        alignItems: "center",
-        width: windowWidth / 3,
+        width: windowWidth / 2,
         backgroundColor: color.green,
     },
 
@@ -142,6 +138,10 @@ export const iosStyles = StyleSheet.create({
         flex:1
     },
 
+    scrollContentContainer:{
+        paddingBottom: 100
+    },
+
     navView:{
         flexDirection: 'row',
         flex: 1,
@@ -151,7 +151,7 @@ export const iosStyles = StyleSheet.create({
 
     navButton1:{
         height: 100,
-        width: windowWidth / 3,
+        width: windowWidth / 2,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: color.light_blue,
@@ -159,17 +159,9 @@ export const iosStyles = StyleSheet.create({
 
     navButton2:{
         height: 100,
-        width: windowWidth / 3,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: color.orange,
-    },
-
-    navButton3:{
-        height: 100,
-        justifyContent: "center",
-        alignItems: "center",
-        width: windowWidth / 3,
+        width: windowWidth / 2,
         backgroundColor: color.green,
     },
 
@@ -243,7 +235,11 @@ export const iosStyles = StyleSheet.create({
 
     reportsRow:{
         flexDirection: 'row',
-        backgroundColor: color.white
+        backgroundColor: color.white,
+        height: 80,
+        marginBottom: 1,
+        alignContent: 'center',
+        paddingLeft: 40
     },
 
     reportMapButton:{
