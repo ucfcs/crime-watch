@@ -58,13 +58,9 @@ class Home extends React.Component {
             reportArray = [];
 
         this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray, 'allReports': allReports});
-        
-        if (deviceID && deviceID !== "")
-        {
-            this.onGetReports();
-            this.onSetLocation(deviceID);
-            this.onSearchListener(deviceID);
-        }
+        this.onGetReports();
+        this.onSetLocation(deviceID);
+        home.searchListener(deviceID);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -189,9 +185,9 @@ class Home extends React.Component {
         return (
             <View style={styles.container}>
         
-                <Swiper style={styles.reportsContainer} autoplay={false}>
+                <Swiper style={styles.reportsContainer} index={0} autoplay={false}>
 
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={styles.scrollContentContainer}>
                         <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
                         <Table borderStyle={{borderColor: 'transparent'}}>
                         
@@ -228,7 +224,7 @@ class Home extends React.Component {
                         />
                     </View>
 
-                    <View>
+                    {/* <View>
                         <View style={styles.spacer}><Text style={styles.spacerText}>Line Chart</Text></View>
                         <VictoryChart
                         theme={VictoryTheme.material}
@@ -247,7 +243,7 @@ class Home extends React.Component {
                         />
                         </VictoryChart>
 
-                    </View>
+                    </View> */}
                 </Swiper>
 
                 <View style={styles.navView}>
@@ -258,20 +254,13 @@ class Home extends React.Component {
                         <Text>Settings</Text>
                    </TouchableOpacity>
 
-                   <TouchableOpacity onPress={Actions.Settings} style={styles.navButton2}>
-                        <Image style={styles.navButtonContent}
-                            source={require('../../../../assets/images/user.png')}>
-                        </Image>
-                        <Text>Henry</Text>
-                   </TouchableOpacity>
-
                    <TouchableOpacity onPress={() => {
                         Actions.Map({
                             longitude: undefined,
                             latitude: undefined,
                             reportLocs: reportLocations
                         });
-                    }} style={styles.navButton3}>
+                    }} style={styles.navButton2}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>

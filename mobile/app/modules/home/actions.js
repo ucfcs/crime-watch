@@ -42,32 +42,43 @@ export function setLocation (deviceID)
     console.log("Waiting on a new user report");
     return (dispatch) =>
     {
-        api.setLocation(deviceID, function (success, reports)
+        if (deviceID && deviceID != "")
         {
-            if (success)
+            api.setLocation(deviceID, function (success, reports)
             {
-                console.log("Received new report");
-                dispatch({type: t.ADD_REPORT, data: reports});
-            }
-            else
-                console.log("No new reports detected");
-                //console.log(reports);
-        });
+                if (success)
+                {
+                    console.log("Received new report");
+                    dispatch({type: t.ADD_REPORT, data: reports});
+                }
+                else
+                    console.log("Error in setLocation:");
+                    console.log(reports);
+            });
+        }
+        else
+            console.log("setLocation: DeviceID was null/undefined or empty");
     };
 }
 
 export function searchListener (deviceID)
 {
     console.log("Listening for search requests");
-    api.searchListener(deviceID, function (success)
+    if (deviceID && deviceID != "")
     {
-        if (success)
+        api.searchListener(deviceID, function (success)
         {
+            if (success)
+            {
 
-        }
-        else
-            console.log("Nothing new");
-    });
+            }
+            else
+                console.log("Nothing new");
+                
+            });
+    }
+    else
+        console.log("searchListener: DeviceID was null/undefined or empty");
 }
 
 export function getReports ()

@@ -40,7 +40,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                                 database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
                                                 .then(() => {
                                                         removeAlexaCode(phoneNumber);
-                                                        callback(true, null);
+                                                        callback(true, deviceId);
                                                 })
                                                 .catch((error) => callback(false, error.message));
                                         })
