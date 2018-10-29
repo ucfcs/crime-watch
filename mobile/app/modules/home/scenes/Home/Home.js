@@ -53,7 +53,7 @@ class Home extends React.Component {
         if (deviceID == "")
             reportArray = [];
 
-        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
+        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray, 'allReports': allReports});
         this.onGetReports();
         this.onSetLocation(deviceID);
         home.searchListener(deviceID);

@@ -56,21 +56,24 @@ export function setLocation (deviceID)
             });
         }
         else
-            console.log("DeviceID was null/undefined or empty");
+            console.log("setLocation: DeviceID was null/undefined or empty");
     };
 }
 
 export function searchListener (deviceID)
 {
+    console.log("Listening for search requests");
+
     if (deviceID && deviceID != "")
     {
         api.searchListener(deviceID, function (success)
         {
-            
+            if (success)
+                console.log("Done")
+            else
+                console.log("Nothing happened");
         });
     }
-    else
-        console.log("DeviceID was null/undefined or empty");
 }
 
 export function getReports ()
