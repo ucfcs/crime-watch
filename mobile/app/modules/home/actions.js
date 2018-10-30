@@ -1,5 +1,6 @@
 import * as t from './actionTypes';
 import * as api from './api';
+import { actions } from '../auth';
 
 export function changeGender (user, gender)
 {
@@ -52,7 +53,6 @@ export function setLocation (deviceID)
                 }
                 else
                     console.log("Error in setLocation:");
-                    console.log(reports);
             });
         }
         else
@@ -78,16 +78,16 @@ export function searchListener (deviceID)
 
 export function getReports ()
 {
-    console.log("Waiting for reports");
+    console.log("Waiting for ALL reports");
 
-   // return (dispatch) =>
-    //{
+    return (dispatch) => 
+    {
         api.getReports( function (success, reports)
         {
             if (success)
-                return reports;
+                dispatch({type: t.ALL_REPORTS, data: reports});
             else
                 console.log("error");
         });
-    //}
+    };
 }
