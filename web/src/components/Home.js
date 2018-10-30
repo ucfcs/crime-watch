@@ -1,39 +1,72 @@
 
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
-import withAuthorization from './withAuthorization';
+//import withAuthorization from './withAuthorization';
 import { db } from '../firebase';
-import { Map, InfoWindow, Marker, GoogleApiWrapper, MapContainer } from 'google-maps-react';
+import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+import { getReports } from '../firebase/db';
+
 
 class HomePage extends Component {
   constructor(props) {
     super(props);
-
+    console.log(props);
     this.state = {
       users: null,
+      reportList: [],
+      longitude: [],
+      latitude: []
     };
   }
 
   componentDidMount() {
+
     db.onceGetUsers().then(snapshot =>
       this.setState(() => ({ users: snapshot.val() }))
     );
+
+    getReports(function (reportList) {
+        //console.log(reportList);
+
+        var latitude = [];
+        var longitude = [];
+
+        // make latitude and longitude arrays
+        for(var i = 0; i < reportList.length; i++)
+        {
+          latitude.push(reportList[i].latitude);
+          longitude.push(reportList[i].longitude);
+        }
+
+        // // generate pins
+        // for(var j = 0; j < latitude.length; j++)
+        // {
+        //   var location = {lat: latitude[j], lng: longitude[j]};
+        //   //var marker = new this.props.google.maps.Marker({position: location, map: map});
+        // }
+
+        //console.log("latitude: " + latitude + "\tlongitude: " + longitude);
+
+        // this.setState({longitude: longitude})
+        // this.setState({latitude: latitude})
+    });
+    console.log(this.latitude);
   }
 
+
   render() {
-	  const { users } = this.state;
-
+	  //const { users } = this.state;
+    //var reports = this.state.reportList;
+    //console.log(reports);
     return (
-    <div>
-        <h1>Home</h1>
-
-        <Table striped bordered condensed hover>
+    <div className="content">
+        <h1>HOME</h1>
+        <Table striped bordered condensed hover className="table">
         <thead>
           <tr>
             <th>#</th>
             <th>User Name</th>
             <th>Incident Type</th>
-            <th>Report Map</th>
           </tr>
         </thead>
         <tbody>
@@ -41,67 +74,55 @@ class HomePage extends Component {
             <td>1</td>
             <td>Mark Jacob</td>
             <td>Vehicle</td>
-            <td>MAP</td>
           </tr>
           <tr>
             <td>2</td>
             <td>Edward Cullen</td>
             <td>Pedestrian</td>
-            <td>MAP</td>
           </tr>
           <tr>
             <td>3</td>
             <td>Eugene Peterson</td>
             <td>Other</td>
-            <td>MAP</td>
           </tr>
           <tr>
             <td>4</td>
             <td>Rick Grimes</td>
             <td>Pedestrial</td>
-            <td>MAP</td>
           </tr>
           <tr>
             <td>5</td>
             <td>April May</td>
             <td>Vehicle</td>
-            <td>MAP</td>
           </tr>
         </tbody>
       </Table>
+      <div>
 
-      <Map  style={{width: '60%'},{height: '75%'}} google={this.props.google} zoom={14}>
+        <Map  style={{height: '70%'}}
+              google={this.props.google}
+              initialCenter={{
+                lat: 28.602571,
+                lng: -81.200439
+              }}
+              zoom={14}
+              onClick={this.onMapClicked}
+              >
 
-        <Marker onClick={this.onMarkerClick}
-                name={'Current location'} />
 
-        <InfoWindow onClose={this.onInfoWindowClose}>
 
-        </InfoWindow>
-      </Map>
-
+        </Map>
       </div>
-
-
-
+    </div>
     );
   }
 }
 
-/*
-const UserList = ({ users }) =>
-  <div>
-    <h2>List of Usernames of Users</h2>
-    <p>(Saved on Sign Up in Firebase Database)</p>
-
-    {Object.keys(users).map(key =>
-      <div key={key}>{users[key].username}</div>
-    )}
-  </div>
-*/
 
 
-const authCondition = (authUser) => !!authUser;
+
+
+//const authCondition = (authUser) => !!authUser;
 
 /* export default withAuthorization(authCondition)(HomePage); */
 
