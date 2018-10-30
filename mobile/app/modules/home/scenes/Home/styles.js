@@ -153,7 +153,7 @@ export const iosStyles = StyleSheet.create({
 
     navButton1:{
         height: 100,
-        width: windowWidth / 2,
+        width: windowWidth / 3,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: color.light_blue,
@@ -163,7 +163,15 @@ export const iosStyles = StyleSheet.create({
         height: 100,
         justifyContent: "center",
         alignItems: "center",
-        width: windowWidth / 2,
+        width: windowWidth / 3,
+        backgroundColor: color.orange,
+    },
+
+    navButton3:{
+        height: 100,
+        justifyContent: "center",
+        alignItems: "center",
+        width: windowWidth / 3,
         backgroundColor: color.green,
     },
 
