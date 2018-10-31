@@ -24,7 +24,7 @@ export function changePhone (user, phone)
 {
     return (dispatch) =>
     {
-        api.changePhone(user, phone, function (success, data, error) 
+        api.changePhone(user, phone, function (success, phone, error) 
         {
             if (success)
             {
@@ -37,24 +37,54 @@ export function changePhone (user, phone)
     };
 }
 
-// auto assigning the phone number, will need to pass in the current users phone
-export function getReport (phone = '4072277420')
+export function setLocation (deviceID)
 {
-    console.log("Waiting for reports");
-    api.getReport(phone, function (success, report)
+    return (dispatch) =>
     {
-        if (success)
+        if (deviceID && deviceID != "")
         {
-            //dispatch({type: t.DATA_RECEIVED, data: report})
-
-
-            // go to the most recent report and look to see if the location field is filled in
-            //console.log(report);
-
-            return report;
+            api.setLocation(deviceID, function (success, reports)
+            {
+                if (success)
+                {
+                    console.log("Received new report");
+                    dispatch({type: t.ADD_REPORT, data: reports});
+                }
+                else
+                    console.log("Error in setLocation:");
+                    console.log(reports);
+            });
         }
         else
-            console.log("error");
-    });
+            console.log("DeviceID was null/undefined or empty");
+    };
 }
 
+export function searchListener (deviceID)
+{
+    if (deviceID && deviceID != "")
+    {
+        api.searchListener(deviceID, function (success)
+        {
+            
+        });
+    }
+    else
+        console.log("DeviceID was null/undefined or empty");
+}
+
+export function getReports ()
+{
+    console.log("Waiting for reports");
+
+   // return (dispatch) =>
+    //{
+        api.getReports( function (success, reports)
+        {
+            if (success)
+                return reports;
+            else
+                console.log("error");
+        });
+    //}
+}

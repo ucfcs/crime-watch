@@ -1,7 +1,6 @@
 import React from 'react';
 var { View, ScrollView, Alert, Text, Platform, TouchableOpacity, Image } = require('react-native');
-import bindActionCreators from 'redux';
-import {Button} from 'react-native-elements'
+
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
@@ -10,10 +9,11 @@ import { iosStyles, androidStyles } from "./styles";
 import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
-import { Table, Row, Rows, TableWrapper, Cell } from 'react-native-table-component';
-
+import { Table, Row, TableWrapper, Cell } from 'react-native-table-component';
+import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme} from 'victory-native';
 import { actions as home } from '../../index';
-
+import Swiper from 'react-native-swiper';
+const { setLocation, getReports } = home;
 const { color } = theme;
 
 Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
@@ -22,56 +22,64 @@ class Home extends React.Component {
     constructor(props){
         super(props);
 
-        // Set some initial state (variables that you need to display somewhere on this screen)
-        // I don't need it all for this home page but why not 
         this.state = { 
             uid: '',
             username: '',
             gender: '',
             phone: '',
             email: '',
-            reports: []
+            reports: [],
         };
+
+        this.onGetReports = this.onGetReports.bind(this);
+        this.onSetLocation = this.onSetLocation.bind(this);
+        this.onSuccess = this.onSuccess.bind(this);
+        this.onError = this.onError.bind(this);
     }
 
-    // The important part. ComponentDidMount happens ONCE when the PAGE is initially loaded. There is where you tap into the store to retrieve the current state. 
-    // Update this.state by using the setState method on each unique field that you'll need for the page
-    //
-    // NOTE ** We wrap the state stuff inside this.props.navigation.addListener(). It's an asynchronous function that actively listens for a page navigation event.
-    // It's the only method I could think of that will allow the state to be updated after going back a page.
-    componentDidMount = async () => {
-        this.props.navigation.addListener('willFocus', () =>{
+   componentDidMount = async () => {
 
-            // Here is a list of all USER REPORTS. Please use this information 
-            // and display it on the page.
-            var reports = home.getReport();
- 
-            const state = store.getState().authReducer;
+        const state = store.getState().authReducer;
+        //console.log("HOME STATE");
+        
+        var uid = state.uid;
+        var username = state.username;
+        var gender = state.gender;
+        var phone = state.phone;
+        var email = state.email;
+        var reports = state.reports;
+        var deviceID = state.deviceID;
+        var reportArray = Object.values(reports);
+        if (deviceID == "")
+            reportArray = [];
 
-            console.log(state);
-
-            var uid = state.uid;
-            var username = state.username;
-            var gender = state.gender;
-            var phone = state.phone;
-            var email = state.email;
-            var reports = state.reports;
-   
-            this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reports});
-        });
+        this.setState({ 'username': username, 'gender': gender, 'uid': uid, 'phone': phone, 'email': email, 'reports': reportArray});
+        this.onGetReports();
+        this.onSetLocation(deviceID);
+        home.searchListener(deviceID);
     }
 
-    // When the component receives new properties i.e. the gender was changed way back up in the root level of the app (because we linked our component to it),
-    // a rerender will happen via this.setState(). Place all of the variables that will be updated in here.
-    //
     componentWillReceiveProps(nextProps) {
         if (nextProps.gender != this.props.gender)
         {
-            console.log("Detected prop change, so rerendering the state");
             this.setState({ gender: nextProps.gender });  
         }
+        if(nextProps.reports != this.props.reports)
+        {
+            var reportArray = Object.values(nextProps.reports)
+
+            this.setState({ reports: reportArray });
+        }
     }
-   
+
+    onGetReports() {
+        var reports = getReports();
+    }
+
+    onSetLocation(deviceID) {
+        this.props.setLocation(deviceID);
+    }
+
     onSuccess() {
         Actions.reset("Auth")
     }
@@ -83,26 +91,137 @@ class Home extends React.Component {
     render() {
         const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
         const reports = this.state.reports;
-        const reportTableHeaders = ['Index', 'Type', 'Time', 'Map'];
+        console.log("HOME RENDER WAS CALLED");
+        var percentageVehicle = 0;
+        var percentagePedestrian = 0;
+        var percentageAnimal = 0;
+        var percentageTraffic = 0;
+        var percentageConstruction = 0;
+        const reportTableHeaders = ['', 'Description', 'Date'];
         const reportTableData = [[]];
-        for (let i = 0; i < reports.length; i++)
+        const reportLocations = [[]];
+
+        for (var i = 0; i < reports.length; i++)
         {
-            reportTableData[i] = [i, reports[i].type, reports[i].time, ''];
+            reportTableData[i] = [<Image
+                style={{width: 30, height: 30}}
+                source={require('../../../../assets/images/gps.png')}
+            />,
+            reports[i].type + ' / \n' +  reports[i].description, reports[i].date + '\n' + reports[i].time ];
+            reportLocations[i] = [reports[i].latitude, reports[i].longitude];
+
+            if (reports[i].type == "Vehicle")
+                percentageVehicle++;
+            else if (reports[i].type == "Pedestrian")
+                percentagePedestrian++;
+            else if (reports[i].type == "Construction")
+                percentageConstruction++;
+            else if (reports[i].type == "Traffic")
+                percentageTraffic++;
+            else if (reports[i].type == "Animal")
+                percentageAnimal++;
         }
-        const reportMapButton = (reportIndex) => (
-            <TouchableOpacity onPress={() => {
-                    Actions.Map({
-                        longitude: reports[reportIndex].longitude,
-                        latitude: reports[reportIndex].latitude,
-                    });
-                }}>
-                <View style={styles.button}>
-                    <Text style={styles.reportMapButton}>MAP</Text>
-                </View>
-            </TouchableOpacity>
-        );
+
+        if (reports.length > 0)
+        {
+            percentageVehicle = percentageVehicle/reports.length;
+            percentagePedestrian = percentagePedestrian/reports.length;
+            percentageTraffic = percentageTraffic/reports.length;
+            percentageAnimal = percentageAnimal/reports.length;
+            percentageConstruction = percentageConstruction/reports.length;
+        }
+
+        var pieChartData = [];
+        var pieChartColors= [];
+        if (percentageVehicle != 0)
+        {
+            pieChartData.push({ x: "Vehicle", y: percentageVehicle });
+            pieChartColors.push(color.green);
+        }
+        if (percentagePedestrian != 0)
+        {
+            pieChartData.push({ x: "Pedestrian", y: percentagePedestrian });
+            pieChartColors.push(color.orange);
+        }
+        if (percentageTraffic != 0)
+        {
+            pieChartData.push({ x: "Traffic", y: percentageTraffic });
+            pieChartColors.push(color.light_black);
+        }
+        if (percentageAnimal != 0)
+        {
+            pieChartData.push({ x: "Animal", y: percentageAnimal });
+            pieChartColors.push(color.navy);
+        }
+        if (percentageConstruction != 0)
+        {
+            pieChartData.push({ x: "Construction", y: percentageConstruction });
+            pieChartColors.push(color.red);
+        }
+
         return (
-            <ScrollView style={styles.container}>
+            <View style={styles.container}>
+        
+                <Swiper style={styles.reportsContainer} index={0} autoplay={false}>
+
+                    <ScrollView contentContainerStyle={styles.scrollContentContainer}>
+                        <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
+                        <Table borderStyle={{borderColor: 'transparent'}}>
+                        
+                                <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
+                                {
+                                    reportTableData.map((rowData, index) => (
+                                        <TouchableOpacity key={index} onPress={() => {
+                                                Actions.Map({
+                                                    longitude: reports[index].longitude,
+                                                    latitude: reports[index].latitude,
+                                                    reportLocs: reportLocations
+                                                });
+                                            }}>
+                                            <TableWrapper key={index} style={styles.reportsRow}>
+                                            {
+                                                rowData.map((cellData, cellIndex) => (
+                                                    <Cell borderStyle={{borderColor: 'transparent'}} key={cellIndex} data={cellData}/>
+                                                ))
+                                            }
+                                            </TableWrapper>
+                                        </TouchableOpacity>
+                                    ))
+                                }
+                         
+                        </Table>
+                    </ScrollView>
+
+                    <View>
+                        <View style={styles.spacer}><Text style={styles.spacerText}>Pie Chart</Text></View>
+                        <VictoryPie
+                        padding={100}
+                        colorScale={pieChartColors}
+                            data={pieChartData}
+                        />
+                    </View>
+
+                    {/* <View>
+                        <View style={styles.spacer}><Text style={styles.spacerText}>Line Chart</Text></View>
+                        <VictoryChart
+                        theme={VictoryTheme.material}
+                        >
+                        <VictoryBar
+                            padding={100}
+                            style={{ data: { fill: "#c43a31" } }}
+                            alignment="start"
+                            data={[
+                                { x: 'Jan', y: 1, y0: 0 },
+                                { x: 'Feb', y: 2, y0: 0 },
+                                { x: 'Mar', y: 3, y0: 0 },
+                                { x: 'Apr', y: 4, y0: 0 },
+                                { x: 'May', y: 5, y0: 0 }
+                            ]}
+                        />
+                        </VictoryChart>
+
+                    </View> */}
+                </Swiper>
 
                 <View style={styles.navView}>
                     <TouchableOpacity onPress={Actions.Settings} style={styles.navButton1}>
@@ -116,54 +235,36 @@ class Home extends React.Component {
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/user.png')}>
                         </Image>
-                        <Text>Henry</Text>
+                        <Text>All Reports</Text>
                    </TouchableOpacity>
 
-                   <TouchableOpacity onPress={Actions.Settings} style={styles.navButton3}>
+                   <TouchableOpacity onPress={() => {
+                        Actions.Map({
+                            longitude: undefined,
+                            latitude: undefined,
+                            reportLocs: reportLocations
+                        });
+                    }} style={styles.navButton3}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>
-                        <Text>53</Text>
+                        <Text>Report Map</Text>
                    </TouchableOpacity>
                 </View>
-
-                <View style={styles.spacer}>
-                    <Text style={styles.reportListTitle}>Report List</Text>
-                </View>
-
-                <View style={styles.reportsContainer}>
-                    <Table borderStyle={{borderColor: 'transparent'}}>
-                        <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
-                        {
-                            reportTableData.map((rowData, index) => (
-                                <TableWrapper key={index} style={styles.reportsRow}>
-                                {
-                                    rowData.map((cellData, cellIndex) => (
-                                        <Cell key={cellIndex} data={cellIndex === 3 ? reportMapButton(index): cellData}/>
-                                    ))
-                                }
-                                </TableWrapper>
-                            ))
-                        }
-                    </Table>
-                </View>
-
-                <TouchableOpacity onPress={Actions.Map}>
-                        <Text>PRESS HERE TO SEE REPORTS MAP</Text>
-                    </TouchableOpacity>
-
-            </ScrollView>
+            </View>
         );
     }
 }
 
-// Not used until later
 const mapStateToProps = (state) => {
     return{
-        username: state.username,
-        gender: state.gender
+        'reports': state.authReducer.reports
     }
 }
 
 
-export default connect(null, {})(Home);
+const mapDispatchToProps = {
+    setLocation
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

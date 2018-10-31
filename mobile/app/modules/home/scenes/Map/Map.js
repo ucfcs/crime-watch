@@ -6,37 +6,40 @@ import {connect} from 'react-redux';
 class Map extends React.Component {
     constructor(props){
         super(props);
-
+        // console.log("MAP PROPS:");
+        // console.log(props);
         this.state = {
-            latitude: 0.0,
-            longitude: 0.0,
+            currLatitude: 0.0,
+            currLongitude: 0.0,
+            focusLatitude: 0.0,
+            focusLongitude: 0.0,
+            reportCoords: [[]],
             error: null
         }
     }
 
     componentDidMount() {
-        if (this.props.longitude && this.props.latitude)
-        {
-            this.setState({
-                latitude: this.props.latitude,
-                longitude: this.props.longitude,
-                error: null
-            });
-        }
-        else
-        {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => { 
+                this.setState({
+                    currLatitude: position.coords.latitude,
+                    currLongitude: position.coords.longitude,
+                    focusLatitude: position.coords.latitude,
+                    focusLongitude: position.coords.longitude,
+                    reportCoords: this.props.reportLocs,
+                    error: null
+                })
+                if (this.props.latitude && this.props.longitude)
+                {
                     this.setState({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        error: null
-                    });
-                },
-                (error) => this.setState({ error: error.message }),
-                { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-            );
-        }
+                        focusLatitude: this.props.latitude,
+                        focusLongitude: this.props.longitude
+                    })
+                }
+             },
+            (error) => this.setState({ error: error.message }),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        );
     }
 
     render() {
@@ -46,19 +49,29 @@ class Map extends React.Component {
             <Text>Longitude: {this.state.longitude}</Text>
                 <MapView style={styles.map}
                 region={{
-                    latitude: this.state.latitude,
-                    longitude: this.state.longitude,
+                    latitude: this.state.focusLatitude,
+                    longitude: this.state.focusLongitude,
                     latitudeDelta: 0.08,
                     longitudeDelta: 0.08
                 }}
                 >
+                    {this.state.reportCoords.map(coordinate => (
+                        <Marker 
+                            coordinate={{
+                                latitude: coordinate[0],
+                                longitude: coordinate[1]
+                            }}
+                            description={coordinate[0] + " " + coordinate[1]}
+                        />
+                    ))}
                     <MapView.Marker
                         coordinate={{
-                            latitude: this.state.latitude,
-                            longitude: this.state.longitude
+                            latitude: this.state.currLatitude,
+                            longitude: this.state.currLongitude
                         }}
+                        pinColor={'rgb(46, 52, 242)'}
                         title={"Current Position"}
-                        description={this.state.latitude + " " + this.state.longitude}    
+                        description={this.state.currLatitude + " " + this.state.currLongitude}    
                     />
                 </MapView>
                 
@@ -90,6 +103,7 @@ const styles = StyleSheet.create({
 Map.defaultProps = {
     latitude: undefined,
     longitude: undefined,
+    reportLocs: [[]]
 };
 
 export default connect(null, {})(Map);

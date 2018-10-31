@@ -3,6 +3,7 @@ import { auth, database, provider } from "../../config/firebase";
 //Register the user using email and password
 export function register(data, callback) 
 {
+    console.log("REGISTER DATA");
     console.log(data);
     const { email, password, phone, username } = data;
     
@@ -36,20 +37,44 @@ export function login(data, callback)
         .catch((error) => callback(false, null, error));
 }
 
-//Get the user object from the realtime database
 export function getUser(user, callback) 
 {
     database.ref('users').child(user.uid).once('value')
         .then(function(snapshot) 
         {
-
             const exists = (snapshot.val() !== null);
-
-            //if the user exist in the DB, replace the user variable with the returned snapshot
             if (exists) user = snapshot.val();
-
-            const data = { exists, user }
-            callback(true, data, null);
+            if (user.deviceID && user.deviceID != "")
+            {
+                database.ref('reports').child(user.deviceID).child('report').once('value')
+                .then(function(reportsSnapshot)
+                {
+                    user.reports = [];
+                    reportsSnapshot.forEach(function(report) {
+                        
+                        user.reports.push({
+                            'date': report.val().date,
+                            'type': report.val().type, 
+                            'description': report.val().description, 
+                            'time': report.val().time, 
+                            'latitude': report.val().latitude, 
+                            'longitude': report.val().longitude
+                        });
+                    })
+                    const data = { exists, user };
+                    callback(true, data, null);
+                })
+                .catch(error => 
+                {
+                    const data = { exists, user }
+                    callback(true, data, error);
+                });
+            }
+            else
+            {
+                const data = { exists, user }
+                callback(true, data, null);
+            }
         })
         .catch(error => callback(false, null, error));
 }
@@ -73,14 +98,3 @@ export function signOut (callback)
             if (callback) callback(false, null, error)
         });
 }
-
-
-/*
-//Sign user in using Facebook
-export function signInWithFacebook (fbToken, callback) {
-    const credential = provider.credential(fbToken);
-    auth.signInWithCredential(credential)
-        .then((user) => getUser(user, callback))
-        .catch((error) => callback(false, null, error));
-}
-*/

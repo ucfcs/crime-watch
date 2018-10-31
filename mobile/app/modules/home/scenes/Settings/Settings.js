@@ -1,5 +1,5 @@
 import React from 'react';
-var { View, StyleSheet, Alert, Text, ScrollView, Platform } = require('react-native');
+var { View, TouchableHighlight, Alert, Text, ScrollView, Platform, TextInput} = require('react-native');
 
 import {SettingsDividerShort, SettingsDividerLong, SettingsEditText, SettingsCategoryHeader, SettingsSwitch, SettingsPicker} from 'react-native-settings-components';
 import {Button} from 'react-native-elements'
@@ -7,14 +7,15 @@ import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import store from '../../../../redux/store';
 
-import styles from "./styles"
+import {androidStyles, iosStyles} from "./styles"
 
 import { actions as auth, theme } from "../../../auth/index"
 import { actions as home } from "../../../home/index"
+import { setLocation } from "../../api"
+import { addAlexaCode } from "../../api"
 
 const { signOut } = auth;
 const { changePhone, changeGender } = home;
-
 const { color } = theme;
 
 class Settings extends React.Component {
@@ -24,6 +25,7 @@ class Settings extends React.Component {
         // Set some initial state (variables that you need to display somewhere on this screen)
         //
         this.state = { 
+            alexa: '',
             uid: '',
             username: '',
             phone: '',
@@ -31,8 +33,6 @@ class Settings extends React.Component {
             gender: '',
             email: ''
         };
-
-        console.log(props);
 
         // Any function that requires a state change will need to be bound onto the component. Do that for every new function here
         this.onPhoneChange = this.onPhoneChange.bind(this);
@@ -54,11 +54,36 @@ class Settings extends React.Component {
         this.props.changeGender(this.state.uid, value);
     }
 
+    onAlexaCodeEnter(value) {
+        console.log(value);
+        addAlexaCode(this.state.uid, this.state.phone, value, function (success, error) 
+        {
+            if (success)
+            {
+                console.log("Successfully added Alexa device ID to user table");
+                setLocation(error, function (success, error) 
+                {
+                    if (success)
+                        console.log("Successfully called report event listener");
+                    else
+                        console.log("Unable to call report event listener");
+                });
+            }
+            else
+            {
+                console.log("Unable to add Alexa device ID to user table: ");
+                console.log(error);
+            }
+        });
+    }
+
     onSignOut() {
         this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this));
     }
 
     onSuccess() {
+        console.log("STATE JUST BEFORE SIGN OUT:");
+        console.log(this.state);
         Actions.reset("Auth");
     }
 
@@ -95,8 +120,45 @@ class Settings extends React.Component {
     }
 
     render() {
+        const styles = (Platform.OS === 'ios')? iosStyles : androidStyles;
+        var alexaCodeBox;
+        if (Platform.OS === 'ios')
+        {
+            alexaCodeBox = 
+            <SettingsEditText
+                    title="Alexa Code"
+                    dialogDescription={'Add the code Alexa gives you in order to report an incident.'}
+                    valuePlaceholder="..."
+                    positiveButtonTitle={'Continue'}
+                    negativeButtonTitle={'Cancel'}
+                    buttonRightTitle={'Save'}
+                    onSaveValue={value => {
+                        this.onAlexaCodeEnter(value);
+                    }}
+                    value={''}
+                    dialogAndroidProps={{
+                        widgetColor: colors.black,
+                        positiveColor: colors.black,
+                        negativeColor: colors.black,
+                    }}
+                />
+        }
+        else
+        {
+            alexaCodeBox = <TextInput 
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            placeholder={"Enter Alexa Code"}
+            keyboardType='numeric'
+            blurOnSubmit={true}
+            maxLength={6}
+            clearButtonMode="always"
+            onSubmitEditing={(event) => this.onAlexaCodeEnter(event.nativeEvent.text)}
+            />
+
+        }
+
         return (
-            <ScrollView style={{flex: 1, backgroundColor: (Platform.OS === 'ios') ? colors.iosSettingsBackground : colors.white}}>
+            <ScrollView style={styles.container}>
         
                 <SettingsCategoryHeader title={'My Account '} textStyle={(Platform.OS === 'android') ? {color: colors.black} : null}/>
         
@@ -153,30 +215,14 @@ class Settings extends React.Component {
                         negativeColor: colors.black,
                     }}
                 />
-        
-                <SettingsPicker
-                    title="Gender"
-                    dialogDescription={'Choose your gender.'}
-                    possibleValues={[
-                        {label: '...', value: ''},
-                        {label: 'male', value: 'male'},
-                        {label: 'female', value: 'female'},
-                        {label: 'other', value: 'other'}
-                    ]}
-                    positiveButtonTitle={'Continue'}
-                    negativeButtonTitle={'Cancel'}
-                    buttonRightTitle={'Save'}
-                    onSaveValue={value => {
-                        this.onGenderChange(value);
-                    }}
-                    value={this.state.gender}
-                    styleModalButtonsText={{color: colors.black}}
-                />
                 
+                {/** Box to enter in alexa code, different between android and ios */}
+                {alexaCodeBox}
+
                 <SettingsDividerShort/>
         
                 <SettingsSwitch
-                    title={'Allow Push Notifications'}
+                    title={''}
                     onSaveValue={(value) => {
                         console.log('allow push notifications:', value);
                         this.setState({
