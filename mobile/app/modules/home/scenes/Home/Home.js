@@ -231,13 +231,20 @@ class Home extends React.Component {
                         <Text>Settings</Text>
                    </TouchableOpacity>
 
+                   <TouchableOpacity onPress={Actions.Settings} style={styles.navButton2}>
+                        <Image style={styles.navButtonContent}
+                            source={require('../../../../assets/images/user.png')}>
+                        </Image>
+                        <Text>All Reports</Text>
+                   </TouchableOpacity>
+
                    <TouchableOpacity onPress={() => {
                         Actions.Map({
                             longitude: undefined,
                             latitude: undefined,
                             reportLocs: reportLocations
                         });
-                    }} style={styles.navButton2}>
+                    }} style={styles.navButton3}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/placeholder.png')}>
                         </Image>

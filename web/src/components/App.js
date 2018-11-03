@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { } from 'react';
+//import logo from './logo.svg';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Navigation from './Navigation';
 import LandingPage from './Landing';
@@ -10,15 +10,14 @@ import HomePage from './Home';
 import AccountPage from './Account';
 import withAuthentication from './withAuthentication';
 import * as routes from '../constants/routes';
-import { firebase } from '../firebase';
+//import { firebase } from '../firebase';
 import './App.css';
 
 const App = () =>
   <Router>
     <div>
-      <Navigation />
-
-      <hr/>
+    <Navigation/>
+    <hr/>
 
       <Route exact path={routes.LANDING} component={() => <LandingPage />} />
       <Route exact path={routes.SIGN_UP} component={() => <SignUpPage />} />
