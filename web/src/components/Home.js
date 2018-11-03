@@ -4,113 +4,105 @@ import { Table } from 'react-bootstrap';
 //import withAuthorization from './withAuthorization';
 import { db } from '../firebase';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+//import { getReports } from '../firebase/db';
 import { getReports } from '../firebase/db';
-
 
 class HomePage extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
-      users: null,
-      reportList: [],
+      date: [],
+      latitude: [],
       longitude: [],
-      latitude: []
+      description: [],
+      time: [],
+      reportList: []
     };
   }
 
-  componentDidMount() {
-
+  componentDidMount = async () => {
+/*
     db.onceGetUsers().then(snapshot =>
       this.setState(() => ({ users: snapshot.val() }))
     );
+*/  var lat = [];
+    var long = [];
+    var description = [];
+    var date = [];
+    var time = [];
+    var reportList = []
 
-    getReports(function (reportList) {
-        //console.log(reportList);
+    db.getReports(this, function (reportList, object){
+      for(var i = 0; i < reportList.length; i++)
+          {
+            lat.push(reportList[i].latitude);
+            long.push(reportList[i].longitude);
+            description.push(reportList[i].description);
+            date.push(reportList[i].date);
+            time.push(reportList[i].time);
 
-        var latitude = [];
-        var longitude = [];
-
-        // make latitude and longitude arrays
-        for(var i = 0; i < reportList.length; i++)
-        {
-          latitude.push(reportList[i].latitude);
-          longitude.push(reportList[i].longitude);
-        }
-
-        // // generate pins
-        // for(var j = 0; j < latitude.length; j++)
-        // {
-        //   var location = {lat: latitude[j], lng: longitude[j]};
-        //   //var marker = new this.props.google.maps.Marker({position: location, map: map});
-        // }
-
-        //console.log("latitude: " + latitude + "\tlongitude: " + longitude);
-
-        // this.setState({longitude: longitude})
-        // this.setState({latitude: latitude})
-    });
-    console.log(this.latitude);
-  }
-
+          }
+          //console.log(reportList);
+          object.setState({ 'latitude': lat,
+                            'longitude': long,
+                            'description': description,
+                            'date': date,
+                            'time': time,
+                            'reportList': reportList
+                          });
+    })
+}
 
   render() {
-	  //const { users } = this.state;
-    //var reports = this.state.reportList;
-    //console.log(reports);
+    console.log(this.state.reportList);
     return (
     <div className="content">
-        <h1>HOME</h1>
+        <h1>Report List</h1>
+
         <Table striped bordered condensed hover className="table">
         <thead>
           <tr>
-            <th>#</th>
-            <th>User Name</th>
-            <th>Incident Type</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Incident description</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mark Jacob</td>
-            <td>Vehicle</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Edward Cullen</td>
-            <td>Pedestrian</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Eugene Peterson</td>
-            <td>Other</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Rick Grimes</td>
-            <td>Pedestrial</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>April May</td>
-            <td>Vehicle</td>
-          </tr>
+          {
+            this.state.reportList.map(report => {
+              return(
+                <tr key={report}>
+                <td>{report.date}</td>
+                <td>{report.time}</td>
+                <td>{report.description}</td>
+                <td>{report.latitude}</td>
+                <td>{report.longitude}</td>
+                </tr>
+              )
+            })
+          }
         </tbody>
       </Table>
       <div>
-
         <Map  style={{height: '70%'}}
               google={this.props.google}
-              initialCenter={{
+              center={{
                 lat: 28.602571,
                 lng: -81.200439
               }}
-              zoom={14}
-              onClick={this.onMapClicked}
-              >
-
-
-
+              zoom={16}
+              onClick={this.onMapClicked} >
+              {
+                this.state.reportList.map(report => {
+                  return(
+                    <Marker
+                    position={{lat: report.latitude, lng: report.longitude}} />
+                  )
+                })
+              }
         </Map>
       </div>
     </div>
@@ -124,7 +116,7 @@ class HomePage extends Component {
 
 //const authCondition = (authUser) => !!authUser;
 
-/* export default withAuthorization(authCondition)(HomePage); */
+//export default withAuthorization(authCondition)(HomePage);
 
 export default GoogleApiWrapper({
   apiKey: ("AIzaSyCcLd7cD6VCRp9h-dmSlXxpFZlcIRN4BAw")

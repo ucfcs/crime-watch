@@ -12,7 +12,8 @@ export const doCreateUser = (id, username, email) =>
 export const onceGetUsers = () =>
 	db.ref('users').once('value');
 
-export function getReports (callback) {
+
+export function getReports (object, callback) {
 
  var reportList = [];
 	var ref = db.ref('reports').on('value', (snapshot) => {
@@ -20,8 +21,6 @@ export function getReports (callback) {
 			var array = Object.values(childSnapshot.val().report);
 			reportList.push(...array);
 		})
-		callback(reportList);
-		//console.log(reportList);
+		callback(reportList, object);
 	})
-
-}
+};
