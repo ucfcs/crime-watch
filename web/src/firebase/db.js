@@ -1,4 +1,5 @@
 import { db } from './firebase';
+import React, { Component } from 'react';
 
 // The user API created as an object with username and email properties
 // stored on users/${id} path.

@@ -1,11 +1,13 @@
 
 import React, { Component } from 'react';
-import { Table } from 'react-bootstrap';
+import { Label } from 'react-bootstrap';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 //import withAuthorization from './withAuthorization';
 import { db } from '../firebase';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
-//import { getReports } from '../firebase/db';
 import { getReports } from '../firebase/db';
+
+let order = 'desc';
 
 class HomePage extends Component {
   constructor(props) {
@@ -21,11 +23,7 @@ class HomePage extends Component {
   }
 
   componentDidMount = async () => {
-/*
-    db.onceGetUsers().then(snapshot =>
-      this.setState(() => ({ users: snapshot.val() }))
-    );
-*/  var lat = [];
+    var lat = [];
     var long = [];
     var description = [];
     var date = [];
@@ -34,58 +32,47 @@ class HomePage extends Component {
 
     db.getReports(this, function (reportList, object){
       for(var i = 0; i < reportList.length; i++)
-          {
-            lat.push(reportList[i].latitude);
-            long.push(reportList[i].longitude);
-            description.push(reportList[i].description);
-            date.push(reportList[i].date);
-            time.push(reportList[i].time);
+      {
+        lat.push(reportList[i].latitude);
+        long.push(reportList[i].longitude);
+        description.push(reportList[i].description);
+        date.push(reportList[i].date);
+        time.push(reportList[i].time);
 
-          }
-          //console.log(reportList);
-          object.setState({ 'latitude': lat,
-                            'longitude': long,
-                            'description': description,
-                            'date': date,
-                            'time': time,
-                            'reportList': reportList
-                          });
+      }
+      object.setState({ 'latitude': lat,
+                        'longitude': long,
+                        'description': description,
+                        'date': date,
+                        'time': time,
+                        'reportList': reportList
+                      });
     })
-}
+  }
+
+  handleBtnClick = () => {
+    if (order === 'desc') {
+      this.refs.table.handleSort('asc', 'name');
+      order = 'asc';
+    } else {
+      this.refs.table.handleSort('desc', 'name');
+      order = 'desc';
+    }
+  }
 
   render() {
-    console.log(this.state.reportList);
     return (
     <div className="content">
-        <h1>Report List</h1>
-
-        <Table striped bordered condensed hover className="table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Incident description</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          {
-            this.state.reportList.map(report => {
-              return(
-                <tr key={report}>
-                <td>{report.date}</td>
-                <td>{report.time}</td>
-                <td>{report.description}</td>
-                <td>{report.latitude}</td>
-                <td>{report.longitude}</td>
-                </tr>
-              )
-            })
-          }
-        </tbody>
-      </Table>
+      <h1 class="text-center">
+      <Label bsStyle="danger">REPORT LIST</Label>
+      </h1>
+      <BootstrapTable ref='table' data={ this.state.reportList }>
+      <TableHeaderColumn dataField='date' width='150' isKey={ true } dataSort={ true }>Date</TableHeaderColumn>
+      <TableHeaderColumn dataField='time' width='150' dataSort={ true }>Time</TableHeaderColumn>
+      <TableHeaderColumn dataField='description' width='150' dataSort={ true }>Description</TableHeaderColumn>
+      <TableHeaderColumn dataField='latitude' width='150' dataSort={ true }>Latitude</TableHeaderColumn>
+      <TableHeaderColumn dataField='longitude' width='150' dataSort={ true }>Longitude</TableHeaderColumn>
+      </BootstrapTable>
       <div>
         <Map  style={{height: '70%'}}
               google={this.props.google}
@@ -93,7 +80,7 @@ class HomePage extends Component {
                 lat: 28.602571,
                 lng: -81.200439
               }}
-              zoom={16}
+              zoom={13}
               onClick={this.onMapClicked} >
               {
                 this.state.reportList.map(report => {
@@ -109,10 +96,6 @@ class HomePage extends Component {
     );
   }
 }
-
-
-
-
 
 //const authCondition = (authUser) => !!authUser;
 
