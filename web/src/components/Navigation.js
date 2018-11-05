@@ -4,7 +4,7 @@ import AuthUserContext from './AuthUserContext';
 //import SignOutButton from './SignOut';
 import * as routes from '../constants/routes';
 import { auth } from '../firebase';
-import { Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Nav, NavItem, Navbar } from 'react-bootstrap';
 
 const Navigation = () =>
   <AuthUserContext.Consumer>
@@ -16,27 +16,30 @@ const Navigation = () =>
 
 const NavigationAuth = () =>
   <div>
-  <Nav bsStyle="tabs" activeKey="1">
-        <NavItem eventKey="1" href= "/">
-          Landing
-        </NavItem>
-        <NavItem eventKey="2" href= "/home" title="Item">
-          Home
-        </NavItem>
-        <NavItem eventKey="3" href= "/account">
-          Account
-        </NavItem>
-        <NavItem eventKey="4" onClick={auth.doSignOut}>
-          Sign Out
-        </NavItem>
-        <NavDropdown eventKey="5" title="Dropdown" id="nav-dropdown">
-          <MenuItem eventKey="4.1">Action</MenuItem>
-          <MenuItem eventKey="4.2">Another action</MenuItem>
-          <MenuItem eventKey="4.3">Something else here</MenuItem>
-          <MenuItem divider />
-          <MenuItem eventKey="4.4">Separated link</MenuItem>
-        </NavDropdown>
-      </Nav>
+  <Navbar inverse collapseOnSelect>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <a href="#brand">CRIME WATCH</a>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
+    <Nav>
+      <NavItem eventKey={1} href="/">
+        Landing
+      </NavItem>
+      <NavItem eventKey={2} href="/home">
+        Home
+      </NavItem>
+      <NavItem eventKey={3} href="/account">
+        Account
+      </NavItem>
+      <NavItem eventKey={4} onClick={auth.doSignOut}>
+        Sign Out
+      </NavItem>
+    </Nav>
+    </Navbar.Collapse>
+  </Navbar>
   </div>
 
 const NavigationNonAuth = () =>
