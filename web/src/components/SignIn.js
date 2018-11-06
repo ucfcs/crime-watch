@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { PasswordForgetLink } from './PasswordForget';
 import { SignUpLink } from './SignUp';
 import { auth } from '../firebase';
-import { Nav, NavItem, Navbar, Form, FormGroup, Col, FormControl, Checkbox, ControlLabel, Button } from 'react-bootstrap';
+import { Form, FormGroup, Col, FormControl, Checkbox, ControlLabel, Button } from 'react-bootstrap';
 import * as routes from '../constants/routes';
 
 const SignInPage = ({ history }) =>
