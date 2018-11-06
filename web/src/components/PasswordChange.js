@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Form, FormGroup, Col, FormControl, Checkbox, ControlLabel, Button } from 'react-bootstrap';
 import { auth } from '../firebase';
 
 const byPropKey = (propertyName, value) => () => ({
@@ -45,25 +45,34 @@ class PasswordChangeForm extends Component {
       passwordOne === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={passwordOne}
-          onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
-          type="password"
-          placeholder="New Password"
-        />
-        <input
-          value={passwordTwo}
-          onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
-          type="password"
-          placeholder="Confirm New Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Reset My Password
-        </button>
 
-        { error && <p>{error.message}</p> }
-      </form>
+      <Form horizontal onSubmit={this.onSubmit}>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} sm={2}>
+          Password
+          </Col>
+          <Col sm={10}>
+            <FormControl type="password" placeholder="New Password" value={passwordOne} style={{width:'50%'}} onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}/>
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} sm={2}>
+          Confirm
+          </Col>
+          <Col sm={10}>
+            <FormControl type="password" placeholder="Confirm New Password" value={passwordTwo} style={{width:'50%'}} onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}/>
+          </Col>
+        </FormGroup>
+
+        <FormGroup>
+          <Col smOffset={2} sm={10}>
+            <Button type="submit" disabled={isInvalid}>Change Password</Button>
+          </Col>
+        </FormGroup>
+        { error && <p style={ {marginLeft:'150px', color:'red'} }>{error.message}</p> }
+      </Form>
     );
   }
 }

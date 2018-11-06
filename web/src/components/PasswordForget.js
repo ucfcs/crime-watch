@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import { Form, FormGroup, Col, FormControl, Checkbox, ControlLabel, Button } from 'react-bootstrap';
 import { auth } from '../firebase';
 
 const PasswordForgetPage = () =>
   <div>
-    <h1>PasswordForget</h1>
+    <h1 style={ {marginLeft:'150px', fontFamily:'Garamond'} }>Password Forget</h1>
+    <br/><br/>
     <PasswordForgetForm />
   </div>
 
@@ -48,25 +49,30 @@ class PasswordForgetForm extends Component {
     const isInvalid = email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={this.state.email}
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">
-          Reset My Password
-        </button>
+      <Form horizontal onSubmit={this.onSubmit}>
+        <FormGroup controlId="formHorizontalEmail">
+          <Col componentClass={ControlLabel} sm={2}>
+            Email
+          </Col>
+          <Col sm={10}>
+            <FormControl type="text" value={this.state.email} placeholder="Email Address" style={{width:'50%'}} onChange={event => this.setState(byPropKey('email', event.target.value))}/>
+          </Col>
+        </FormGroup>
 
-        { error && <p>{error.message}</p> }
-      </form>
+        <FormGroup>
+          <Col smOffset={2} sm={10}>
+            <Button type="submit" disabled={isInvalid}>Reset Password</Button>
+          </Col>
+        </FormGroup>
+
+        { error && <p style={ {marginLeft:'150px', color:'red'} }>{error.message}</p> }
+      </Form>
     );
   }
 }
 
 const PasswordForgetLink = () =>
-  <p>
+  <p style={ {marginLeft:'150px'} }>
     <Link to="/pw-forget">Forgot Password?</Link>
   </p>
 

@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { Link, withRouter, } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import * as routes from '../constants/routes';
+import { Form, FormGroup, Col, FormControl, Checkbox, ControlLabel, Button } from 'react-bootstrap';
 
 const SignUpPage = ({ history }) =>
   <div>
-    <h1>SignUp</h1>
+    <h1 style={ {marginLeft:'150px', fontFamily:'Garamond'} }>SignUp</h1>
+    <br/><br/>
     <SignUpForm history={history}/>
   </div>
 
@@ -16,7 +18,7 @@ const INITIAL_STATE = {
   passwordTwo: '',
   error: null,
 };
-  
+
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -25,11 +27,11 @@ const byPropKey = (propertyName, value) => () => ({
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
-	
+
 	  this.state = { ...INITIAL_STATE };
 
   }
-  
+
 
   onSubmit = (event) => {
 	const {
@@ -37,14 +39,14 @@ class SignUpForm extends Component {
       email,
       passwordOne,
     } = this.state;
-	
+
 	const{
 		history,
 	} = this.props;
 
     auth.doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        
+
         // Create a user in your own accessible Firebase Database too
         db.doCreateUser(authUser.uid, username, email)
           .then(() => {
@@ -54,7 +56,7 @@ class SignUpForm extends Component {
           .catch(error => {
             this.setState(byPropKey('error', error));
           });
-		  
+
       })
       .catch(error => {
         this.setState(byPropKey('error', error));
@@ -62,9 +64,9 @@ class SignUpForm extends Component {
 	event.preventDefault();
   }
 
-  
+
   render() {
-	  
+
 	const {
       username,
       email,
@@ -72,51 +74,66 @@ class SignUpForm extends Component {
       passwordTwo,
       error,
     } = this.state;
-	
+
 	const isInvalid =
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
       email === '' ||
       username === '';
-	
+
     return (
-      <form onSubmit={this.onSubmit}>
-		<input
-          value={username}
-          onChange={event => this.setState(byPropKey('username', event.target.value))}
-          type="text"
-          placeholder="Full Name"
-        />
-        <input
-          value={email}
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          value={passwordOne}
-          onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
-          type="password"
-          placeholder="Password"
-        />
-        <input
-          value={passwordTwo}
-          onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign Up
-        </button>
-		
-		{ error && <p>{error.message}</p> }
-      </form>
+      <Form horizontal onSubmit={this.onSubmit}>
+
+        <FormGroup controlId="formHorizontalEmail">
+          <Col componentClass={ControlLabel} sm={2}>
+          Name
+          </Col>
+          <Col sm={10}>
+            <FormControl type="text" value={username} placeholder="Full Name" style={{width:'50%'}} onChange={event => this.setState(byPropKey('username', event.target.value))}/>
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} sm={2}>
+          Email
+          </Col>
+          <Col sm={10}>
+            <FormControl type="text" value={email} placeholder="Email Address" style={{width:'50%'}} onChange={event => this.setState(byPropKey('email', event.target.value))}/>
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} sm={2}>
+          Enter Password
+          </Col>
+          <Col sm={10}>
+            <FormControl type="password" value={passwordOne} placeholder="Password" style={{width:'50%'}} onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}/>
+          </Col>
+        </FormGroup>
+
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} sm={2}>
+          Confirm Password
+          </Col>
+          <Col sm={10}>
+            <FormControl type="password" value={passwordTwo} placeholder="Confirm Password" style={{width:'50%'}} onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}/>
+          </Col>
+        </FormGroup>
+
+        <FormGroup>
+          <Col smOffset={2} sm={10}>
+            <Button type="submit" disabled={isInvalid}>Sign in</Button>
+          </Col>
+        </FormGroup>
+
+        { error && <p style={ {marginLeft:'150px', color:'red'} }>{error.message}</p> }
+      </Form>
     );
   }
 }
 
 const SignUpLink = () =>
-  <p>
+  <p style={ {marginLeft:'150px'} }>
     Don't have an account?
     {' '}
     <Link to={routes.SIGN_UP}>Sign Up</Link>

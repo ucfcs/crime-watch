@@ -19,7 +19,7 @@ const NavigationAuth = () =>
   <Navbar inverse collapseOnSelect>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#brand">CRIME WATCH</a>
+        <a href="#brand" style={ {fontFamily:'Garamond'} }>CRIME WATCH</a>
         </Navbar.Brand>
         <Navbar.Toggle />
     </Navbar.Header>
@@ -34,7 +34,7 @@ const NavigationAuth = () =>
       <NavItem eventKey={3} href="/account">
         Account
       </NavItem>
-      <NavItem eventKey={4} onClick={auth.doSignOut}>
+      <NavItem eventKey={4} onClick={auth.doSignOut} href="/signin">
         Sign Out
       </NavItem>
     </Nav>
@@ -43,9 +43,26 @@ const NavigationAuth = () =>
   </div>
 
 const NavigationNonAuth = () =>
-  <ul>
-    <li><Link to={routes.LANDING}>Landing</Link></li>
-    <li><Link to={routes.SIGN_IN}>Sign In</Link></li>
-  </ul>
+  <div>
+    <Navbar inverse collapseOnSelect>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <a href="#brand">CRIME WATCH</a>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+      </Navbar.Header>
+      <Navbar.Collapse>
+      <Nav>
+        <NavItem eventKey={1} href="/">
+          Landing
+        </NavItem>
+        <NavItem eventKey={2} href="/signin">
+          Sign In
+        </NavItem>
+
+      </Nav>
+      </Navbar.Collapse>
+    </Navbar>
+  </div>
 
 export default Navigation;
