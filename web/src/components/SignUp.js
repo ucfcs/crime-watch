@@ -122,7 +122,7 @@ class SignUpForm extends Component {
 
         <FormGroup>
           <Col smOffset={2} sm={10}>
-            <Button type="submit" disabled={isInvalid}>Sign in</Button>
+            <Button type="submit" disabled={isInvalid}>Sign Up</Button>
           </Col>
         </FormGroup>
 

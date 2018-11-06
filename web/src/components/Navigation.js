@@ -19,15 +19,12 @@ const NavigationAuth = () =>
   <Navbar inverse collapseOnSelect>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#brand" style={ {fontFamily:'Garamond'} }>CRIME WATCH</a>
+        <a href="#brand" href="/" style={ {fontFamily:'Garamond'} }>CRIME WATCH</a>
         </Navbar.Brand>
         <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
     <Nav>
-      <NavItem eventKey={1} href="/">
-        Landing
-      </NavItem>
       <NavItem eventKey={2} href="/home">
         Home
       </NavItem>
@@ -47,15 +44,12 @@ const NavigationNonAuth = () =>
     <Navbar inverse collapseOnSelect>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="#brand">CRIME WATCH</a>
+          <a href="#brand" href="/" style={ {fontFamily:'Garamond'} }>CRIME WATCH</a>
           </Navbar.Brand>
           <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
       <Nav>
-        <NavItem eventKey={1} href="/">
-          Landing
-        </NavItem>
         <NavItem eventKey={2} href="/signin">
           Sign In
         </NavItem>

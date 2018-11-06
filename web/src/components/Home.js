@@ -69,7 +69,7 @@ class HomePage extends Component {
       </h1>
       <br/>
 
-      <BootstrapTable ref='table' data={ this.state.reportList }>
+      <BootstrapTable ref='table' data={ this.state.reportList } pagination>
       <TableHeaderColumn dataField='date' width='150' isKey={ true } dataSort={ true }>Date</TableHeaderColumn>
       <TableHeaderColumn dataField='time' width='150' dataSort={ true }>Time</TableHeaderColumn>
       <TableHeaderColumn dataField='description' width='150' dataSort={ true }>Description</TableHeaderColumn>
@@ -98,13 +98,13 @@ class HomePage extends Component {
       </h1>
       <br/>
       <div>
-        <Map  style={ {height: '70%'} }
+        <Map  style={ {height: '100%'} }
               google={this.props.google}
               center={{
                 lat: 28.602571,
                 lng: -81.200439
               }}
-              zoom={13}
+              zoom={14}
               onClick={this.onMapClicked} >
               {
                 this.state.reportList.map(report => {
