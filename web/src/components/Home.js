@@ -19,6 +19,7 @@ class HomePage extends Component {
       longitude: [],
       description: [],
       time: [],
+	  pieData: [],
       reportList: []
     };
   }
@@ -29,6 +30,7 @@ class HomePage extends Component {
     var description = [];
     var date = [];
     var time = [];
+	var pie = [];
     var reportList = []
 
     db.getReports(this, function (reportList, object){
@@ -41,11 +43,33 @@ class HomePage extends Component {
         time.push(reportList[i].time);
 
       }
+	  var uniqueDescriptions = [];
+	  for(var j = 0; j < description.length; j++)
+	  {
+		if(description.includes(description[j]) && !uniqueDescriptions.includes(description[j]))
+		{
+			uniqueDescriptions.push(description[j]);
+		}			
+	  }
+	  for(var k = 0; k < uniqueDescriptions.length; k++)
+	  {
+		  var count = 0;
+		  for(var l = 0; l < description.length; l++)
+		  {
+			  if(uniqueDescriptions[k] === description[l])
+			  {
+				  count++;
+			  }
+		  }
+		  
+		  pie.push({x: count, y: description.length, label: uniqueDescriptions[k]});
+	  }
       object.setState({ 'latitude': lat,
                         'longitude': long,
                         'description': description,
                         'date': date,
                         'time': time,
+						'pieData': pie,
                         'reportList': reportList
                       });
     })
@@ -87,7 +111,8 @@ class HomePage extends Component {
         </div>
         <div style={{marginLeft:'300px', float:'left'}}>
           <VictoryPie
-            colorScale={["tomato", "orange", "gold", "cyan", "navy"]}
+            colorScale={["tomato", "orange", "gold", "cyan", "navy", "green"]}
+			data = {this.state.pieData}
           />
         </div>
       </div>
