@@ -20,6 +20,7 @@ class HomePage extends Component {
       description: [],
       time: [],
 	    pieData: [],
+      type: [],
       reportList: []
     };
   }
@@ -31,7 +32,8 @@ class HomePage extends Component {
     var date = [];
     var time = [];
 	  var pie = [];
-    var reportList = [];
+	  var type = [];
+    var reportList = []
 
     db.getReports(this, function (reportList, object){
       for(var i = 0; i < reportList.length; i++)
@@ -41,28 +43,21 @@ class HomePage extends Component {
         description.push(reportList[i].description);
         date.push(reportList[i].date);
         time.push(reportList[i].time);
-
+		type.push(reportList[i].type);
       }
-	  var uniqueDescriptions = [];
-	  for(var j = 0; j < description.length; j++)
-	  {
-		if(description.includes(description[j]) && !uniqueDescriptions.includes(description[j]))
-		{
-			uniqueDescriptions.push(description[j]);
-		}
-	  }
-	  for(var k = 0; k < uniqueDescriptions.length; k++)
+
+	  for(var k = 0; k < type.length; k++)
 	  {
 		  var count = 0;
-		  for(var l = 0; l < description.length; l++)
+		  for(var l = 0; l < type.length; l++)
 		  {
-			  if(uniqueDescriptions[k] === description[l])
+			  if(type[k] === type[l])
 			  {
 				  count++;
 			  }
 		  }
 
-		 pie.push({x: count, y: description.length, label: uniqueDescriptions[k]});
+		  pie.push({x: count, y: type.length, label: type[k]});
 	  }
       object.setState({ 'latitude': lat,
                         'longitude': long,
@@ -86,7 +81,7 @@ class HomePage extends Component {
   }
 
   render() {
-    console.log(this.state.reportList)
+    console.log(this.state.pieData)
     return (
     <div className="content">
       <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
@@ -97,6 +92,7 @@ class HomePage extends Component {
       <BootstrapTable ref='table' data={ this.state.reportList } pagination>
       <TableHeaderColumn dataField='date' width='150' isKey={ true } dataSort={ true }>Date</TableHeaderColumn>
       <TableHeaderColumn dataField='time' width='150' dataSort={ true }>Time</TableHeaderColumn>
+      <TableHeaderColumn dataField='type' width='150' dataSort={ true }>Type</TableHeaderColumn>
       <TableHeaderColumn dataField='description' width='150' dataSort={ true }>Description</TableHeaderColumn>
       <TableHeaderColumn dataField='latitude' width='150' dataSort={ true }>Latitude</TableHeaderColumn>
       <TableHeaderColumn dataField='longitude' width='150' dataSort={ true }>Longitude</TableHeaderColumn>
