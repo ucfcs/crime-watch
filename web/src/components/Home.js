@@ -44,19 +44,20 @@ class HomePage extends Component {
         time.push(reportList[i].time);
 		type.push(reportList[i].type);
       }
-
-	  for(var k = 0; k < type.length; k++)
+		
+		var fiveTypes = ["Animal","Construction","Pedestrian","Traffic","Vehicle"];
+	  for(var k = 0; k < fiveTypes.length; k++)
 	  {
 		  var count = 0;
 		  for(var l = 0; l < type.length; l++)
 		  {
-			  if(type[k] === type[l])
+			  if(fiveTypes[k] === type[l])
 			  {
 				  count++;
 			  }
 		  }
 		  
-		  pie.push({x: count, y: type.length, label: type[k]});
+		  pie.push({x: count, y: type.length, label:fiveTypes[k]});
 	  }
       object.setState({ 'latitude': lat,
                         'longitude': long,
