@@ -6,7 +6,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { db } from '../firebase';
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import { getReports } from '../firebase/db';
-import { VictoryBar, VictoryPie } from 'victory';
+import { VictoryBar, VictoryPie, VictoryChart, VictoryAxis } from 'victory';
 
 let order = 'desc';
 
@@ -57,7 +57,7 @@ class HomePage extends Component {
 			  }
 		  }
 		  
-		  pie.push({x: label:fiveTypes[k], y: count / type.length * 100});
+		  pie.push({x: fiveTypes[k], y: count / type.length * 100});
 	  }
       object.setState({ 'latitude': lat,
                         'longitude': long,
@@ -102,11 +102,24 @@ class HomePage extends Component {
       <br/>
       <div style={ {height:'400px', width:'1500px', display:'inline-block', backgroundColor:'#D6EAF8'} }>
         <div style={{marginLeft:'100px', float:'left'}}>
-          <VictoryBar/>
+		<VictoryChart domainPadding={20}>
+			<VictoryAxis
+				tickValues={[1,2,3]}
+				tickFormat={["0000 - 0800", "0800-1600", "1600-0000"]}
+			/>
+			<VictoryAxis
+			dependentAxis
+			tickFormat={(x) => (x)}
+			/>
+          <VictoryBar
+		    //x="month"
+			//y="number of reports"
+		  />
+		  </VictoryChart>
         </div>
         <div style={{marginLeft:'300px', float:'left'}}>
           <VictoryPie
-            colorScale={["tomato", "orange", "gold", "cyan", "navy", "green"]}
+            colorScale={['#68C690', '#6693C8', '#BA4C71', '#A07CBF', '#D09D3D']}
 			data = {this.state.pieData}
           />
         </div>
