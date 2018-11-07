@@ -19,7 +19,7 @@ class HomePage extends Component {
       longitude: [],
       description: [],
       time: [],
-	  pieData: [],
+	    pieData: [],
       reportList: []
     };
   }
@@ -30,8 +30,8 @@ class HomePage extends Component {
     var description = [];
     var date = [];
     var time = [];
-	var pie = [];
-    var reportList = []
+	  var pie = [];
+    var reportList = [];
 
     db.getReports(this, function (reportList, object){
       for(var i = 0; i < reportList.length; i++)
@@ -49,7 +49,7 @@ class HomePage extends Component {
 		if(description.includes(description[j]) && !uniqueDescriptions.includes(description[j]))
 		{
 			uniqueDescriptions.push(description[j]);
-		}			
+		}
 	  }
 	  for(var k = 0; k < uniqueDescriptions.length; k++)
 	  {
@@ -61,15 +61,15 @@ class HomePage extends Component {
 				  count++;
 			  }
 		  }
-		  
-		  pie.push({x: count, y: description.length, label: uniqueDescriptions[k]});
+
+		 pie.push({x: count, y: description.length, label: uniqueDescriptions[k]});
 	  }
       object.setState({ 'latitude': lat,
                         'longitude': long,
                         'description': description,
                         'date': date,
                         'time': time,
-						'pieData': pie,
+						            'pieData': pie,
                         'reportList': reportList
                       });
     })
@@ -86,6 +86,7 @@ class HomePage extends Component {
   }
 
   render() {
+    console.log(this.state.reportList)
     return (
     <div className="content">
       <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
@@ -109,10 +110,10 @@ class HomePage extends Component {
         <div style={{marginLeft:'100px', float:'left'}}>
           <VictoryBar/>
         </div>
-        <div style={{marginLeft:'300px', float:'left'}}>
+        <div style={{marginLeft:'300px', float:'left'} }>
           <VictoryPie
             colorScale={["tomato", "orange", "gold", "cyan", "navy", "green"]}
-			data = {this.state.pieData}
+			      data = {this.state.pieData}
           />
         </div>
       </div>
