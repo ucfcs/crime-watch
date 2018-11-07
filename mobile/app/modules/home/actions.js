@@ -1,5 +1,6 @@
 import * as t from './actionTypes';
 import * as api from './api';
+import { actions } from '../auth';
 
 export function changeGender (user, gender)
 {
@@ -52,39 +53,41 @@ export function setLocation (deviceID)
                 }
                 else
                     console.log("Error in setLocation:");
-                    console.log(reports);
             });
         }
         else
-            console.log("DeviceID was null/undefined or empty");
+            console.log("setLocation: DeviceID was null/undefined or empty");
     };
 }
 
 export function searchListener (deviceID)
 {
+    console.log("Listening for search requests");
+
     if (deviceID && deviceID != "")
     {
         api.searchListener(deviceID, function (success)
         {
-            
+            if (success)
+                console.log("Done")
+            else
+                console.log("Nothing happened");
         });
     }
-    else
-        console.log("DeviceID was null/undefined or empty");
 }
 
 export function getReports ()
 {
-    console.log("Waiting for reports");
+    console.log("Waiting for ALL reports");
 
-   // return (dispatch) =>
-    //{
+    return (dispatch) => 
+    {
         api.getReports( function (success, reports)
         {
             if (success)
-                return reports;
+                dispatch({type: t.ALL_REPORTS, data: reports});
             else
                 console.log("error");
         });
-    //}
+    };
 }

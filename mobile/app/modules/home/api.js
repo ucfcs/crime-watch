@@ -62,6 +62,7 @@ export function removeAlexaCode(phoneNumber)
 // on child added is supposed to only fire off when a new data object is added
 export function setLocation(deviceID, callback)
 {
+        console.log("Waiting on new user reports");
         database.ref('reports').child(deviceID).child('report').endAt().limitToLast(1).on('child_added', (snapshot) =>{
                 if (snapshot.child('latitude').exists() == false)
                 {
@@ -82,18 +83,19 @@ export function setLocation(deviceID, callback)
                                 },
                                 (error) => console.log(error),
                                 { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-                                );
-                        
+                                );       
                 }
                 else
                         callback(false,  "Report already had coordinates");
         })
-        .catch(error => callback(false, error.message));
 }
 
 export function searchListener(deviceID, callback)
 {
-        console.log("listening for search requests");
+        var reports = []
+        var threshold = 500;
+        var total = 0;
+        
         database.ref('reports').child(deviceID).child('search').on('child_changed', (snapshot) =>{
                 console.log('searching request');
                 
@@ -103,12 +105,41 @@ export function searchListener(deviceID, callback)
 
                         // At this point, we need to query the database using the current location and 
                         // comparing with locations of all other reports
+                        database.ref('reports').once('value', (snapshot) => {
+                                snapshot.forEach(function (childSnapshot) {
+                                        var array = Object.values(childSnapshot.val().report);
+                                        reports.push(...array);
+                                })
+                        })
+                        .then(() => {
+                                navigator.geolocation.getCurrentPosition(
+                                        (position) => {
+                                                
+                                                for (let i = 0; i < reports.length; i++)
+                                                {
+                                                        if(!(reports[i].longitude && reports[i].latitude))
+                                                                continue;
+                                                        
+                                                        var distance = compareDistance(reports[i].longitude, reports[i].latitude, position.coords.longitude, position.coords.latitude);
+                                                        
+                                                        if (distance < threshold)
+                                                                total++;
+                                                }
 
-
-
-
-                        var speechResponse = "There have been five major incidents in this area."
-                        database.ref('reports').child(deviceID).child('search').set({'bool':'false', 'speech': speechResponse});
+                                                console.log(total);
+                                                var speechResponse = "There have been " + total + " major incidents in this area."
+                                                database.ref('reports').child(deviceID).child('search').set({'bool':'false', 'speech': speechResponse})
+                                                .then(() =>
+                                                {
+                                                        reports = [];
+                                                        total = 0;
+                                                        callback(true);
+                                                })
+                                        },
+                                        (error) => console.log(error),
+                                        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+                                );
+                        })  
                 }
                 else
                 {
@@ -120,17 +151,33 @@ export function searchListener(deviceID, callback)
 
 export function getReports(callback)
 {
-        console.log("INSIDE GETREPORTS");
-        // database.ref('reports').child.on('value', (snapshot) => {
-        //         console.log("INSIDE GETREPORTS DATABASE CALL");
-        //         console.log(snapshot.report);
-        //         callback(false, null);
-        //         // snapshot.forEach(function (childSnapshot) {
-        //         //         console.log("INSIDE GETREPORTS DATABASE CALL");
-        //         //         console.log(childSnapshot.report);
-        //         //        callback(false);
-        //         // })
+        var reports = []
+         database.ref('reports').on('value', (snapshot) => {
+                snapshot.forEach(function (childSnapshot) {
+                        var array = Object.values(childSnapshot.val().report);
+                        reports.push(...array);
+                })
+           
+                // return an array of all reports in the database
+                callback(true, reports);
+         })
+}
 
-        //         //return null;
-        // });
+function compareDistance(lon1, lat1, lon2, lat2)
+{
+        var radius = 6371e3
+        var w = lat1 * Math.PI / 180;
+        var x = lat2 * Math.PI / 180;
+        var y = (lat2 - lat1) * Math.PI / 180;
+        var z = (lon2 - lon1) * Math.PI / 180;
+
+        var a = Math.sin(y / 2) * Math.sin(y / 2) +
+                Math.cos(w) * Math.cos(x) *
+                Math.sin(z / 2) * Math.sin(z / 2);
+        
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        var distance = radius * c;
+
+        return distance;
 }
