@@ -258,7 +258,7 @@ class Home extends React.Component {
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/user.png')}>
                         </Image>
-                        <Text>All Reports</Text>
+                        <Text>Henry</Text>
                    </TouchableOpacity>
 
                    <TouchableOpacity onPress={() => {
