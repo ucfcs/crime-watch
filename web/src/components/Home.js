@@ -92,6 +92,7 @@ class HomePage extends Component {
         </div>
       </div>
       <br/>
+      <br/>
 
       <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
       <Label bsStyle="success">Incident Map</Label>
