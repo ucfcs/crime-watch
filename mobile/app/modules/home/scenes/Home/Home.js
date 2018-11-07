@@ -224,7 +224,7 @@ class Home extends React.Component {
                         />
                     </View>
 
-                    <View>
+                    {/* <View>
                         <View style={styles.spacer}><Text style={styles.spacerText}>Line Chart</Text></View>
                         <VictoryChart
                         theme={VictoryTheme.material}
@@ -243,7 +243,7 @@ class Home extends React.Component {
                         />
                         </VictoryChart>
 
-                    </View>
+                    </View> */}
                 </Swiper>
 
                 <View style={styles.navView}>
