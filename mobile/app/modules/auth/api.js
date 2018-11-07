@@ -50,6 +50,7 @@ export function getUser(user, callback)
                 .then(function(reportsSnapshot)
                 {
                     user.reports = [];
+                    user.allReports = [];
                     reportsSnapshot.forEach(function(report) {
                         
                         user.reports.push({

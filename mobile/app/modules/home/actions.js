@@ -39,6 +39,7 @@ export function changePhone (user, phone)
 
 export function setLocation (deviceID)
 {
+    console.log("Waiting on a new user report");
     return (dispatch) =>
     {
         if (deviceID && deviceID != "")
@@ -56,35 +57,42 @@ export function setLocation (deviceID)
             });
         }
         else
-            console.log("DeviceID was null/undefined or empty");
+            console.log("setLocation: DeviceID was null/undefined or empty");
     };
 }
 
 export function searchListener (deviceID)
 {
+    console.log("Listening for search requests");
     if (deviceID && deviceID != "")
     {
         api.searchListener(deviceID, function (success)
         {
-            
-        });
+            if (success)
+            {
+
+            }
+            else
+                console.log("Nothing new");
+                
+            });
     }
     else
-        console.log("DeviceID was null/undefined or empty");
+        console.log("searchListener: DeviceID was null/undefined or empty");
 }
 
 export function getReports ()
 {
-    console.log("Waiting for reports");
+    console.log("Waiting for ALL reports");
 
-   // return (dispatch) =>
-    //{
+    return dispatch => 
+    {
         api.getReports( function (success, reports)
         {
             if (success)
-                return reports;
+                dispatch({type: t.ALL_REPORTS, data: reports});
             else
                 console.log("error");
         });
-    //}
+    }
 }

@@ -88,13 +88,11 @@ export function setLocation(deviceID, callback)
                 else
                         callback(false,  "Report already had coordinates");
         })
-        .catch(error => callback(false, error.message));
 }
 
 export function searchListener(deviceID, callback)
 {
-        console.log("listening for search requests");
-        database.ref('reports').child(deviceID).child('search').on('child_changed', (snapshot) =>{
+        database.ref('reports').child(deviceID).child('search').on('child_changed', (snapshot) => {
                 console.log('searching request');
                 
                 if(snapshot.val() === true)
@@ -115,22 +113,19 @@ export function searchListener(deviceID, callback)
                         callback(false);
                 }
                 
-        });
+        })
 }
 
 export function getReports(callback)
 {
-        console.log("INSIDE GETREPORTS");
-        // database.ref('reports').child.on('value', (snapshot) => {
-        //         console.log("INSIDE GETREPORTS DATABASE CALL");
-        //         console.log(snapshot.report);
-        //         callback(false, null);
-        //         // snapshot.forEach(function (childSnapshot) {
-        //         //         console.log("INSIDE GETREPORTS DATABASE CALL");
-        //         //         console.log(childSnapshot.report);
-        //         //        callback(false);
-        //         // })
-
-        //         //return null;
-        // });
+        var reports = []
+         database.ref('reports').on('value', (snapshot) => {
+                snapshot.forEach(function (childSnapshot) {
+                        var array = Object.values(childSnapshot.val().report);
+                        reports.push(...array);
+                })
+                
+                // return an array of all reports in the database
+                callback(true, reports);
+         })
 }
