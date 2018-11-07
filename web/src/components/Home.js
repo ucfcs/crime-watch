@@ -42,7 +42,7 @@ class HomePage extends Component {
         description.push(reportList[i].description);
         date.push(reportList[i].date);
         time.push(reportList[i].time);
-		type.push(reporList[i].type);
+		type.push(reportList[i].type);
       }
 
 	  for(var k = 0; k < type.length; k++)
