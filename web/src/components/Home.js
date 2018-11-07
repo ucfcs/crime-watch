@@ -57,7 +57,7 @@ class HomePage extends Component {
 			  }
 		  }
 		  
-		  pie.push({x: count, y: type.length, label:fiveTypes[k]});
+		  pie.push({x: label:fiveTypes[k], y: count / type.length * 100});
 	  }
       object.setState({ 'latitude': lat,
                         'longitude': long,
