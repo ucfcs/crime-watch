@@ -89,7 +89,7 @@ class Welcome extends React.Component {
                 >
 
                 <View style={styles.topContainer}>
-                    <Image style={styles.image} source={require('../../../../assets/images/color.png')}/>
+                    <Image style={styles.image} source={require('../../../../assets/images/logo.png')}/>
                     <Text style={styles.title}>Crime Watch</Text>
                 </View>
 
