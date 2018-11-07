@@ -31,6 +31,7 @@ class HomePage extends Component {
     var date = [];
     var time = [];
 	var pie = [];
+	var type = [];
     var reportList = []
 
     db.getReports(this, function (reportList, object){
@@ -41,28 +42,21 @@ class HomePage extends Component {
         description.push(reportList[i].description);
         date.push(reportList[i].date);
         time.push(reportList[i].time);
-
+		type.push(reporList[i].type);
       }
-	  var uniqueDescriptions = [];
-	  for(var j = 0; j < description.length; j++)
-	  {
-		if(description.includes(description[j]) && !uniqueDescriptions.includes(description[j]))
-		{
-			uniqueDescriptions.push(description[j]);
-		}			
-	  }
-	  for(var k = 0; k < uniqueDescriptions.length; k++)
+
+	  for(var k = 0; k < type.length; k++)
 	  {
 		  var count = 0;
-		  for(var l = 0; l < description.length; l++)
+		  for(var l = 0; l < type.length; l++)
 		  {
-			  if(uniqueDescriptions[k] === description[l])
+			  if(type[k] === type[l])
 			  {
 				  count++;
 			  }
 		  }
 		  
-		  pie.push({x: count, y: description.length, label: uniqueDescriptions[k]});
+		  pie.push({x: count, y: type.length, label: type[k]});
 	  }
       object.setState({ 'latitude': lat,
                         'longitude': long,
