@@ -8,11 +8,11 @@ const resizeMode = 'contain';
 export const androidStyles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor: color.white
+        backgroundColor: "transparent",
     },
 
     scrollContentContainer:{
-        paddingBottom: 100
+        paddingBottom: 1
     },
 
     navView:{
@@ -22,12 +22,18 @@ export const androidStyles = StyleSheet.create({
         bottom: 0
     },
 
-    navButton1:{
+    settingsContainer: {
+        width: windowWidth,
         height: 100,
-        width: windowWidth / 2,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: color.light_blue,
+        backgroundColor: color.white_transparent
+    },
+
+    settingsButton:{
+        height: 100,
+        width: 100,
+        paddingLeft: 30,
+        paddingTop: 50,
+        backgroundColor: 'transparent'
     },
 
     navButton2:{
@@ -62,15 +68,18 @@ export const androidStyles = StyleSheet.create({
     },
 
     spacer:{
-        backgroundColor: color.navy,
+        backgroundColor: color.white_transparent,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 60,
+        height: 100,
+        paddingBottom: 15,
+        marginBottom: 1
     },
 
     spacerText:{
+        paddingTop: 20,
         color: color.white,
-        fontSize: 24
+        fontSize: 24,
     },
 
     buttonContainer:{
@@ -94,28 +103,32 @@ export const androidStyles = StyleSheet.create({
 
     reportsContainer:{
         flex: 2,
-        backgroundColor: color.light_grey,
+        backgroundColor: "transparent",
         margin: 'auto',
-        marginBottom: 100
+        marginBottom: 1
     },
 
     reportsHeader:{
         height: 45,
-        backgroundColor: color.light_grey,
-        paddingLeft: 20
+        backgroundColor:  color.white_transparent,
+        paddingLeft: 30,
+        paddingRight: 10
     },
 
     reportsText:{
-        margin: 5
+        margin: 5,
+        color: color.white
     },
 
     reportsRow:{
         flexDirection: 'row',
-        backgroundColor: color.white,
-        height: 80,
+        backgroundColor: color.white_transparent,
+        height: 100,
+        marginTop: 1,
         marginBottom: 1,
         alignContent: 'center',
-        paddingLeft: 40
+        paddingLeft: 30,
+        paddingRight: 10
     },
 
     reportsCell:{
@@ -129,8 +142,21 @@ export const androidStyles = StyleSheet.create({
 
     // pie chart
     pieContainer:{
-        margin: 40,
+        backgroundColor: color.white_transparent,
+        height: windowHeight - 100
     },
+
+    legend:{
+        flex: 1,
+        paddingLeft: 60,
+        paddingRight: 60,
+        bottom: 80
+    },
+    
+    footer: {
+        height: 100,
+        backgroundColor: color.white_transparent
+    }
 
 });
 

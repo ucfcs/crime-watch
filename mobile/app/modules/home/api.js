@@ -96,9 +96,9 @@ export function searchListener(deviceID, callback)
         var threshold = 500;
         var total = 0;
         
-        database.ref('reports').child(deviceID).child('search').on('child_changed', (snapshot) =>{
+        database.ref('reports').child(deviceID).child('search').on('child_added', (snapshot) =>{
                 console.log('searching request');
-                
+                console.log(snapshot);
                 if(snapshot.val() === true)
                 {
                         console.log("Found true");
@@ -126,9 +126,9 @@ export function searchListener(deviceID, callback)
                                                                 total++;
                                                 }
 
-                                                console.log(total);
+                                                
                                                 var speechResponse = "There have been " + total + " major incidents in this area."
-                                                database.ref('reports').child(deviceID).child('search').set({'bool':'false', 'speech': speechResponse})
+                                                database.ref('reports').child(deviceID).child('search').set(speechResponse)
                                                 .then(() =>
                                                 {
                                                         reports = [];

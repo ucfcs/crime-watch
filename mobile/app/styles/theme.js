@@ -19,6 +19,7 @@ const color = {
     green_transparent: 'rgba(110, 209, 187, 0.8)',
     navy_transparent: 'rgba(42, 60, 89, 0.8)',
     light_grey_transparent: 'rgba(242, 242, 242, 0.2)',
+    white_transparent: 'rgba(255, 255, 255, 0.2)',
     orange: 'rgb(244, 156, 73)',
     light_grey: 'rgb(242, 242, 242)',
     navy: 'rgb(37, 56, 76)',

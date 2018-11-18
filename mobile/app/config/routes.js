@@ -42,7 +42,7 @@ export default class extends React.Component {
 
         return (
             <Router>
-                <Scene key="root" hideNavBar 
+                <Scene key="root" hideNavBar
                        navigationBarStyle={{backgroundColor: color.white}}
                        titleStyle={navTitleStyle}
                        navBarButtonColor={color.navy}
@@ -56,7 +56,7 @@ export default class extends React.Component {
                     </Stack>
 
                     <Stack key="Main" initial={this.state.isLoggedIn}>
-                        <Scene key="Home" component={Home} title="Home" initial={true} type={ActionConst.REPLACE}/>
+                        <Scene key="Home" hideNavBar component={Home} title="Home" initial={true} type={ActionConst.REPLACE}/>
                         <Scene key="Settings" component={Settings} title="Settings"/>
                         <Scene key="Map" component={Map} title="Map"/>
                     </Stack>
