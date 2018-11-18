@@ -19,7 +19,12 @@ class HomePage extends Component {
       longitude: [],
       description: [],
       time: [],
-	  pieData: [],
+	    pieData: [],
+      type: [],
+	  barData: [],
+	  showingInfoWindow: false,
+	  activeMarker: {},
+	  selectedPlace: {},
       reportList: []
     };
   }
@@ -30,8 +35,8 @@ class HomePage extends Component {
     var description = [];
     var date = [];
     var time = [];
-	var pie = [];
-	var type = [];
+	  var pie = [];
+	  var type = [];
     var reportList = []
 
     db.getReports(this, function (reportList, object){
@@ -44,8 +49,9 @@ class HomePage extends Component {
         time.push(reportList[i].time);
 		type.push(reportList[i].type);
       }
-		
+
 		var fiveTypes = ["Animal","Construction","Pedestrian","Traffic","Vehicle"];
+
 	  for(var k = 0; k < fiveTypes.length; k++)
 	  {
 		  var count = 0;
@@ -56,15 +62,44 @@ class HomePage extends Component {
 				  count++;
 			  }
 		  }
-		  
 		  pie.push({x: fiveTypes[k], y: count / type.length * 100});
 	  }
+	  var hourArray = [];
+	  for(var i = 0; i < time.length; i++)
+	  {
+		  var hourStr = time[i].substring(0,2);
+		  var hourInt = parseInt(hourStr, 10);
+		  hourArray.push(hourInt);
+	  }
+	  var hour1 = 0;
+	  var hour2 = 0;
+	  var hour3 = 0;
+	  for(var i = 0; i < hourArray.length; i++)
+	  {
+		  if(hourArray[i] >= 0 && hourArray[i] < 8)
+		  {
+			  hour1++;
+		  }
+		  else if(hourArray[i] >= 8 && hourArray[i] < 16)
+		  {
+			  hour2++;
+		  }
+		  else
+		  {
+			  hour3++;
+		  }
+	  }
+	  var barData = [];
+	  barData.push(hour1);
+	  barData.push(hour2);
+	  barData.push(hour3);
       object.setState({ 'latitude': lat,
                         'longitude': long,
                         'description': description,
                         'date': date,
                         'time': time,
 						'pieData': pie,
+						'barData': barData,
                         'reportList': reportList
                       });
     })
@@ -79,8 +114,17 @@ class HomePage extends Component {
       order = 'desc';
     }
   }
+  
+  onMarkerClick = (props, marker, e) =>
+	this.setState({
+		selectedPlace: props,
+		activeMarker: marker,
+		showingInfoWindow: true
+	});
 
   render() {
+    console.log(this.state.reportList)
+	var testString = "Test";
     return (
     <div className="content">
       <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
@@ -91,6 +135,7 @@ class HomePage extends Component {
       <BootstrapTable ref='table' data={ this.state.reportList } pagination>
       <TableHeaderColumn dataField='date' width='150' isKey={ true } dataSort={ true }>Date</TableHeaderColumn>
       <TableHeaderColumn dataField='time' width='150' dataSort={ true }>Time</TableHeaderColumn>
+      <TableHeaderColumn dataField='type' width='150' dataSort={ true }>Type</TableHeaderColumn>
       <TableHeaderColumn dataField='description' width='150' dataSort={ true }>Description</TableHeaderColumn>
       <TableHeaderColumn dataField='latitude' width='150' dataSort={ true }>Latitude</TableHeaderColumn>
       <TableHeaderColumn dataField='longitude' width='150' dataSort={ true }>Longitude</TableHeaderColumn>
@@ -112,19 +157,27 @@ class HomePage extends Component {
 			tickFormat={(x) => (x)}
 			/>
           <VictoryBar
-		    //x="month"
-			//y="number of reports"
+		    data = {[{x: 1, y: this.state.barData[0]}, {x: 2, y: this.state.barData[1]}, {x: 3, y: this.state.barData[2]}]}
 		  />
 		  </VictoryChart>
         </div>
-        <div style={{marginLeft:'300px', float:'left'}}>
+        <div style={{marginLeft:'300px', float:'left'} }>
           <VictoryPie
             colorScale={['#68C690', '#6693C8', '#BA4C71', '#A07CBF', '#D09D3D']}
 			data = {this.state.pieData}
+
           />
         </div>
       </div>
       <br/>
+      <br/>
+	  
+	  <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
+      <Label bsStyle="success">Number of Reports: {this.state.reportList.length}</Label>
+	  <Label bsStyle="success">Number of Reports: {this.state.reportList.length / 30}</Label>
+	  <Label bsStyle="success">Number of Reports: {this.state.reportList.length}</Label>
+	  <Label bsStyle="success">Most Reported Type: {this.state.reportList.length}</Label>
+      </h1>
 
       <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
       <Label bsStyle="success">Incident Map</Label>
@@ -137,16 +190,25 @@ class HomePage extends Component {
                 lat: 28.602571,
                 lng: -81.200439
               }}
-              zoom={14}
-              onClick={this.onMapClicked} >
+              zoom={14}>
               {
                 this.state.reportList.map(report => {
                   return(
-                    <Marker
-                    position={{lat: report.latitude, lng: report.longitude}} />
+                    <Marker onClick = {this.onMarkerClick}
+					name = {report.description + '\r' + report.type + '\n' + report.date + '\n' + report.time}
+                    position={{lat: report.latitude, lng: report.longitude}}/>
+					
                   )
                 })
               }
+			  
+			<InfoWindow
+				marker = {this.state.activeMarker}
+				visible = {this.state.showingInfoWindow}>
+					<div>
+						{this.state.selectedPlace.name}
+					</div>
+			</InfoWindow>
         </Map>
       </div>
       <br/>
