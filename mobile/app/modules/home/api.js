@@ -37,7 +37,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                 database.ref('users').child(uid).update({'deviceID': deviceId})
                                         .then(() =>{
                                                 // Second call Creates a new deviceID-key object in the reports table
-                                                database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
+                                                database.ref('reports').child(deviceId).set({'report': ''})
                                                 .then(() => {
                                                         removeAlexaCode(phoneNumber);
                                                         callback(true, deviceId);
