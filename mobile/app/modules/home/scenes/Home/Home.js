@@ -155,33 +155,38 @@ class Home extends React.Component {
         }
 
         var pieChartData = [];
-        var pieChartColors= [];
+        var pieChartColors = [];
+        var legendData = [];
         if (percentageVehicle != 0)
         {
             pieChartData.push({y: percentageVehicle });
             pieChartColors.push('#FF3333');
+            legendData.push({name: 'Vehicle', color: '#FF3333'});
         }
         if (percentagePedestrian != 0)
         {
             pieChartData.push({y: percentagePedestrian });
             pieChartColors.push("#FFFF33");
+            legendData.push({name: 'Pedestrian', color: '#FFFF33'});
         }
         if (percentageTraffic != 0)
         {
             pieChartData.push({ y: percentageTraffic });
             pieChartColors.push("#33FF33");
+            legendData.push({name: 'Traffic', color: '#33FF33'});
         }
         if (percentageAnimal != 0)
         {
             pieChartData.push({y: percentageAnimal });
             pieChartColors.push("#33FFFF");
+            legendData.push({name: 'Animal', color: '#33FFFF'});
         }
         if (percentageConstruction != 0)
         {
             pieChartData.push({y: percentageConstruction });
             pieChartColors.push("#FF33FF");
+            legendData.push({name: 'Construction', color: '#FF33FF'});
         }
-
         return (
             <View style={styles.container}>
             <ImageBackground 
@@ -196,7 +201,7 @@ class Home extends React.Component {
                 </TouchableOpacity>
             </View>
 
-                <Swiper style={styles.reportsContainer} autoplay={false}>
+                <Swiper style={styles.reportsContainer} activeDotStyle={styles.swiperActiveDot} dotStyle={styles.swiperDot} autoplay={false}>
                     <View>
                         <View style={styles.spacer}>
 
@@ -206,7 +211,7 @@ class Home extends React.Component {
 
                         <ScrollView>
                             
-                            <Table borderStyle={{borderColor: 'transparent'}}>
+                            <Table borderStyle={{borderColor: 'transparent'}} style={styles.tableStyle}>
                             
                                     <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                                     {
@@ -242,18 +247,26 @@ class Home extends React.Component {
                                 style={{ labels: { fill: "white", fontSize: 16} }}
                                 padding={100}
                                 colorScale={pieChartColors}
-                                    data={pieChartData}
+                                data={pieChartData.map((data) => ({x: " ", y: data.y}))}
                                 />
-
-                                <View style={styles.legend}>
+                                <VictoryLegend x={20} y={0}
+                                    itemsPerRow={3}
+                                    borderPadding={0}
+                                    centerTitle
+                                    orientation="horizontal"
+                                    data={legendData.map((data) => 
+                                        ({name: data.name, symbol: {fill: data.color}, labels: {fill: "white"}}))}
+                                    style={{border: {stroke: "white" }, title: { fontSize: 20 } }}/>
+                                
+                                {/* <View style={styles.legend}>
                                     <Table borderStyle={{borderColor: 'transparent'}}>
-                                    <Row data={["Vehicle", ""]} style={styles.head} textStyle={styles.reportsText}/>
-                                    <Row data={["Traffic", ""]} style={styles.head} textStyle={styles.reportsText}/>
-                                    <Row data={["Pedestrian", ""]} style={styles.head} textStyle={styles.reportsText}/>
-                                    <Row data={["Construction", ""]} style={styles.head} textStyle={styles.reportsText}/>
-                                    <Row data={["Animal", ""]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["0  Vehicle", ""]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["1  Pedestrian", ""]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["2  Traffic", ""]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["3  Animal", ""]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["4  Construction", ""]} style={styles.head} textStyle={styles.reportsText}/>
                                     </Table>
-                                </View>
+                                </View> */}
                             </View>
                     </View>
 

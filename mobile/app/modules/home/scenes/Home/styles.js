@@ -161,13 +161,14 @@ export const androidStyles = StyleSheet.create({
 });
 
 export const iosStyles = StyleSheet.create({
+
     container:{
         flex:1,
-        backgroundColor: color.white
+        backgroundColor: "transparent",
     },
 
     scrollContentContainer:{
-        paddingBottom: 100
+        paddingBottom: 1
     },
 
     navView:{
@@ -177,12 +178,18 @@ export const iosStyles = StyleSheet.create({
         bottom: 0
     },
 
-    navButton1:{
+    settingsContainer: {
+        width: windowWidth,
+        height: 50,
+        backgroundColor: color.white_transparent
+    },
+
+    settingsButton:{
         height: 100,
-        width: windowWidth / 2,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: color.light_blue,
+        width: 100,
+        paddingLeft: 30,
+        paddingTop: 50,
+        backgroundColor: 'transparent'
     },
 
     navButton2:{
@@ -196,8 +203,7 @@ export const iosStyles = StyleSheet.create({
     navButtonContent:{
         height: 30,
         width: 30,
-        margin: 5,
-        color: color.white
+        marginBottom: 5
     },
 
     navText:{
@@ -205,10 +211,10 @@ export const iosStyles = StyleSheet.create({
     },
 
     userView:{
-        flex:1,
-        paddingVertical: '20%',
-        justifyContent: 'center',
-        alignItems: 'center'
+        flex: 1,
+        paddingVertical: "20%",
+        justifyContent: "center",
+        alignItems: "center"
     },
 
     reportListTitle:{
@@ -218,13 +224,16 @@ export const iosStyles = StyleSheet.create({
     },
 
     spacer:{
-        backgroundColor: color.navy,
+        backgroundColor: color.white_transparent,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 60
+        height: 100,
+        paddingBottom: 15,
+        marginBottom: 1
     },
 
     spacerText:{
+        paddingTop: 20,
         color: color.white,
         fontSize: 24
     },
@@ -249,33 +258,81 @@ export const iosStyles = StyleSheet.create({
     },
 
     reportsContainer:{
-        
+        backgroundColor: 'transparent'
+    },
+
+    swiperDot:{
+        backgroundColor:'rgba(0,0,0,.2)',
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: -100
+    },
+
+    swiperActiveDot:{
+        backgroundColor:'#007aff',
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: -100
     },
 
     reportsHeader:{
-        height: 30,
-        backgroundColor: '#808B97'
+        height: 50,
+        backgroundColor:  color.white_transparent,
+        paddingLeft: 30,
+        paddingRight: 10
     },
 
     reportsText:{
-        margin: 5
+        margin: 5,
+        color: color.white
     },
 
     reportsRow:{
         flexDirection: 'row',
-        backgroundColor: color.white,
-        height: 80,
+        backgroundColor: color.white_transparent,
+        height: 100,
+        marginTop: 1,
         marginBottom: 1,
         alignContent: 'center',
-        paddingLeft: 40
+        paddingLeft: 30,
+        paddingRight: 10
     },
 
-    reportMapButton:{
+    reportsCell:{
+        borderWidth: 0
+    },
+
+    reportMapButton: {
         height: 40,
         width: 40
     },
 
+    tableStyle: {
+        height: windowHeight - 75
+    },
+
+    // pie chart
     pieContainer:{
-        margin: 40
+        backgroundColor: color.white_transparent,
+    },
+
+    legend:{
+        flex: 1,
+        paddingLeft: 60,
+        paddingRight: 60,
+        bottom: 75
+    },
+    
+    footer: {
+        height: 50,
+        backgroundColor: color.white_transparent
     }
 });
