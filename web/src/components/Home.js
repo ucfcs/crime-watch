@@ -43,7 +43,7 @@ class HomePage extends Component {
         description.push(reportList[i].description);
         date.push(reportList[i].date);
         time.push(reportList[i].time);
-		type.push(reportList[i].type);
+		    type.push(reportList[i].type);
       }
 
 		var fiveTypes = ["Animal","Construction","Pedestrian","Traffic","Vehicle"];
@@ -58,8 +58,8 @@ class HomePage extends Component {
 				  count++;
 			  }
 		  }
-      
-		  pie.push({x: count, y: type.length, label:fiveTypes[k]});
+
+		  pie.push({x: fiveTypes[k], y: count / type.length * 100});
 	  }
       object.setState({ 'latitude': lat,
                         'longitude': long,
@@ -123,13 +123,13 @@ class HomePage extends Component {
       </h1>
       <br/>
       <div>
-        <Map  style={ {height: '100%'} }
+        <Map style={ {height: '100%'} }
               google={this.props.google}
               center={{
                 lat: 28.602571,
                 lng: -81.200439
               }}
-              zoom={14}
+              zoom={11}
               onClick={this.onMapClicked} >
               {
                 this.state.reportList.map(report => {

@@ -86,7 +86,7 @@ class SignUpForm extends Component {
 
         <FormGroup controlId="formHorizontalEmail">
           <Col componentClass={ControlLabel} sm={2}>
-          Name
+          Full Name
           </Col>
           <Col sm={10}>
             <FormControl type="text" value={username} placeholder="Full Name" style={{width:'50%'}} onChange={event => this.setState(byPropKey('username', event.target.value))}/>
