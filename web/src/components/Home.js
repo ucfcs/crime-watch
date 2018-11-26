@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { Label } from 'react-bootstrap';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -21,14 +20,11 @@ class HomePage extends Component {
       time: [],
 	    pieData: [],
       type: [],
-<<<<<<< HEAD
-=======
 	  barData: [],
 	  showingInfoWindow: false,
 	  activeMarker: {},
 	  selectedPlace: {},
 	  mostType: [],
->>>>>>> 165eb4f440bae4ef24f1e7d783be7a9844e965dc
       reportList: []
     };
   }
@@ -51,14 +47,11 @@ class HomePage extends Component {
         description.push(reportList[i].description);
         date.push(reportList[i].date);
         time.push(reportList[i].time);
-		    type.push(reportList[i].type);
+		type.push(reportList[i].type);
       }
 
 		var fiveTypes = ["Animal","Construction","Pedestrian","Traffic","Vehicle"];
-<<<<<<< HEAD
-=======
 		var mostType = 0;
->>>>>>> 165eb4f440bae4ef24f1e7d783be7a9844e965dc
 
 	  for(var k = 0; k < fiveTypes.length; k++)
 	  {
@@ -71,16 +64,12 @@ class HomePage extends Component {
 				  count++;
 			  }
 		  }
-<<<<<<< HEAD
-
-=======
 		  if(count > mostType)
 		  {
 			  mostType = count;
 			  mostTypeName = fiveTypes[k];
 			  //console.log(mostTypeName);
 		  }
->>>>>>> 165eb4f440bae4ef24f1e7d783be7a9844e965dc
 		  pie.push({x: fiveTypes[k], y: count / type.length * 100});
 	  }
 	  var hourArray = [];
@@ -117,13 +106,9 @@ class HomePage extends Component {
                         'description': description,
                         'date': date,
                         'time': time,
-<<<<<<< HEAD
-						            'pieData': pie,
-=======
 						'pieData': pie,
 						'barData': barData,
 						'mostType': mostTypeName,
->>>>>>> 165eb4f440bae4ef24f1e7d783be7a9844e965dc
                         'reportList': reportList
                       });
     })
@@ -147,12 +132,8 @@ class HomePage extends Component {
 	});
 
   render() {
-<<<<<<< HEAD
-    console.log(this.state.pieData)
-=======
     console.log(this.state.mostType)
 	var testString = "Test";
->>>>>>> 165eb4f440bae4ef24f1e7d783be7a9844e965dc
     return (
     <div className="content">
       <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
@@ -191,46 +172,33 @@ class HomePage extends Component {
         </div>
         <div style={{marginLeft:'300px', float:'left'} }>
           <VictoryPie
-<<<<<<< HEAD
-            colorScale={["tomato", "orange", "gold", "cyan", "navy", "green"]}
-			      data = {this.state.pieData}
-=======
             colorScale={['#68C690', '#6693C8', '#BA4C71', '#A07CBF', '#D09D3D']}
 			data = {this.state.pieData}
 
->>>>>>> 165eb4f440bae4ef24f1e7d783be7a9844e965dc
           />
         </div>
       </div>
       <br/>
       <br/>
-<<<<<<< HEAD
-=======
 
 	  <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
       <Label bsStyle="info">Number of Reports: {this.state.reportList.length}</Label>
 	  <Label bsStyle="info">Average Reports Per Day: {this.state.reportList.length / 30}</Label>
 	  <Label bsStyle="info">Average Reports Per Week: {this.state.reportList.length / 7}</Label>
       </h1>
->>>>>>> 165eb4f440bae4ef24f1e7d783be7a9844e965dc
 
       <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
       <Label bsStyle="success">Incident Map</Label>
       </h1>
       <br/>
       <div>
-        <Map style={ {height: '100%'} }
+        <Map  style={ {height: '100%'} }
               google={this.props.google}
               center={{
                 lat: 28.602571,
                 lng: -81.200439
               }}
-<<<<<<< HEAD
-              zoom={11}
-              onClick={this.onMapClicked} >
-=======
               zoom={14}>
->>>>>>> 165eb4f440bae4ef24f1e7d783be7a9844e965dc
               {
                 this.state.reportList.map(report => {
                   return(
