@@ -247,11 +247,11 @@ class Home extends React.Component {
 
                                 <View style={styles.legend}>
                                     <Table borderStyle={{borderColor: 'transparent'}}>
-                                    <Row data={["Vehicle", ""]} style={styles.head} textStyle={styles.reportsText}/>
-                                    <Row data={["Traffic", ""]} style={styles.head} textStyle={styles.reportsText}/>
-                                    <Row data={["Pedestrian", ""]} style={styles.head} textStyle={styles.reportsText}/>
-                                    <Row data={["Construction", ""]} style={styles.head} textStyle={styles.reportsText}/>
-                                    <Row data={["Animal", ""]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["0:", "Vehicle"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["1", "Pedestrian"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["2", "Traffic"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["3", "Animal"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["4", "Construction"]} style={styles.head} textStyle={styles.reportsText}/>
                                     </Table>
                                 </View>
                             </View>

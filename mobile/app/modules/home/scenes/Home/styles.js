@@ -147,7 +147,6 @@ export const androidStyles = StyleSheet.create({
     },
 
     legend:{
-        flex: 1,
         paddingLeft: 60,
         paddingRight: 60,
         bottom: 80
