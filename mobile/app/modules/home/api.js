@@ -1,6 +1,5 @@
 import { database } from "../../config/firebase";
 
-
 export function changeGender(user, gender, callback) 
 {
         database.ref('users').child(user).update({'gender': gender})

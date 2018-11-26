@@ -3,13 +3,15 @@ import { withRouter } from 'react-router-dom';
 import { PasswordForgetLink } from './PasswordForget';
 import { SignUpLink } from './SignUp';
 import { auth } from '../firebase';
+import { Form, FormGroup, Col, FormControl, Checkbox, ControlLabel, Button } from 'react-bootstrap';
 import * as routes from '../constants/routes';
 
 const SignInPage = ({ history }) =>
   <div>
-    <h1>SignIn</h1>
+    <h1 style={ {marginLeft:'150px',fontFamily:'Garamond'} }>Sign In</h1>
+    <br/><br/>
     <SignInForm history={history} />
-	<PasswordForgetLink />
+	   <PasswordForgetLink />
     <SignUpLink />
   </div>
 
@@ -64,25 +66,32 @@ class SignInForm extends Component {
       email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={email}
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          value={password}
-          onChange={event => this.setState(byPropKey('password', event.target.value))}
-          type="password"
-          placeholder="Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
+      <Form horizontal onSubmit={this.onSubmit}>
+        <FormGroup controlId="formHorizontalEmail">
+          <Col componentClass={ControlLabel} sm={2}>
+            Email
+          </Col>
+          <Col sm={10}>
+            <FormControl type="text" value={email} placeholder="Email Address" style={{width:'50%'}} onChange={event => this.setState(byPropKey('email', event.target.value))}/>
+          </Col>
+        </FormGroup>
 
-        { error && <p>{error.message}</p> }
-      </form>
+        <FormGroup controlId="formHorizontalPassword">
+          <Col componentClass={ControlLabel} sm={2}>
+            Password
+          </Col>
+          <Col sm={10}>
+            <FormControl type="password" value={password} placeholder="Password" style={{width:'50%'}} onChange={event => this.setState(byPropKey('password', event.target.value))}/>
+          </Col>
+        </FormGroup>
+
+        <FormGroup>
+          <Col smOffset={2} sm={10}>
+            <Button type="submit" disabled={isInvalid}>Sign in</Button>
+          </Col>
+        </FormGroup>
+        { error && <p style={ {marginLeft:'150px', color:'red'} }>{error.message}</p> }
+      </Form>
     );
   }
 }

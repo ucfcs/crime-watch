@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthUserContext from './AuthUserContext';
-import SignOutButton from './SignOut';
+//import SignOutButton from './SignOut';
 import * as routes from '../constants/routes';
+import { auth } from '../firebase';
+import { Nav, NavItem, Navbar } from 'react-bootstrap';
 
 const Navigation = () =>
   <AuthUserContext.Consumer>
@@ -13,17 +15,48 @@ const Navigation = () =>
   </AuthUserContext.Consumer>
 
 const NavigationAuth = () =>
-  <ul>
-    <li><Link to={routes.LANDING}>Landing</Link></li>
-    <li><Link to={routes.HOME}>Home</Link></li>
-    <li><Link to={routes.ACCOUNT}>Account</Link></li>
-    <li><SignOutButton /></li>
-  </ul>
+  <div>
+  <Navbar inverse collapseOnSelect>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <a href="#brand" href="/" style={ {fontFamily:'Garamond'} }>CRIME WATCH</a>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
+    <Nav>
+      <NavItem eventKey={2} href="/home">
+        Home
+      </NavItem>
+      <NavItem eventKey={3} href="/account">
+        Account
+      </NavItem>
+      <NavItem eventKey={4} onClick={auth.doSignOut} href="/signin">
+        Sign Out
+      </NavItem>
+    </Nav>
+    </Navbar.Collapse>
+  </Navbar>
+  </div>
 
 const NavigationNonAuth = () =>
-  <ul>
-    <li><Link to={routes.LANDING}>Landing</Link></li>
-    <li><Link to={routes.SIGN_IN}>Sign In</Link></li>
-  </ul>
+  <div>
+    <Navbar inverse collapseOnSelect>
+      <Navbar.Header>
+        <Navbar.Brand>
+          <a href="#brand" href="/" style={ {fontFamily:'Garamond'} }>CRIME WATCH</a>
+          </Navbar.Brand>
+          <Navbar.Toggle />
+      </Navbar.Header>
+      <Navbar.Collapse>
+      <Nav>
+        <NavItem eventKey={2} href="/signin">
+          Sign In
+        </NavItem>
+
+      </Nav>
+      </Navbar.Collapse>
+    </Navbar>
+  </div>
 
 export default Navigation;
