@@ -1,5 +1,5 @@
 import React from 'react';
-var { View, ScrollView, Alert, Text, Platform, TouchableOpacity, Image } = require('react-native');
+var { View, ScrollView, Alert, Text, Platform, TouchableOpacity, Image, ImageBackground } = require('react-native');
 
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
@@ -9,8 +9,8 @@ import { iosStyles, androidStyles } from "./styles";
 import store from '../../../../redux/store';
 
 import { actions as auth, theme } from "../../../auth/index"
-import { Table, Row, TableWrapper, Cell } from 'react-native-table-component';
-import { VictoryPie, VictoryBar, VictoryChart, VictoryTheme} from 'victory-native';
+import { Table, Row, Rows, TableWrapper, Cell } from 'react-native-table-component';
+import { VictoryPie, VictoryBar, VictoryChart, VictoryLegend} from 'victory-native';
 import { actions as home } from '../../index';
 import Swiper from 'react-native-swiper';
 const { setLocation, getReports, searchListener } = home;
@@ -120,7 +120,7 @@ class Home extends React.Component {
         const reportTableHeaders = ['', 'Description', 'Date'];
         const reportTableData = [[]];
         const reportLocations = [[]];
-
+    
         for (var i = 0; i < reports.length; i++)
         {
             reportTableData[i] = [<Image
@@ -158,109 +158,123 @@ class Home extends React.Component {
         var pieChartColors= [];
         if (percentageVehicle != 0)
         {
-            pieChartData.push({ x: "Vehicle", y: percentageVehicle });
-            pieChartColors.push(color.green);
+            pieChartData.push({y: percentageVehicle });
+            pieChartColors.push('#FF3333');
         }
         if (percentagePedestrian != 0)
         {
-            pieChartData.push({ x: "Pedestrian", y: percentagePedestrian });
-            pieChartColors.push(color.orange);
+            pieChartData.push({y: percentagePedestrian });
+            pieChartColors.push("#FFFF33");
         }
         if (percentageTraffic != 0)
         {
-            pieChartData.push({ x: "Traffic", y: percentageTraffic });
-            pieChartColors.push(color.light_black);
+            pieChartData.push({ y: percentageTraffic });
+            pieChartColors.push("#33FF33");
         }
         if (percentageAnimal != 0)
         {
-            pieChartData.push({ x: "Animal", y: percentageAnimal });
-            pieChartColors.push(color.navy);
+            pieChartData.push({y: percentageAnimal });
+            pieChartColors.push("#33FFFF");
         }
         if (percentageConstruction != 0)
         {
-            pieChartData.push({ x: "Construction", y: percentageConstruction });
-            pieChartColors.push(color.red);
+            pieChartData.push({y: percentageConstruction });
+            pieChartColors.push("#FF33FF");
         }
 
         return (
             <View style={styles.container}>
-        
+            <ImageBackground 
+                style={{flex:1}}
+                source={require('../../../../assets/images/city2.jpg')}
+            >
+            <View style={styles.settingsContainer}>
+                <TouchableOpacity onPress={Actions.Settings} style={styles.settingsButton}>
+                    <Image style={styles.navButtonContent}
+                        source={require('../../../../assets/images/settings.png')}>
+                    </Image>
+                </TouchableOpacity>
+            </View>
+
                 <Swiper style={styles.reportsContainer} autoplay={false}>
-
-                    <ScrollView>
-                        <View style={styles.spacer}><Text style={styles.spacerText}>My Reports</Text></View>
-                        <Table borderStyle={{borderColor: 'transparent'}}>
-                        
-                                <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
-                                {
-                                    reportTableData.map((rowData, index) => (
-                                        <TouchableOpacity key={index} onPress={() => {
-                                                Actions.Map({
-                                                    longitude: reports[index].longitude,
-                                                    latitude: reports[index].latitude,
-                                                    reportLocs: reportLocations
-                                                });
-                                            }}>
-                                            <TableWrapper key={index} style={styles.reportsRow}>
-                                            {
-                                                rowData.map((cellData, cellIndex) => (
-                                                    <Cell borderStyle={{borderColor: 'transparent'}} key={cellIndex} data={cellData}/>
-                                                ))
-                                            }
-                                            </TableWrapper>
-                                        </TouchableOpacity>
-                                    ))
-                                }
-                         
-                        </Table>
-                    </ScrollView>
-
                     <View>
-                        <View style={styles.spacer}><Text style={styles.spacerText}>Pie Chart</Text></View>
-                        <VictoryPie
-                        padding={100}
-                        colorScale={pieChartColors}
-                            data={pieChartData}
-                        />
+                        <View style={styles.spacer}>
+
+                            <Text style={styles.spacerText}>My Reports</Text>
+                            
+                        </View>
+
+                        <ScrollView>
+                            
+                            <Table borderStyle={{borderColor: 'transparent'}}>
+                            
+                                    <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
+                                    {
+                                        reportTableData.map((rowData, index) => (
+                                            <TouchableOpacity key={index} onPress={() => {
+                                                    Actions.Map({
+                                                        longitude: reports[index].longitude,
+                                                        latitude: reports[index].latitude,
+                                                        reportLocs: reportLocations
+                                                    });
+                                                }}>
+                                                <TableWrapper key={index} style={styles.reportsRow}>
+                                                {
+                                                    rowData.map((cellData, cellIndex) => (
+                                                        <Cell textStyle={styles.reportsText} borderStyle={{borderColor: 'transparent'}} key={cellIndex} data={cellData}/>
+                                                    ))
+                                                }
+                                                </TableWrapper>
+                                            </TouchableOpacity>
+                                        ))
+                                    }
+                            
+                            </Table>
+                        </ScrollView>
                     </View>
 
-                    {/* <View>
-                        <View style={styles.spacer}><Text style={styles.spacerText}>Line Chart</Text></View>
-                        <VictoryChart
-                        theme={VictoryTheme.material}
-                        >
-                        <VictoryBar
-                            padding={100}
-                            style={{ data: { fill: "#c43a31" } }}
-                            alignment="start"
-                            data={[
-                                { x: 'Jan', y: 1, y0: 0 },
-                                { x: 'Feb', y: 2, y0: 0 },
-                                { x: 'Mar', y: 3, y0: 0 },
-                                { x: 'Apr', y: 4, y0: 0 },
-                                { x: 'May', y: 5, y0: 0 }
-                            ]}
-                        />
-                        </VictoryChart>
+                    <View style={styles.container}>
+                        <View style={styles.spacer}><Text style={styles.spacerText}>Pie Chart</Text></View>
+                            <View style={styles.pieContainer}>
+                                <VictoryPie
+                                innerRadius={80}
+                                labelRadius={130}
+                                style={{ labels: { fill: "white", fontSize: 16} }}
+                                padding={100}
+                                colorScale={pieChartColors}
+                                    data={pieChartData}
+                                />
 
-                    </View> */}
+                                <View style={styles.legend}>
+                                    <Table borderStyle={{borderColor: 'transparent'}}>
+                                    <Row data={["0:", "Vehicle"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["1", "Pedestrian"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["2", "Traffic"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["3", "Animal"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    <Row data={["4", "Construction"]} style={styles.head} textStyle={styles.reportsText}/>
+                                    </Table>
+                                </View>
+                            </View>
+                    </View>
+
                 </Swiper>
+                <View style={styles.footer}></View>
 
+                {/*
                 <View style={styles.navView}>
                     <TouchableOpacity onPress={Actions.Settings} style={styles.navButton1}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/settings.png')}>
                         </Image>
-                        <Text>Settings</Text>
                    </TouchableOpacity>
-
+                            
                    <TouchableOpacity onPress={Actions.Settings} style={styles.navButton2}>
                         <Image style={styles.navButtonContent}
                             source={require('../../../../assets/images/user.png')}>
                         </Image>
                         <Text>Henry</Text>
                    </TouchableOpacity>
-
+                            
                    <TouchableOpacity onPress={() => {
                         Actions.Map({
                             longitude: undefined,
@@ -273,7 +287,10 @@ class Home extends React.Component {
                         </Image>
                         <Text>Report Map</Text>
                    </TouchableOpacity>
+                   
                 </View>
+                */}
+            </ImageBackground>
             </View>
         );
     }

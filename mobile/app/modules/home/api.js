@@ -1,6 +1,5 @@
 import { database } from "../../config/firebase";
 
-
 export function changeGender(user, gender, callback) 
 {
         database.ref('users').child(user).update({'gender': gender})
@@ -37,7 +36,7 @@ export function addAlexaCode(uid, phoneNumber, alexaCode, callback)
                                 database.ref('users').child(uid).update({'deviceID': deviceId})
                                         .then(() =>{
                                                 // Second call Creates a new deviceID-key object in the reports table
-                                                database.ref('reports').child(deviceId).set({'report': '', 'search': {'bool': false, 'speech': ''}})
+                                                database.ref('reports').child(deviceId).set({'report': ''})
                                                 .then(() => {
                                                         removeAlexaCode(phoneNumber);
                                                         callback(true, deviceId);
@@ -96,9 +95,9 @@ export function searchListener(deviceID, callback)
         var threshold = 500;
         var total = 0;
         
-        database.ref('reports').child(deviceID).child('search').on('child_changed', (snapshot) =>{
+        database.ref('reports').child(deviceID).child('search').on('child_added', (snapshot) =>{
                 console.log('searching request');
-                
+                console.log(snapshot);
                 if(snapshot.val() === true)
                 {
                         console.log("Found true");
@@ -126,9 +125,9 @@ export function searchListener(deviceID, callback)
                                                                 total++;
                                                 }
 
-                                                console.log(total);
+                                                
                                                 var speechResponse = "There have been " + total + " major incidents in this area."
-                                                database.ref('reports').child(deviceID).child('search').set({'bool':'false', 'speech': speechResponse})
+                                                database.ref('reports').child(deviceID).child('search').set(speechResponse)
                                                 .then(() =>
                                                 {
                                                         reports = [];
