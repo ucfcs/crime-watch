@@ -25,6 +25,7 @@ class HomePage extends Component {
 	  showingInfoWindow: false,
 	  activeMarker: {},
 	  selectedPlace: {},
+	  mostType: [],
       reportList: []
     };
   }
@@ -51,16 +52,24 @@ class HomePage extends Component {
       }
 
 		var fiveTypes = ["Animal","Construction","Pedestrian","Traffic","Vehicle"];
+		var mostType = 0;
 
 	  for(var k = 0; k < fiveTypes.length; k++)
 	  {
 		  var count = 0;
+		  var mostTypeName = [];
 		  for(var l = 0; l < type.length; l++)
 		  {
 			  if(fiveTypes[k] === type[l])
 			  {
 				  count++;
 			  }
+		  }
+		  if(count > mostType)
+		  {
+			  mostType = count;
+			  mostTypeName = fiveTypes[k];
+			  //console.log(mostTypeName);
 		  }
 		  pie.push({x: fiveTypes[k], y: count / type.length * 100});
 	  }
@@ -100,6 +109,7 @@ class HomePage extends Component {
                         'time': time,
 						'pieData': pie,
 						'barData': barData,
+						'mostType': mostTypeName,
                         'reportList': reportList
                       });
     })
@@ -123,7 +133,7 @@ class HomePage extends Component {
 	});
 
   render() {
-    console.log(this.state.reportList)
+    console.log(this.state.mostType)
 	var testString = "Test";
     return (
     <div className="content">
@@ -173,10 +183,9 @@ class HomePage extends Component {
       <br/>
 	  
 	  <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
-      <Label bsStyle="success">Number of Reports: {this.state.reportList.length}</Label>
-	  <Label bsStyle="success">Number of Reports: {this.state.reportList.length / 30}</Label>
-	  <Label bsStyle="success">Number of Reports: {this.state.reportList.length}</Label>
-	  <Label bsStyle="success">Most Reported Type: {this.state.reportList.length}</Label>
+      <Label bsStyle="info">Number of Reports: {this.state.reportList.length}</Label>
+	  <Label bsStyle="info">Average Reports Per Day: {this.state.reportList.length / 30}</Label>
+	  <Label bsStyle="info">Average Reports Per Week: {this.state.reportList.length / 7}</Label>
       </h1>
 
       <h1 class="text-center" style={ {fontFamily:'Garamond'} }>
@@ -195,7 +204,7 @@ class HomePage extends Component {
                 this.state.reportList.map(report => {
                   return(
                     <Marker onClick = {this.onMarkerClick}
-					name = {report.description + '\r' + report.type + '\n' + report.date + '\n' + report.time}
+					name = {report.date + " -- " + "<"+ report.description + "> " + report.type}
                     position={{lat: report.latitude, lng: report.longitude}}/>
 					
                   )
