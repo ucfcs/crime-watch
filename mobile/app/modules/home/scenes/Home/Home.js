@@ -187,6 +187,7 @@ class Home extends React.Component {
             pieChartColors.push("#FF33FF");
             legendData.push({name: 'Construction', color: '#FF33FF'});
         }
+        var tableHeight = (reports.length * 102) + 151;
         return (
             <View style={styles.container}>
             <ImageBackground 
@@ -211,7 +212,7 @@ class Home extends React.Component {
 
                         <ScrollView>
                             
-                            <Table borderStyle={{borderColor: 'transparent'}} style={styles.tableStyle}>
+                            <Table borderStyle={{borderColor: 'transparent'}} style={{height: tableHeight}}>
                             
                                     <Row data={reportTableHeaders} style={styles.reportsHeader} textStyle={styles.reportsText}/>
                                     {

@@ -315,10 +315,6 @@ export const iosStyles = StyleSheet.create({
         width: 40
     },
 
-    tableStyle: {
-        height: windowHeight - 75
-    },
-
     // pie chart
     pieContainer:{
         backgroundColor: color.white_transparent,
